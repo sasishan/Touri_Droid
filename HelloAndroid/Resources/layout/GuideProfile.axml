@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/guide_photo"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/guide_name"
+            android:layout_toRightOf="@+id/guide_photo"
+            android:layout_alignParentTop="true"
+            android:textSize="30sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/languages_text"
+            android:layout_below="@+id/guide_photo"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:text="Languages Spoken:" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/languages"
+            android:layout_below="@+id/languages_text" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/expertise_text"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/languages"
+            android:textStyle="bold"
+            android:text="Expertise Areas:" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/expertise"
+            android:layout_below="@+id/expertise_text" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:id="@+id/about_text"
+            android:layout_below="@+id/expertise"
+            android:textStyle="bold"
+            android:text="About me:" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/about"
+            android:layout_below="@+id/about_text" />
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:id="@+id/ChatButton"
+            android:textSize="20dp"
+            android:text="Chat"
+            android:layout_below="@+id/about"
+            android:layout_marginTop="50dp"
+            android:layout_toLeftOf="@+id/EmailButton" />
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:id="@+id/EmailButton"
+            android:textSize="20dp"
+            android:text="Email"
+            android:layout_below="@+id/about"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="50dp" />
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:id="@+id/CallButton"
+            android:textSize="20dp"
+            android:text="Call"
+            android:layout_below="@+id/about"
+            android:layout_toRightOf="@+id/EmailButton"
+            android:layout_marginTop="50dp" />
+    </RelativeLayout>
+</LinearLayout>

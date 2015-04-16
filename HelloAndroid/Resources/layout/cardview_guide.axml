@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="2dp">
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/cv"
+        android:background="@color/dark_grey"
+        android:layout_gravity="center_horizontal"
+        card_view:cardElevation="4dp"
+        card_view:cardCornerRadius="4dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+            <ImageView
+                android:id="@+id/guide_photo"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="10dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/guide_name"
+                android:layout_toRightOf="@+id/guide_photo"
+                android:layout_alignParentTop="true"
+                android:textStyle="bold"
+                android:textColor="@color/black" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/locationsServed"
+                android:layout_toRightOf="@+id/guide_photo"
+                android:layout_below="@+id/guide_name"
+                android:textSize="13sp"
+                android:textColor="@color/black" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/languages"
+                android:layout_toRightOf="@+id/guide_photo"
+                android:layout_below="@+id/locationsServed"
+                android:textSize="13sp"
+                android:textColor="@color/black" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/description"
+                android:layout_toRightOf="@+id/guide_photo"
+                android:layout_below="@+id/languages"
+                android:textSize="13sp"
+                android:textColor="@color/black" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/availability"
+                android:layout_toRightOf="@+id/guide_photo"
+                android:layout_below="@+id/description"
+                android:textSize="13sp"
+                android:textColor="@color/black" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
