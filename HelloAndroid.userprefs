@@ -1,8 +1,11 @@
 ﻿<Properties StartupItem="HelloAndroid\TravelApp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.x86Emulator" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="c:\Users\Sasi\Documents\Xamarin\Projects\HelloAndroid\HelloAndroid\SecondActivity.cs">
+  <MonoDevelop.Ide.Workbench>
     <Files>
-      <File FileName="c:\Users\Sasi\Documents\Xamarin\Projects\HelloAndroid\HelloAndroid\SecondActivity.cs" Line="50" Column="96" />
+      <File FileName="c:\Users\Sasi\Documents\Xamarin\Projects\HelloAndroid\HelloAndroid\SecondActivity.cs" Line="46" Column="13" />
+      <File FileName="HelloAndroid\GuideFragment.cs" Line="585" Column="62" />
+      <File FileName="HelloAndroid\Resources\values\Strings.xml" Line="19" Column="34" />
+      <File FileName="c:\Bitbucket\Touri_Droid\HelloAndroid\SecondActivity.cs" Line="375" Column="53" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

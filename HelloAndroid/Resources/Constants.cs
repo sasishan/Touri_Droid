@@ -64,8 +64,8 @@ namespace HelloAndroid
 		public const int Uninitialized=-1;
 
 		//image size for profile pictures
-		public const int ProfileReqWidth=160;
-		public const int ProfileReqHeight=160;
+		public const int ProfileReqWidth=60;
+		public const int ProfileReqHeight=60;
 	}
 }
 

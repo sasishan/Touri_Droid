@@ -542,8 +542,8 @@ namespace HelloAndroid
 		{
 			MyView myHolder = holder as MyView;
 
-			string languages = "Languages I speak: ";
-			string placesServed = "Locations I serve: ";
+			string languages = "";
+			string placesServed = "";
 			// Set name
 			myHolder.mFName.Text = mGuides[position].fName + " " + mGuides[position].lName;
 
@@ -588,15 +588,16 @@ namespace HelloAndroid
 			}
 
 			foreach (string l in mGuides[position].languageList) {
-				languages += l + "; ";
+				languages += "• "+l+"\r\n" ;
 			}				
 			languages = languages.Remove (languages.Length - 2);
+
 			myHolder.mLanguages.Text = languages;
 
 			foreach (string l in mGuides[position].placesServedList) {
-				placesServed += l + "; ";
+				placesServed += "• "+l+"\r\n" ;
 			}				
-			placesServed = placesServed.Remove (placesServed.Length - 2);
+			//placesServed = placesServed.Remove (placesServed.Length - 2);
 			myHolder.mLocations.Text = placesServed;
 
 			//myHolder.mPhoto.SetImageResource (Resource.Drawable.placeholder_photo);
@@ -604,9 +605,7 @@ namespace HelloAndroid
 				myHolder.mPhoto.SetImageResource (Resource.Drawable.placeholder_photo);
 			} else {
 				myHolder.mPhoto.SetImageBitmap (mGuides [position].profileImage);
-			}
-
-
+			}				
 
 			myHolder.ItemView.Click += (sender, e) => {
 				int itemPosition = myHolder.Position;
@@ -687,8 +686,6 @@ namespace HelloAndroid
 			request.Method = "GET";
 			BitmapFactory.Options options = new BitmapFactory.Options();
 
-
-
 			// Send the request to the server and wait for the response:
 			Bitmap bitMap=null;
 			using (WebResponse response = await request.GetResponseAsync ()) {
@@ -701,7 +698,6 @@ namespace HelloAndroid
 					//Bitmap bitMap =  await Task.Run (() => BitmapFactory.DecodeStream(stream));
 
 					options.InSampleSize = calculateInSampleSize (options, Constants.ProfileReqWidth, Constants.ProfileReqHeight);
-
 				}
 			}
 			//@todo - reuse the stream!!

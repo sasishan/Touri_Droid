@@ -373,7 +373,9 @@ namespace HelloAndroid
 
 				URL url = new URL(sb.ToString());
 				conn = (HttpURLConnection) url.OpenConnection();
-				InputStreamReader inS = new InputStreamReader(conn.InputStream);
+				InputStreamReader inS;
+				inS = new InputStreamReader(conn.InputStream);
+
 
 				// Load the results into a StringBuilder
 				int read;
