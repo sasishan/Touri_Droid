@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pageLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="1dp">
+    android:layout_height="wrap_content"
+    android:paddingBottom="10dp">
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/guideCardViewLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/cv"
-        android:background="@color/dark_grey"
-        android:padding="3dp"
-        card_view:cardElevation="4dp"
-        card_view:cardCornerRadius="5dp">
+        android:layout_height="wrap_content"
+        card_view:cardElevation="8dp"
+        card_view:cardCornerRadius="5dp"
+        android:animateLayoutChanges="true">
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/guideContentLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="10dp">
             <RelativeLayout
                 android:id="@+id/guide_details"
                 android:layout_width="match_parent"
@@ -23,22 +24,55 @@
                 android:padding="2dp">
                 <ImageView
                     android:id="@+id/guide_photo"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:layout_alignParentLeft="true"
                     android:layout_marginRight="10dp"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"
+                    android:background="@color/dark_grey"
+                    android:scaleType="centerCrop" />
                 <TextView
                     android:id="@+id/guide_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="10dp"
+                    android:paddingBottom="5dp"
                     android:layout_toRightOf="@+id/guide_photo"
                     android:layout_alignParentTop="true"
                     android:textStyle="bold"
-                    android:textSize="15sp"
                     android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="wrap_content"
+                    android:paddingLeft="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/guide_photo"
+                    android:layout_below="@+id/guide_name"
+                    android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/availability"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    android:textColor="@color/black"
+                    android:layout_toRightOf="@+id/guide_photo"
+                    android:layout_below="@+id/description" />
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:gravity="right">
+                <Button
+                    android:id="@+id/moreButton"
+                    android:layout_height="50dp"
+                    android:layout_width="50dp"
+                    android:background="@drawable/expander_ic_minimized" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/moreLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
                 <TextView
                     android:id="@+id/locationsTitle"
                     android:layout_width="250dp"
@@ -47,70 +81,37 @@
                     android:paddingTop="5dp"
                     android:textStyle="bold"
                     android:text="Locations:"
-                    android:layout_toRightOf="@+id/guide_photo"
                     android:layout_below="@+id/guide_name"
                     android:textSize="13sp"
-                    android:textColor="@color/black"
-                    android:background="@color/light_blue" />
+                    android:textColor="@color/black" />
                 <TextView
                     android:id="@+id/locationsServed"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
-                    android:layout_toRightOf="@+id/guide_photo"
                     android:layout_below="@+id/locationsTitle"
                     android:textSize="13sp"
-                    android:textColor="@color/black"
-                    android:background="@color/light_blue" />
+                    android:textColor="@color/black" />
                 <TextView
                     android:id="@+id/languagesTitle"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/guide_photo"
                     android:layout_below="@+id/locationsServed"
                     android:paddingLeft="5dp"
                     android:textStyle="bold"
                     android:text="Languages:"
                     android:textSize="13sp"
-                    android:textColor="@color/black"
-                    android:background="@color/light_blue" />
+                    android:textColor="@color/black" />
                 <TextView
                     android:id="@+id/languages"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/guide_photo"
                     android:layout_below="@+id/languagesTitle"
                     android:paddingLeft="10dp"
                     android:paddingBottom="10dp"
                     android:textSize="13sp"
-                    android:textColor="@color/black"
-                    android:background="@color/light_blue" />
-                <TextView
-                    android:id="@+id/availability"
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/guide_photo"
-                    android:layout_below="@+id/languages"
-                    android:textSize="13sp"
-                    android:textColor="@color/black"
-                    android:background="@color/light_blue" />
-            </RelativeLayout>
-            <TextView
-                android:id="@+id/summaryTitle"
-                android:layout_width="400dp"
-                android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:textStyle="bold"
-                android:text="Summary:"
-                android:textSize="13sp"
-                android:textColor="@color/black" />
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="400dp"
-                android:paddingLeft="10dp"
-                android:layout_height="wrap_content"
-                android:textSize="13sp"
-                android:textColor="@color/black" />
+                    android:textColor="@color/black" />
+            </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

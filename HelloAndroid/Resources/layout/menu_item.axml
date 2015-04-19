@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
-    android:id="@android:id/text1"
+    android:id="@+id/drawer_text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceMedium"
@@ -10,4 +10,5 @@
     android:paddingRight="16dp"
     android:textColor="@color/black"
     android:singleLine="true"
+    android:choiceMode="multipleChoice"
     android:minHeight="?android:attr/listPreferredItemHeight" />

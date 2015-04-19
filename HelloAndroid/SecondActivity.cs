@@ -30,11 +30,13 @@ namespace HelloAndroid
 		private ArrayAdapter<string> mAdapterLanguages=null;
 		private ArrayAdapter<string> mAdapterMainMenu=null;
 		private ArrayAdapter<string> mAdapterExpertise=null;
-		private GuideSearch mGuideSearch;
+		public GuideSearch mGuideSearch;
 		private SparseBooleanArray mLastSparseArrayLanguages;
 		private SparseBooleanArray mLastSparseArrayExpertise;
 		public string mPlace="";
 		public string mExpertise="";
+		public List<String> availableLanguages = new List<String> ();
+		public List<string> checkedLanguages = new List<String>();
 
 		private static string[] placeSuggestions = {
 			"Toronto", "Sao Paulo", "Rio de Janeiro",
@@ -67,6 +69,7 @@ namespace HelloAndroid
 			RequestWindowFeature(WindowFeatures.ActionBar);
 			base.OnCreate (savedInstanceState);
 
+			checkedLanguages.Add ("English");
 			//@remove
 			mPlace = Intent.GetStringExtra ("location") ?? "";
 			mExpertise = Intent.GetStringExtra ("expertise") ?? "";
@@ -123,17 +126,14 @@ namespace HelloAndroid
 		{
 			MenuInflater.Inflate(Resource.Menu.menu_guide, menu);
 
-			var item = menu.FindItem (Resource.Id.search);
+			/*			var item = menu.FindItem (Resource.Id.search);
 			View v = (View) MenuItemCompat.GetActionView (item);
 			AutoCompleteTextView searchPlaces = (AutoCompleteTextView) v.FindViewById (Resource.Id.search_places);
-
-			//AutoCompleteTextView searchPlaces = (AutoCompleteTextView)FindViewById (Resource.Id.search_places);
 
 			PlacesAutoCompleteAdapter pacAdapter = new PlacesAutoCompleteAdapter (this, Android.Resource.Layout.SimpleListItem1);
 			searchPlaces.Adapter = pacAdapter;
 			searchPlaces.ItemClick += searchPlaces_ItemClick;
 
-			//@remove
 			mPlace = Intent.GetStringExtra ("location") ?? "";
 			string expertise = Intent.GetStringExtra ("expertise") ?? "";
 			searchPlaces.Text = mPlace;
@@ -142,6 +142,8 @@ namespace HelloAndroid
 			mGuideSearch.expertiseList.Add (expertise);
 			GuideFragment gf = FragmentManager.FindFragmentById<GuideFragment> (Resource.Id.fragment_container);
 			gf.RefineSearch(mGuideSearch);
+
+*/
 
 			//ArrayAdapter<String> adapter = new ArrayAdapter<String> (this, Android.Resource.Layout.SimpleListItem1, placeSuggestions);
 			//searchPlaces.Adapter = adapter;
@@ -255,6 +257,7 @@ namespace HelloAndroid
 				if (mAdapterLanguages == null) {
 					//	mAdapterDone = new ArrayAdapter<string> (this, Android.Resource.Layout.SimpleListItem1, Constants.DrawerOptionDone);
 					mAdapterLanguages = new ArrayAdapter<string> (this, Android.Resource.Layout.SimpleListItemMultipleChoice, mDrawerLanguages);
+					//mAdapterLanguages = new ArrayAdapter<string> (this, Resource.Layout.menu_item, mDrawerLanguages);
 				}
 				mDrawerList.Adapter = mAdapterLanguages;
 				mDrawerList.ChoiceMode = Android.Widget.ChoiceMode.Multiple; // Multiple
@@ -300,6 +303,7 @@ namespace HelloAndroid
 		public PlacesAutoCompleteAdapter(Context context, int textViewResourceId):base(context, textViewResourceId) {
 			filter = new SuggestionsFilter (this);
 			resultList = new List<string> ();
+
 		}
 
 		public override int Count {

@@ -88,6 +88,7 @@
     <Compile Include="Resources\Support.cs" />
     <Compile Include="Resources\GuideSearch.cs" />
     <Compile Include="ExpertiseFragment.cs" />
+    <Compile Include="FilterFragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -105,7 +106,6 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\Icon.png" />
     <AndroidResource Include="Resources\layout\Second.axml" />
     <AndroidResource Include="Resources\layout\fragment_guide.axml" />
-    <AndroidResource Include="Resources\layout\menu_item.xml" />
     <AndroidResource Include="Resources\drawable\ic_action_search.png" />
     <AndroidResource Include="Resources\layout\row_guide.axml" />
     <AndroidResource Include="Resources\layout\cardview_guide.axml" />
@@ -120,6 +120,26 @@
     <AndroidResource Include="Resources\layout\Second_backup.axml" />
     <AndroidResource Include="Resources\layout\Main_backup.axml" />
     <AndroidResource Include="Resources\drawable\ic_action_search_grey.png" />
+    <AndroidResource Include="Resources\drawable\expander_ic_maximized.9.png" />
+    <AndroidResource Include="Resources\drawable\expander_ic_minimized.9.png" />
+    <AndroidResource Include="Resources\layout\menu_item.axml" />
+    <AndroidResource Include="Resources\menu\menu_filters.xml" />
+    <AndroidResource Include="Resources\layout\fragment_filter.axml" />
+    <AndroidResource Include="Resources\layout\Expertise_Grid.axml" />
+    <AndroidResource Include="Resources\layout\expertise_tablerow.axml" />
+    <AndroidResource Include="Resources\layout\blank_tablerow.axml" />
+    <AndroidResource Include="Resources\drawable\camera.png" />
+    <AndroidResource Include="Resources\drawable\cup54.png" />
+    <AndroidResource Include="Resources\drawable\drink71.png" />
+    <AndroidResource Include="Resources\drawable\egypt2.png" />
+    <AndroidResource Include="Resources\drawable\lunch4.png" />
+    <AndroidResource Include="Resources\drawable\museum37.png" />
+    <AndroidResource Include="Resources\drawable\bar48.png" />
+    <AndroidResource Include="Resources\drawable\egypt2b.png" />
+    <AndroidResource Include="Resources\drawable\bar48_pressed.png" />
+    <AndroidResource Include="Resources\drawable\hiking48.png" />
+    <AndroidResource Include="Resources\drawable\hiking48_pressed.png" />
+    <AndroidResource Include="Resources\layout\language_tablerow.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>

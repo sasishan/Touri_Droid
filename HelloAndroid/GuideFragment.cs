@@ -13,6 +13,9 @@ using Android.Support.V7.Widget;
 using Android.Content;
 using Android.Graphics;
 using Java.Net;
+using Android.Views.Animations;
+using Android.Animation;
+using Android.Support.V4.View;
 
 namespace HelloAndroid
 {
@@ -23,15 +26,84 @@ namespace HelloAndroid
 		private RecyclerView.LayoutManager mLayoutManager;
 		private RecyclerView.Adapter mAdapter;
 		protected List<Guide> mGuideList = new List<Guide> ();
-		public event EventHandler<int> ItemClick;
+		public string mPlace="";
+		public GuideSearch mGuideSearch;
 
 
 		public override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
-
+			mGuideSearch = ((SecondActivity)this.Activity).mGuideSearch;//new GuideSearch ();
+			SetHasOptionsMenu(true);
 			// Create your fragment here
 		}			
+
+		public override void OnCreateOptionsMenu(IMenu menu, MenuInflater menuInflater)
+		{
+			//menu.Clear ();
+			menuInflater.Inflate(Resource.Menu.menu_filters, menu);
+			mPlace = Activity.Intent.GetStringExtra ("location") ?? "";
+			string expertise = Activity.Intent.GetStringExtra ("expertise") ?? "";
+
+			var item = menu.FindItem (Resource.Id.search);
+
+			if (item != null) {
+				View v = (View) MenuItemCompat.GetActionView (item);
+				AutoCompleteTextView searchPlaces = (AutoCompleteTextView) v.FindViewById (Resource.Id.search_places);
+
+				PlacesAutoCompleteAdapter pacAdapter = new PlacesAutoCompleteAdapter (v.Context, Android.Resource.Layout.SimpleListItem1);
+				searchPlaces.Adapter = pacAdapter;
+				searchPlaces.ItemClick += searchPlaces_ItemClick;
+				searchPlaces.Text = mPlace;
+
+			}
+				
+			mGuideSearch.placesServedList.Clear ();
+			mGuideSearch.placesServedList.Add (mPlace);
+			mGuideSearch.expertiseList.Add (expertise);
+			//GuideFragment gf = FragmentManager.FindFragmentById<GuideFragment> (Resource.Id.fragment_container);
+			RefineSearch(mGuideSearch);
+
+			//var item = menu.FindItem (Resource.Id.filter);
+			//item.SetOnMenuItemClickListener(
+			base.OnCreateOptionsMenu(menu, menuInflater);
+		}
+
+		private void searchPlaces_ItemClick (object sender, AdapterView.ItemClickEventArgs e)
+		{
+			if (sender != null) {
+
+				string place = ((AutoCompleteTextView)sender).Text;
+				mGuideSearch.placesServedList.Clear ();
+				mGuideSearch.placesServedList.Add (place);
+				GuideFragment gf = FragmentManager.FindFragmentById<GuideFragment> (Resource.Id.fragment_container);
+				gf.RefineSearch(mGuideSearch);
+
+				//	string place = 
+			} else {
+				//@todo
+			}
+		}
+
+
+		public override bool OnOptionsItemSelected (IMenuItem item)
+		{
+			if (item.ItemId == Resource.Id.filter) {
+				var newFragment = new FilterFragment ();
+				//var ft = FragmentManager.BeginTransaction ();
+				FragmentTransaction transaction = FragmentManager.BeginTransaction();
+
+				// Replace whatever is in the fragment_container view with this fragment,
+				// and add the transaction to the back stack if needed
+				transaction.Replace(Resource.Id.fragment_container, newFragment);
+				//transaction.AddToBackStack(null);
+
+				// Commit the transaction
+				transaction.Commit();
+			}
+			
+			return base.OnOptionsItemSelected (item);
+		}
 
 		public async void RefineSearch(GuideSearch guideSearch)
 		{
@@ -96,6 +168,8 @@ namespace HelloAndroid
 			// and attach an event to it
 			//Button button = view.FindViewById<Button> (Resource.Id.nextButton);
 			//TextView text =  view.FindViewById<TextView> (Resource.Id.guideFirstName);
+
+	//		Button button = (Button) ((SecondActivity)this.Activity).FindViewById(Resource.Id.moreButton);
 			mRecyclerView = view.FindViewById<RecyclerView> (Resource.Id.my_recycler_view);
 
 			mLayoutManager =  new LinearLayoutManager(view.Context);//new GridLayoutManager(view.Context, 2, GridLayoutManager.Horizontal, false);
@@ -151,6 +225,7 @@ namespace HelloAndroid
 		public void parseGuideProfiles(JsonValue json)
 		{
 			mGuideList.Clear ();
+			((SecondActivity)this.Activity).availableLanguages.Clear ();
 
 			for (int i = 0; i < json.Count; i++) {
 				Guide g = new Guide ();
@@ -198,6 +273,7 @@ namespace HelloAndroid
 					{
 						JsonValue l = temp[j];
 						g.languageList.Add (l [Constants.Guide_WebAPI_Key_Language]);
+						((SecondActivity)this.Activity).availableLanguages.Add (l [Constants.Guide_WebAPI_Key_Language]);
 						//@todo get languageId too
 					}
 				}
@@ -534,6 +610,46 @@ namespace HelloAndroid
 			TextView availability = row.FindViewById<TextView> (Resource.Id.availability);
 			ImageView photo = row.FindViewById<ImageView> (Resource.Id.guide_photo);
 
+			//set click listener for more button
+			Button moreButton = row.FindViewById<Button>(Resource.Id.moreButton);
+			moreButton.Click += (sender, e) => {
+				LinearLayout more = (LinearLayout) row.FindViewById(Resource.Id.moreLayout);
+
+				View card = row.FindViewById(Resource.Id.guideCardViewLayout);
+
+				float newHeight = 0;
+				if (more.Visibility==ViewStates.Visible)
+				{ 
+					// make it invisible
+					newHeight =card.Height-more.Height;	
+					more.Visibility=ViewStates.Gone;
+					moreButton.SetBackgroundResource(Resource.Drawable.expander_ic_minimized);
+					//moreButton.Background=DRawabl(Resource.Drawable.expander_ic_minimized);
+				}
+				else //make it visible
+				{
+					newHeight =card.Height+more.Height;
+					more.Visibility=ViewStates.Visible;
+					moreButton.SetBackgroundResource(Resource.Drawable.expander_ic_maximized);
+				}
+					
+				//more.Alpha=0.0f;
+
+				//TranslateAnimation animateSlideUp = new TranslateAnimation(0,0,0,h);
+				//animateSlideUp.FillAfter=true;
+				//card.StartAnimation(animateSlideUp);
+				//row.LayoutParameters.Height=-2;//row.Height-(int)h;
+			//	row.RequestLayout();
+				//card.LayoutParameters.Height=card.Height-(int)h;
+				card.RequestLayout();
+				more.Animate().Alpha(1.0f);
+				//page.=page.Height-(int)h;
+
+				//card.Animate().TranslationYBy(h);
+
+			};
+
+
 			MyView view = new MyView (row) { mFName = FName, mLocations=locations, mLanguages = languages, mPhoto=photo, mDescription=description, mAvailability=availability};
 			return view;
 		}
@@ -584,7 +700,6 @@ namespace HelloAndroid
 				myHolder.mAvailability.Text = Constants.NoValue;
 				myHolder.mAvailability.SetTextColor (NotAvailableForChatColor);
 				break;
-
 			}
 
 			foreach (string l in mGuides[position].languageList) {
@@ -606,8 +721,11 @@ namespace HelloAndroid
 			} else {
 				myHolder.mPhoto.SetImageBitmap (mGuides [position].profileImage);
 			}				
+				
+			//myHolder.ItemView.Click += (sender, e) => {
+			LinearLayout content = myHolder.ItemView.FindViewById<LinearLayout> (Resource.Id.guideContentLayout);
 
-			myHolder.ItemView.Click += (sender, e) => {
+			content.Click += (sender, e) => {
 				int itemPosition = myHolder.Position;
 
 				var gprofileActivity = new Intent (thisActivity, typeof(GuideProfileActivity));
@@ -620,8 +738,7 @@ namespace HelloAndroid
 				{
 					langs+=l+"; ";
 				}
-
-
+					
 				string expertises="";
 				foreach(Expertise exp in mGuides[itemPosition].expertise)
 				{

@@ -12,11 +12,14 @@
 	<string name="FindGuide">Find A Guide</string>
 	<string name="numGuidesText">Number of Guides in Area: </string>
 	<string name="ContactButtonTopMargin">60dp</string>
+	<string name="SelectExpertise">Select Expertise</string>
+	<string name="SelectLanguages">Available Guide Languages</string>
+	<string name="ApplyFilter">Apply Filter</string>
 	<color name="white">#FFFFFF</color>
 	<color name="dark_grey">#7e7e7e</color>
 	<color name="black">#000000</color>
 	<color name="light_blue">#d5e7fb</color>
-	<string name="cardcontainerwidth">200dp</string>
+
 
 
     <string-array name="nav_drawer_items">
