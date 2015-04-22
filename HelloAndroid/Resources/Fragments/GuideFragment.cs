@@ -17,7 +17,7 @@ using Android.Views.Animations;
 using Android.Animation;
 using Android.Support.V4.View;
 
-namespace HelloAndroid
+namespace TouriDroid
 {
 	public class GuideFragment : Fragment
 	{

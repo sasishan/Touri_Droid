@@ -1,15 +1,21 @@
 ﻿<Properties StartupItem="HelloAndroid\TravelApp.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.x86Emulator" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.08f7f593031f50f3" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\GuideFragment.cs">
     <Files>
-      <File FileName="c:\Users\Sasi\Documents\Xamarin\Projects\HelloAndroid\HelloAndroid\SecondActivity.cs" Line="46" Column="13" />
-      <File FileName="HelloAndroid\GuideFragment.cs" Line="585" Column="62" />
-      <File FileName="HelloAndroid\Resources\values\Strings.xml" Line="19" Column="34" />
-      <File FileName="c:\Bitbucket\Touri_Droid\HelloAndroid\SecondActivity.cs" Line="375" Column="53" />
+      <File FileName="HelloAndroid\FilterFragment.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\SecondActivity.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\GuideProfileActivity.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\GuideFragment.cs" Line="276" Column="57" />
+      <File FileName="HelloAndroid\Resources\values\Strings.xml" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="c:\Users\Sasi\Documents\Xamarin\Projects\HelloAndroid\HelloAndroid\SecondActivity.cs" line="200" column="25" />
+      <Breakpoint file="c:\Users\Sasi\Documents\Xamarin\Projects\HelloAndroid\HelloAndroid\SecondActivity.cs" line="222" column="25" />
+      <Breakpoint file="c:\Users\Sasi\Documents\Xamarin\Projects\HelloAndroid\HelloAndroid\SecondActivity.cs" line="86" column="10" />
+      <Breakpoint file="c:\Users\Sasi\Documents\Xamarin\Projects\HelloAndroid\HelloAndroid\SecondActivity.cs" line="189" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="HelloAndroid\GuideFragment.cs" line="157" offsetX="844" offsetY="2496" expression="this.Activity.mPlace" liveUpdate="False" />

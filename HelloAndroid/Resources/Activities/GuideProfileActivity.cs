@@ -13,7 +13,7 @@ using Android.Widget;
 
 
 
-namespace HelloAndroid
+namespace TouriDroid
 {
 	[Activity (Label = "GuideProfileActivity")]			
 	public class GuideProfileActivity : Activity

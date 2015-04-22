@@ -18,7 +18,7 @@ using Android.Util;
 using Org.Json;
 
 
-namespace HelloAndroid
+namespace TouriDroid
 {
 	[Activity (Label = "Nativus", Theme = "@style/Theme.AppCompat")]			
 	public class SecondActivity : ActionBarActivity

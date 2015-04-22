@@ -3,7 +3,7 @@ using Android.Graphics;
 using Android.Content;
 using Java.IO;
 
-namespace HelloAndroid
+namespace TouriDroid
 {
 	public static class Support
 	{

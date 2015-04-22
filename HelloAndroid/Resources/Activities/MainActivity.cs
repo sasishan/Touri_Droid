@@ -18,9 +18,10 @@ using Android.Util;
 
 
 
-namespace HelloAndroid
+namespace TouriDroid
 {
 	//[Activity (Label = "HelloAndroid", MainLauncher = true, Icon = "@drawable/icon")]
+	/* This is the Activity that displays all the expertises and is the Main Activity */
 	[Activity (Label = "Touri", MainLauncher = true, Theme = "@style/Theme.AppCompat")]			
 	public class MainActivity : ActionBarActivity, Android.Support.V7.App.ActionBar.ITabListener
 	{

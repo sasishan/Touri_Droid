@@ -1,7 +1,7 @@
 ﻿using System;
 using Android.Graphics;
 
-namespace HelloAndroid
+namespace TouriDroid
 {
 	public static class Constants
 	{

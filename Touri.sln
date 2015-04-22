@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelApp", "HelloAndroid\TravelApp.csproj", "{B586346D-8C20-457F-9B7F-30A588CA0D29}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TouriDroid", "HelloAndroid\TouriDroid.csproj", "{B586346D-8C20-457F-9B7F-30A588CA0D29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

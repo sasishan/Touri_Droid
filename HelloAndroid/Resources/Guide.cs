@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using System.Json;
 using Android.Graphics;
 
-namespace HelloAndroid
+namespace TouriDroid
 {
 	public class Guide
 	{

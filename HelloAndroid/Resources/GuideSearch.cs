@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HelloAndroid
+namespace TouriDroid
 {
 	public class GuideSearch
 	{

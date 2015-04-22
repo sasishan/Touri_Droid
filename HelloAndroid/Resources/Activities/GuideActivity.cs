@@ -11,7 +11,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
-namespace HelloAndroid
+namespace TouriDroid
 {
 	[Activity (Label = "GuideActivity")]			
 	public class GuideActivity : Activity

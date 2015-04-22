@@ -1,17 +1,20 @@
-﻿<Properties StartupItem="HelloAndroid\TravelApp.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="c:\Users\Sasi\Documents\Xamarin\Projects\HelloAndroid\HelloAndroid\SecondActivity.cs">
+﻿<Properties StartupItem="HelloAndroid\TouriDroid.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.08f7f593031f50f3" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\MainActivity.cs">
     <Files>
-      <File FileName="c:\Users\Sasi\Documents\Xamarin\Projects\HelloAndroid\HelloAndroid\SecondActivity.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\MainActivity.cs" Line="21" Column="17" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="c:\Users\Sasi\Documents\Xamarin\Projects\HelloAndroid\HelloAndroid\SecondActivity.cs" line="171" column="8" />
+      <Breakpoint file="c:\Users\Sasi\Documents\Xamarin\Projects\HelloAndroid\HelloAndroid\SecondActivity.cs" line="200" column="25" />
+      <Breakpoint file="c:\Users\Sasi\Documents\Xamarin\Projects\HelloAndroid\HelloAndroid\SecondActivity.cs" line="222" column="25" />
+      <Breakpoint file="c:\Users\Sasi\Documents\Xamarin\Projects\HelloAndroid\HelloAndroid\SecondActivity.cs" line="86" column="10" />
+      <Breakpoint file="c:\Users\Sasi\Documents\Xamarin\Projects\HelloAndroid\HelloAndroid\SecondActivity.cs" line="189" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="HelloAndroid\GuideFragment.cs" line="157" offsetX="844" offsetY="2496" expression="this.Activity.mPlace" liveUpdate="False" />
   </MonoDevelop.Ide.DebuggingService.PinnedWatches>
-  <MonoDevelop.Ide.ItemProperties.TravelApp AndroidDesignerPreferredDevice="Nexus 4" AndroidDeviceId-Debug="emulator-5554" />
+  <MonoDevelop.Ide.ItemProperties.TouriDroid AndroidDesignerPreferredDevice="Nexus 4" AndroidDeviceId-Debug="emulator-5554" />
 </Properties>

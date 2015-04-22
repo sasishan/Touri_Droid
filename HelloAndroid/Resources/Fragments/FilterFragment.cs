@@ -12,7 +12,7 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 
-namespace HelloAndroid
+namespace TouriDroid
 {
 	public class FilterFragment : Fragment
 	{

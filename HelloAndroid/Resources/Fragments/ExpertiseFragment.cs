@@ -15,7 +15,7 @@ using Android.Graphics;
 using System.Json;
 using Android.Support.V7.Widget;
 
-namespace HelloAndroid
+namespace TouriDroid
 {
 	public class ExpertiseFragment : Fragment
 	{
