@@ -74,6 +74,19 @@
       <HintPath>..\packages\Xamarin.GooglePlayServices.22.0.0.0\lib\MonoAndroid41\GooglePlayServicesLib.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\monoandroid\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\monoandroid\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Client">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Client.2.2.0\lib\portable-net45+sl5+netcore45+wp8+wp81\Microsoft.AspNet.SignalR.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Services" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Resources\Resource.designer.cs" />
@@ -89,6 +102,18 @@
     <Compile Include="Resources\Fragments\FilterFragment.cs" />
     <Compile Include="Resources\Fragments\ExpertiseFragment.cs" />
     <Compile Include="Resources\Guide.cs" />
+    <Compile Include="Resources\Activities\ActiveChat.cs" />
+    <Compile Include="Resources\ChatClient.cs" />
+    <Compile Include="Resources\Activities\LoginOrSignupActivity.cs" />
+    <Compile Include="Resources\Fragments\SigninSignupFragment.cs" />
+    <Compile Include="Resources\Fragments\SignupNameFragment.cs" />
+    <Compile Include="Resources\Fragments\SignupCitiesFragment.cs" />
+    <Compile Include="Resources\Fragments\SignupExpertiseFragment.cs" />
+    <Compile Include="Resources\SupportFunctions.cs" />
+    <Compile Include="Resources\Fragments\SignupLanguagesFragment.cs" />
+    <Compile Include="Resources\Fragments\SignupRegisterGuide.cs" />
+    <Compile Include="Resources\Fragments\SignInFragment.cs" />
+    <Compile Include="Resources\Activities\SignUpAsGuideActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -140,6 +165,24 @@
     <AndroidResource Include="Resources\drawable\hiking48.png" />
     <AndroidResource Include="Resources\drawable\hiking48_pressed.png" />
     <AndroidResource Include="Resources\layout\language_tablerow.axml" />
+    <AndroidResource Include="Resources\layout\ActiveChat_Activity.axml" />
+    <AndroidResource Include="Resources\drawable-hdpi\linearlayout_bg.axml" />
+    <AndroidResource Include="Resources\drawable\desert_bg.jpg" />
+    <AndroidResource Include="Resources\drawable-hdpi\button_default_bg.axml" />
+    <AndroidResource Include="Resources\drawable-hdpi\edittext_top_bg.axml" />
+    <AndroidResource Include="Resources\drawable-hdpi\edittext_default_bg.axml" />
+    <AndroidResource Include="Resources\drawable-hdpi\edittext_bottom_bg.axml" />
+    <AndroidResource Include="Resources\layout\SignInSignUp_layout.axml" />
+    <AndroidResource Include="Resources\layout\fragment_signinsignup.axml" />
+    <AndroidResource Include="Resources\layout\test.axml" />
+    <AndroidResource Include="Resources\layout\SignupName.axml" />
+    <AndroidResource Include="Resources\layout\SignupCities.axml" />
+    <AndroidResource Include="Resources\layout\SignupLanguages.axml" />
+    <AndroidResource Include="Resources\layout\Signin_screen.axml" />
+    <AndroidResource Include="Resources\layout\Signup_screen.axml" />
+    <AndroidResource Include="Resources\layout\SignupExpertise.axml" />
+    <AndroidResource Include="Resources\layout\SignupRegister.axml" />
+    <AndroidResource Include="Resources\layout\SignIn.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>

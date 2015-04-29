@@ -20,30 +20,28 @@ using Android.Support.V4.View;
 namespace TouriDroid
 {
 	public class GuideFragment : Fragment
-	{
-		
-		private RecyclerView mRecyclerView;
-		private RecyclerView.LayoutManager mLayoutManager;
-		private RecyclerView.Adapter mAdapter;
-		protected List<Guide> mGuideList = new List<Guide> ();
-		public string mPlace="";
-		public GuideSearch mGuideSearch;
-
+	{		
+		private RecyclerView 				mRecyclerView;
+		private RecyclerView.LayoutManager 	mLayoutManager;
+		private RecyclerView.Adapter 		mAdapter;
+		protected List<Guide> 				mGuideList = new List<Guide> ();
+		public string 						mPlace="";
+		public GuideSearch 					mGuideSearch;
 
 		public override void OnCreate (Bundle savedInstanceState)
 		{
+			mGuideSearch = ((SecondActivity)this.Activity).mGuideSearch;
 			base.OnCreate (savedInstanceState);
-			mGuideSearch = ((SecondActivity)this.Activity).mGuideSearch;//new GuideSearch ();
+
 			SetHasOptionsMenu(true);
-			// Create your fragment here
 		}			
 
 		public override void OnCreateOptionsMenu(IMenu menu, MenuInflater menuInflater)
 		{
 			//menu.Clear ();
 			menuInflater.Inflate(Resource.Menu.menu_filters, menu);
-			mPlace = Activity.Intent.GetStringExtra ("location") ?? "";
-			string expertise = Activity.Intent.GetStringExtra ("expertise") ?? "";
+			mPlace = Activity.Intent.GetStringExtra (Constants.selectedLocation) ?? "";
+			string expertise = Activity.Intent.GetStringExtra (Constants.selectedExpertise) ?? "";
 
 			var item = menu.FindItem (Resource.Id.search);
 
@@ -61,7 +59,7 @@ namespace TouriDroid
 			mGuideSearch.placesServedList.Clear ();
 			mGuideSearch.placesServedList.Add (mPlace);
 			mGuideSearch.expertiseList.Add (expertise);
-			//GuideFragment gf = FragmentManager.FindFragmentById<GuideFragment> (Resource.Id.fragment_container);
+
 			RefineSearch(mGuideSearch);
 
 			//var item = menu.FindItem (Resource.Id.filter);
@@ -78,16 +76,16 @@ namespace TouriDroid
 				mGuideSearch.placesServedList.Add (place);
 				GuideFragment gf = FragmentManager.FindFragmentById<GuideFragment> (Resource.Id.fragment_container);
 				gf.RefineSearch(mGuideSearch);
-
-				//	string place = 
-			} else {
+			} 
+			else 
+			{
 				//@todo
 			}
 		}
-
-
+			
 		public override bool OnOptionsItemSelected (IMenuItem item)
 		{
+			//load filter fragment
 			if (item.ItemId == Resource.Id.filter) {
 				var newFragment = new FilterFragment ();
 				//var ft = FragmentManager.BeginTransaction ();
@@ -144,19 +142,8 @@ namespace TouriDroid
 			if (atLeastOneSearchParameter == false) {
 				url = Constants.DEBUG_BASE_URL+Constants.URL_Get_All_Guides;
 			}
-
-
+				
 			await loadGuideProfiles (url);
-			//CallAPI ca = new CallAPI();
-
-			//List<Guide> myGuides = new List<Guide> ();
-
-			/****** Uncomment when webservice is running *****/
-			//JsonValue json = await ca.getWebApiData(url);
-			//parseGuideProfiles(json);
-
-		//	mAdapter.NotifyDataSetChanged ();
-
 		}
 
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -224,6 +211,9 @@ namespace TouriDroid
 
 		public void parseGuideProfiles(JsonValue json)
 		{
+			if (json == null) {
+				return;
+			}
 			mGuideList.Clear ();
 			((SecondActivity)this.Activity).availableLanguages.Clear ();
 
@@ -340,233 +330,7 @@ namespace TouriDroid
 		{
 			int photoNum = position + 1;
 			//Toast.MakeText(this, "This is photo number " + photoNum, ToastLength.Short).Show();
-		}
-
-		private List<Guide> buildTestData()
-		{
-			List<Guide> myGuides = new List<Guide> ();
-
-			myGuides.Add (new Guide(){guideId = 1, fName = "John", lName = "Lennon"});
-			myGuides [0].languageList.Add ("English");
-			myGuides [0].languageList.Add ("French");
-			myGuides [0].placesServedList.Add ("Toronto, Ontario, Canada");
-			myGuides [0].placesServedList.Add ("Scarborough, Ontario, Canada");
-			myGuides [0].placesServedList.Add ("Pickering, Ontario, Canada");
-			myGuides [0].availability = Constants.AvailableNowValue;
-			myGuides [0].description = "My name is Naga Subrahmanyam and my friends call me Subbu. I am an experienced, " +
-				"professional English-speaking licensed tour guide of Hyderabad. I have been working since 2002 for the" +
-				"tourists from different countries of the world. I was trained and licensed by Ministry of Tourism, Government of India." +
-				" Tourism is my lifetime passion and I love working with people. I am providing private tours so that you will discover" +
-				"and learn more about our beautiful city Hyderabad, its legends and anecdotes, and the way of life. I studied my graduation" +
-				" and post graduation in tourism management and experienced in different kinds of tours such as heritage / historical / architectural" +
-				" tours, religious (temple / faith) tours, Forest / Nature / Wildlife Tours, Buddhist tours, Offbeat coastal tours, walking tours and" +
-				" textile tours.";			
-			myGuides [0].expertise.Add (new Expertise (){ expertiseId = 0, expertise = "Nightlife" });
-			myGuides [0].expertise.Add (new Expertise (){ expertiseId = 1, expertise = "Museums" });
-			myGuides [0].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Restaurants" });
-
-			myGuides.Add (new Guide(){guideId = 2, fName = "Paul", lName = "McCartney"});
-			myGuides [1].languageList.Add ("English");
-			myGuides [1].placesServedList.Add ("Vancouver, British Columbia, Canada");
-			myGuides [1].availability = Constants.AvailableNowValue;
-			myGuides.Add (new Guide(){guideId = 3, fName = "Ringo", lName = "Starr"});
-			myGuides [1].availability = Constants.AvailableNowValue;
-			myGuides [1].expertise.Add (new Expertise (){ expertiseId = 0, expertise = "Landmarks" });
-			myGuides [1].expertise.Add (new Expertise (){ expertiseId = 1, expertise = "Museums" });
-			myGuides [1].description = "My name is Naga Subrahmanyam and my friends call me Subbu. I am an experienced, " +
-				"professional English-speaking licensed tour guide of Hyderabad. I have been working since 2002 for the" +
-				"tourists from different countries of the world. I was trained and licensed by Ministry of Tourism, Government of India." +
-				" Tourism is my lifetime passion and I love working with people. I am providing private tours so that you will discover" +
-				"and learn more about our beautiful city Hyderabad, its legends and anecdotes, and the way of life. I studied my graduation" +
-				" and post graduation in tourism management and experienced in different kinds of tours such as heritage / historical / architectural" +
-				" tours, religious (temple / faith) tours, Forest / Nature / Wildlife Tours, Buddhist tours, Offbeat coastal tours, walking tours and" +
-				" textile tours.";
-
-			myGuides [2].languageList.Add ("Italian");
-			myGuides [2].languageList.Add ("French");
-			myGuides [2].placesServedList.Add ("Colombo, Sri Lanka");
-			myGuides [2].placesServedList.Add ("Galle, Sri Lanka");
-			myGuides [2].availability = Constants.AvailableNowValue;
-			myGuides [2].expertise.Add (new Expertise (){ expertiseId = 0, expertise = "Nightlife" });
-			myGuides [2].expertise.Add (new Expertise (){ expertiseId = 1, expertise = "Museums" });
-			myGuides [2].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Restaurants" });
-			myGuides [2].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Coffee Shops" });
-			myGuides [2].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Outdoors" });
-			myGuides [2].description = "My name is Naga Subrahmanyam and my friends call me Subbu. I am an experienced, " +
-				"professional English-speaking licensed tour guide of Hyderabad. I have been working since 2002 for the" +
-				"tourists from different countries of the world. I was trained and licensed by Ministry of Tourism, Government of India." +
-				" Tourism is my lifetime passion and I love working with people. I am providing private tours so that you will discover" +
-				"and learn more about our beautiful city Hyderabad, its legends and anecdotes, and the way of life. I studied my graduation" +
-				" and post graduation in tourism management and experienced in different kinds of tours such as heritage / historical / architectural" +
-				" tours, religious (temple / faith) tours, Forest / Nature / Wildlife Tours, Buddhist tours, Offbeat coastal tours, walking tours and" +
-				" textile tours.";
-
-			myGuides.Add (new Guide(){guideId = 4, fName = "Peter", lName = "Piper"});
-			myGuides [3].languageList.Add ("English");
-			myGuides [3].languageList.Add ("Macedonian");
-			myGuides [3].languageList.Add ("Croatian");
-			myGuides [3].placesServedList.Add ("Chennai, Tamil Nadu, India");
-			myGuides [3].placesServedList.Add ("Mumbai, India");
-			myGuides [3].availability = Constants.AvailableLaterValue;
-			myGuides [3].expertise.Add (new Expertise (){ expertiseId = 0, expertise = "Nightlife" });
-			myGuides [3].expertise.Add (new Expertise (){ expertiseId = 1, expertise = "Museums" });
-			myGuides [3].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Restaurants" });
-			myGuides [3].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Coffee Shops" });
-			myGuides [3].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Outdoors" });
-			myGuides [3].description = "My name is Naga Subrahmanyam and my friends call me Subbu. I am an experienced, " +
-				"professional English-speaking licensed tour guide of Hyderabad. I have been working since 2002 for the" +
-				"tourists from different countries of the world. I was trained and licensed by Ministry of Tourism, Government of India." +
-				" Tourism is my lifetime passion and I love working with people. I am providing private tours so that you will discover" +
-				"and learn more about our beautiful city Hyderabad, its legends and anecdotes, and the way of life. I studied my graduation" +
-				" and post graduation in tourism management and experienced in different kinds of tours such as heritage / historical / architectural" +
-				" tours, religious (temple / faith) tours, Forest / Nature / Wildlife Tours, Buddhist tours, Offbeat coastal tours, walking tours and" +
-				" textile tours.";
-			myGuides.Add (new Guide(){guideId = 5, fName = "Malcolm", lName = "X"});
-			myGuides [4].languageList.Add ("English");
-			myGuides [4].placesServedList.Add ("Mumbai, India");
-			myGuides [4].availability = Constants.AvailableLaterValue;
-			myGuides [4].expertise.Add (new Expertise (){ expertiseId = 0, expertise = "Nightlife" });
-			myGuides [4].expertise.Add (new Expertise (){ expertiseId = 1, expertise = "Museums" });
-			myGuides [4].description = "My name is Naga Subrahmanyam and my friends call me Subbu. I am an experienced, " +
-				"professional English-speaking licensed tour guide of Hyderabad. I have been working since 2002 for the" +
-				"tourists from different countries of the world. I was trained and licensed by Ministry of Tourism, Government of India." +
-				" Tourism is my lifetime passion and I love working with people. I am providing private tours so that you will discover" +
-				"and learn more about our beautiful city Hyderabad, its legends and anecdotes, and the way of life. I studied my graduation" +
-				" and post graduation in tourism management and experienced in different kinds of tours such as heritage / historical / architectural" +
-				" tours, religious (temple / faith) tours, Forest / Nature / Wildlife Tours, Buddhist tours, Offbeat coastal tours, walking tours and" +
-				" textile tours.";
-			myGuides.Add (new Guide(){guideId = 6, fName = "Mohammed", lName = "Ali"});
-			myGuides [5].languageList.Add ("English");
-			myGuides [5].languageList.Add ("French");
-			myGuides [5].placesServedList.Add ("Mumbai, India");
-			myGuides [5].availability = Constants.AvailableLaterValue;
-			myGuides [5].expertise.Add (new Expertise (){ expertiseId = 0, expertise = "Restaurants" });
-			myGuides [5].expertise.Add (new Expertise (){ expertiseId = 1, expertise = "Outdoors" });
-			myGuides [5].description = "My name is Naga Subrahmanyam and my friends call me Subbu. I am an experienced, " +
-				"professional English-speaking licensed tour guide of Hyderabad. I have been working since 2002 for the" +
-				"tourists from different countries of the world. I was trained and licensed by Ministry of Tourism, Government of India." +
-				" Tourism is my lifetime passion and I love working with people. I am providing private tours so that you will discover" +
-				"and learn more about our beautiful city Hyderabad, its legends and anecdotes, and the way of life. I studied my graduation" +
-				" and post graduation in tourism management and experienced in different kinds of tours such as heritage / historical / architectural" +
-				" tours, religious (temple / faith) tours, Forest / Nature / Wildlife Tours, Buddhist tours, Offbeat coastal tours, walking tours and" +
-				" textile tours.";
-			myGuides.Add (new Guide(){guideId = 7, fName = "Kamal", lName = "Hassan"});
-			myGuides [6].languageList.Add ("English");
-			myGuides [6].languageList.Add ("German");
-			myGuides [6].languageList.Add ("French");
-			myGuides [6].languageList.Add ("Italian");
-			myGuides [6].languageList.Add ("Macedonian");
-			myGuides [6].placesServedList.Add ("Istanbul, Turkey");
-			myGuides [6].availability = Constants.NotAvailableForChatValue;
-			myGuides [6].expertise.Add (new Expertise (){ expertiseId = 0, expertise = "Restaurants" });
-			myGuides [6].expertise.Add (new Expertise (){ expertiseId = 1, expertise = "Outdoors" });
-			myGuides [6].description = "My name is Naga Subrahmanyam and my friends call me Subbu. I am an experienced, " +
-				"professional English-speaking licensed tour guide of Hyderabad. I have been working since 2002 for the" +
-				"tourists from different countries of the world. I was trained and licensed by Ministry of Tourism, Government of India." +
-				" Tourism is my lifetime passion and I love working with people. I am providing private tours so that you will discover" +
-				"and learn more about our beautiful city Hyderabad, its legends and anecdotes, and the way of life. I studied my graduation" +
-				" and post graduation in tourism management and experienced in different kinds of tours such as heritage / historical / architectural" +
-				" tours, religious (temple / faith) tours, Forest / Nature / Wildlife Tours, Buddhist tours, Offbeat coastal tours, walking tours and" +
-				" textile tours.";
-			myGuides.Add (new Guide(){guideId = 8, fName = "John", lName = "Smith"});
-			myGuides [7].languageList.Add ("Hindi");
-			myGuides [7].languageList.Add ("Tamil");
-			myGuides [7].placesServedList.Add ("Chennai, Tamil Nadu, India");
-			myGuides [7].availability =  Constants.NotAvailableForChatValue;;
-			myGuides [7].expertise.Add (new Expertise (){ expertiseId = 0, expertise = "Restaurants" });
-			myGuides [7].expertise.Add (new Expertise (){ expertiseId = 1, expertise = "Nightlife" });
-			myGuides [7].description = "My name is Naga Subrahmanyam and my friends call me Subbu. I am an experienced, " +
-				"professional English-speaking licensed tour guide of Hyderabad. I have been working since 2002 for the" +
-				"tourists from different countries of the world. I was trained and licensed by Ministry of Tourism, Government of India." +
-				" Tourism is my lifetime passion and I love working with people. I am providing private tours so that you will discover" +
-				"and learn more about our beautiful city Hyderabad, its legends and anecdotes, and the way of life. I studied my graduation" +
-				" and post graduation in tourism management and experienced in different kinds of tours such as heritage / historical / architectural" +
-				" tours, religious (temple / faith) tours, Forest / Nature / Wildlife Tours, Buddhist tours, Offbeat coastal tours, walking tours and" +
-				" textile tours.";
-
-			myGuides.Add (new Guide(){guideId = 9, fName = "Rajni", lName = "Kanth"});
-			myGuides [8].languageList.Add ("Tamil");
-			myGuides [8].placesServedList.Add ("Chennai, Tamil Nadu, India");
-			myGuides [8].availability =  Constants.AvailableNowValue;;
-			myGuides [8].expertise.Add (new Expertise (){ expertiseId = 0, expertise = "Nightlife" });
-			myGuides [8].expertise.Add (new Expertise (){ expertiseId = 1, expertise = "Museums" });
-			myGuides [8].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Restaurants" });
-			myGuides [8].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Coffee Shops" });
-			myGuides [8].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Outdoors" });
-			myGuides [8].description = "My name is Naga Subrahmanyam and my friends call me Subbu. I am an experienced, " +
-				"professional English-speaking licensed tour guide of Hyderabad. I have been working since 2002 for the" +
-				"tourists from different countries of the world. I was trained and licensed by Ministry of Tourism, Government of India." +
-				" Tourism is my lifetime passion and I love working with people. I am providing private tours so that you will discover" +
-				"and learn more about our beautiful city Hyderabad, its legends and anecdotes, and the way of life. I studied my graduation" +
-				" and post graduation in tourism management and experienced in different kinds of tours such as heritage / historical / architectural" +
-				" tours, religious (temple / faith) tours, Forest / Nature / Wildlife Tours, Buddhist tours, Offbeat coastal tours, walking tours and" +
-				" textile tours.";
-			myGuides.Add (new Guide(){guideId = 9, fName = "Igor", lName = "Siljanovski"});
-			myGuides [9].languageList.Add ("Punjabi");
-			myGuides [9].placesServedList.Add ("Athens, Greece");
-			myGuides [9].availability =  Constants.AvailableLaterValue;
-			myGuides [9].expertise.Add (new Expertise (){ expertiseId = 0, expertise = "Nightlife" });
-			myGuides [9].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Coffee Shops" });
-			myGuides [9].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Outdoors" });
-			myGuides [9].description = "My name is Naga Subrahmanyam and my friends call me Subbu. I am an experienced, " +
-				"professional English-speaking licensed tour guide of Hyderabad. I have been working since 2002 for the" +
-				"tourists from different countries of the world. I was trained and licensed by Ministry of Tourism, Government of India." +
-				" Tourism is my lifetime passion and I love working with people. I am providing private tours so that you will discover" +
-				"and learn more about our beautiful city Hyderabad, its legends and anecdotes, and the way of life. I studied my graduation" +
-				" and post graduation in tourism management and experienced in different kinds of tours such as heritage / historical / architectural" +
-				" tours, religious (temple / faith) tours, Forest / Nature / Wildlife Tours, Buddhist tours, Offbeat coastal tours, walking tours and" +
-				" textile tours.";
-			myGuides.Add (new Guide(){guideId = 9, fName = "Bojan", lName = "Siljanovski"});
-			myGuides [10].languageList.Add ("English");
-			myGuides [10].placesServedList.Add ("Toronto, Ontario, Canada");
-			myGuides [10].placesServedList.Add ("Scarborough, Ontario, Canada");
-			myGuides [10].placesServedList.Add ("Pickering, Ontario, Canada");
-			myGuides [10].availability = Constants.AvailableLaterValue;
-			myGuides [10].expertise.Add (new Expertise (){ expertiseId = 0, expertise = "Nightlife" });
-			myGuides [10].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Coffee Shops" });
-			myGuides [10].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Outdoors" });
-			myGuides [10].description = "My name is Naga Subrahmanyam and my friends call me Subbu. I am an experienced, " +
-				"professional English-speaking licensed tour guide of Hyderabad. I have been working since 2002 for the" +
-				"tourists from different countries of the world. I was trained and licensed by Ministry of Tourism, Government of India." +
-				" Tourism is my lifetime passion and I love working with people. I am providing private tours so that you will discover" +
-				"and learn more about our beautiful city Hyderabad, its legends and anecdotes, and the way of life. I studied my graduation" +
-				" and post graduation in tourism management and experienced in different kinds of tours such as heritage / historical / architectural" +
-				" tours, religious (temple / faith) tours, Forest / Nature / Wildlife Tours, Buddhist tours, Offbeat coastal tours, walking tours and" +
-				" textile tours.";
-			myGuides.Add (new Guide(){guideId = 9, fName = "Ryhaan", lName = "Shan"});
-			myGuides [11].languageList.Add ("English");
-			myGuides [11].languageList.Add ("Macedonian");
-			myGuides [11].placesServedList.Add ("Scarborough, Ontario, Canada");
-			myGuides [11].placesServedList.Add ("Pickering, Ontario, Canada");
-			myGuides [11].availability =  Constants.NotAvailableForChatValue;
-			myGuides [11].expertise.Add (new Expertise (){ expertiseId = 0, expertise = "Nightlife" });
-			myGuides [11].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Coffee Shops" });
-			myGuides [11].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Outdoors" });
-			myGuides [11].description = "My name is Naga Subrahmanyam and my friends call me Subbu. I am an experienced, " +
-				"professional English-speaking licensed tour guide of Hyderabad. I have been working since 2002 for the" +
-				"tourists from different countries of the world. I was trained and licensed by Ministry of Tourism, Government of India." +
-				" Tourism is my lifetime passion and I love working with people. I am providing private tours so that you will discover" +
-				"and learn more about our beautiful city Hyderabad, its legends and anecdotes, and the way of life. I studied my graduation" +
-				" and post graduation in tourism management and experienced in different kinds of tours such as heritage / historical / architectural" +
-				" tours, religious (temple / faith) tours, Forest / Nature / Wildlife Tours, Buddhist tours, Offbeat coastal tours, walking tours and" +
-				" textile tours.";
-			myGuides.Add (new Guide(){guideId = 9, fName = "Sasi", lName = "Shan"});
-			myGuides [12].languageList.Add ("English");
-			myGuides [12].placesServedList.Add ("Vancouver, British Columbia, Canada");
-			myGuides [12].availability =  Constants.AvailableNowValue;
-			myGuides [12].expertise.Add (new Expertise (){ expertiseId = 0, expertise = "Nightlife" });
-			myGuides [12].expertise.Add (new Expertise (){ expertiseId = 2, expertise = "Outdoors" });		
-			myGuides [12].description = "My name is Naga Subrahmanyam and my friends call me Subbu. I am an experienced, " +
-				"professional English-speaking licensed tour guide of Hyderabad. I have been working since 2002 for the" +
-				"tourists from different countries of the world. I was trained and licensed by Ministry of Tourism, Government of India." +
-				" Tourism is my lifetime passion and I love working with people. I am providing private tours so that you will discover" +
-				"and learn more about our beautiful city Hyderabad, its legends and anecdotes, and the way of life. I studied my graduation" +
-				" and post graduation in tourism management and experienced in different kinds of tours such as heritage / historical / architectural" +
-				" tours, religious (temple / faith) tours, Forest / Nature / Wildlife Tours, Buddhist tours, Offbeat coastal tours, walking tours and" +
-				" textile tours.";
-
-			return myGuides;
-		}
+		}			
 	}
 
 

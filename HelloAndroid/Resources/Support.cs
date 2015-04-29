@@ -6,9 +6,8 @@ using Java.IO;
 namespace TouriDroid
 {
 	public static class Support
-	{
-		
-		public static String createImageFromBitmap(Bitmap bitmap, Context c) {
+	{		
+		public static String createImageFromdddBitmap(Bitmap bitmap, Context c) {
 			String fileName = "myImage";//no .png or .jpg needed
 			ContextWrapper cw = new ContextWrapper(c);
 			Java.IO.File directory = cw.GetDir("imgDir", FileCreationMode.Private);

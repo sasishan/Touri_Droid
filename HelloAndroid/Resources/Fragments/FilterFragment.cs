@@ -16,27 +16,10 @@ namespace TouriDroid
 {
 	public class FilterFragment : Fragment
 	{
-
-
-		private static readonly string[] availableLanguages = new []
-		{
-			"Chinese","Spanish","English","Arabic","Hindi","Croatian","Portuguese","Russian","Japanese","German","Macedonian","Vietnamese","French","Korean","Tamil","Italian","Urdu"
-		};
-
 		private static readonly int[] mExpertiseValues = new []
 		{
 			Resource.Drawable.bar48, Resource.Drawable.lunch4, Resource.Drawable.cup54,
 			Resource.Drawable.camera, Resource.Drawable.hiking48, Resource.Drawable.museum37
-		};
-
-		private List<Tuple<int,int>> expertiseImages = new List<Tuple<int,int>> {
-			Tuple.Create(Resource.Drawable.bar48, Resource.Drawable.bar48_pressed),
-			Tuple.Create(Resource.Drawable.cup54, Resource.Drawable.cup54),
-			Tuple.Create(Resource.Drawable.camera, Resource.Drawable.camera),
-
-			Tuple.Create(Resource.Drawable.lunch4, Resource.Drawable.lunch4),
-			Tuple.Create(Resource.Drawable.hiking48, Resource.Drawable.hiking48_pressed),
-			Tuple.Create(Resource.Drawable.museum37, Resource.Drawable.museum37)
 		};
 
 		public override void OnCreate (Bundle savedInstanceState)
@@ -73,49 +56,21 @@ namespace TouriDroid
 				transaction.Commit();
 			};
 
+			SupportFunctions sf = new SupportFunctions ();
+
+			// build out the expertises table
 			TableLayout expertiseTable = (TableLayout)view.FindViewById (Resource.Id.table_Expertise);
-			for (int i = 0; i < expertiseImages.Count; i = i + 3) {
-				TableRow row = (TableRow)LayoutInflater.From (view.Context).Inflate (Resource.Layout.expertise_tablerow, null);
-
-				ImageButton []buttonArray = new ImageButton[3];
-
-				buttonArray[0] = row.FindViewById<ImageButton> (Resource.Id.exp1);
-				buttonArray[1] = row.FindViewById<ImageButton> (Resource.Id.exp2);
-				buttonArray[2] = row.FindViewById<ImageButton> (Resource.Id.exp3);
-
-				for (int j = 0; j < buttonArray.Length; j++) {
-					ImageButton b = buttonArray[j];
-					int downImage = expertiseImages [i + j].Item2;
-					int upImage = expertiseImages [i + j].Item1;
-					b.SetImageResource (upImage);
-
-					b.Click += (object sender, EventArgs e) => {
-						if (!b.Selected)
-						{						
-							b.SetImageResource (downImage);
-							b.Selected=true;
-						}
-						else
-						{
-							b.SetImageResource (upImage);
-							b.Selected=false;
-						}
-					};					
-				}								
-
-				//	expertiseTable.AddView (blankRow);
-				expertiseTable.AddView (row);
-			}
+			List<string> expertises = sf.BuildExpertiseTable (view, expertiseTable, Resource.Layout.expertise_tablerow);
 			expertiseTable.RequestLayout();
 
 			//((SecondActivity)this.Activity).checkedLanguages.Clear ();
 			TableLayout languagesTable = (TableLayout)view.FindViewById (Resource.Id.table_Languages);
-			for (int i = 0; i < availableLanguages.Length; i++) {
+			for (int i = 0; i < Constants.AvailableLanguages.Length; i++) {
 				TableRow row = (TableRow)LayoutInflater.From (view.Context).Inflate (Resource.Layout.language_tablerow, null);
 				CheckBox c = row.FindViewById<CheckBox> (Resource.Id.languageCheck);
-				c.Text = availableLanguages [i];
+				c.Text = Constants.AvailableLanguages [i];
 
-				if (((SecondActivity)this.Activity).checkedLanguages.Contains (availableLanguages [i])) {
+				if (((SecondActivity)this.Activity).checkedLanguages.Contains (Constants.AvailableLanguages [i])) {
 					c.Checked = true;
 					//((SecondActivity)this.Activity).checkedLanguages.Add(c.Text);
 				}

@@ -9,6 +9,7 @@ namespace TouriDroid
 	public class Guide
 	{
 		public int guideId { get; set; }
+		public string userName { get; set; }
 		public string fName { get; set; }
 		public string lName { get; set; }
 		public string phone { get; set; }

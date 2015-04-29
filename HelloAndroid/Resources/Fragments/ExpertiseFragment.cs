@@ -44,6 +44,8 @@ namespace TouriDroid
 
 			mRecyclerView.SetLayoutManager (mLayoutManager);
 			mAdapter = new RecyclerAdapterExpertise (mExpertiseList, this.Activity);
+			((RecyclerAdapterExpertise)mAdapter).ItemClick += OnItemClick;
+
 			mRecyclerView.SetAdapter (mAdapter);
 
 			//string url = Constants.DEBUG_BASE_URL + Constants.URL_Get_All_Expertises;
@@ -63,13 +65,26 @@ namespace TouriDroid
 			return view;
 		}
 			
+		void OnItemClick (object sender, int position)
+		{
+			Expertise exp = ((RecyclerAdapterExpertise)mAdapter).getExpertise (position);
+			string place = ((MainActivity) Activity).getPlace();
+			((MainActivity) Activity).mExpertise = exp;
+
+			// pass the Second activity the location and currently selected expertise so 
+			// it can start of with it
+			var gprofileActivity = new Intent (Activity, typeof(SecondActivity));
+			gprofileActivity.PutExtra (Constants.selectedLocation, place);
+			gprofileActivity.PutExtra (Constants.selectedExpertise, exp.expertise);		
+			this.StartActivity (gprofileActivity);
+		}
+
 		public async void loadExpertises(string url)
 		{
 			CallAPI ca = new CallAPI();
 
 			var json = await ca.getWebApiData(url);
 			parseExpertises(json);
-
 
 			// load the images for each expertise now
 			string imageUrl;
@@ -131,6 +146,7 @@ namespace TouriDroid
 	{
 		private List<Expertise> mExpertise;
 		private Activity thisActivity;
+		public event EventHandler<int> ItemClick;
 
 		public RecyclerAdapterExpertise(List<Expertise> expertiseList, Activity thisAct)
 		{
@@ -146,9 +162,13 @@ namespace TouriDroid
 			public TextView mGuideCount { get; set;} 
 			public ImageView mExpertiseImage { get; set; }
 
-			public MyView(View view): base(view)
+			public MyView(View view, Action<int> listener): base(view)
 			{
 				mMainView = view;
+
+				view.Click += (sender, e) => listener (base.Position);
+				//mMainView.Click += (sender, e) => OrientationListener(base.Position);
+
 			}
 		}
 
@@ -160,7 +180,7 @@ namespace TouriDroid
 			TextView guideCount = row.FindViewById<TextView> (Resource.Id.expertise_guide_count);
 			ImageView expImage = row.FindViewById<ImageView> (Resource.Id.expertise_image);
 
-			MyView view = new MyView (row) { mExpertise = expertise, mGuideCount=guideCount, mExpertiseImage = expImage};
+			MyView view = new MyView (row, OnClick) { mExpertise = expertise, mGuideCount=guideCount, mExpertiseImage = expImage};
 			return view;
 		}
 
@@ -172,30 +192,22 @@ namespace TouriDroid
 			myHolder.mExpertise.Text = mExpertise[position].expertise;
 			myHolder.mGuideCount.Text = mExpertise[position].numberOfGuides.ToString();
 			myHolder.mExpertiseImage.SetImageBitmap(mExpertise[position].expertiseImage);
-
-			myHolder.ItemView.Click += (sender, e) => {
-				int itemPosition = myHolder.Position;
-
-				string place = ((MainActivity) thisActivity).getPlace();
-				((MainActivity) thisActivity).mExpertise = mExpertise[itemPosition];
-
-				var gprofileActivity = new Intent (thisActivity, typeof(SecondActivity));
-				gprofileActivity.PutExtra ("location", place);
-				gprofileActivity.PutExtra ("expertise", mExpertise[itemPosition].expertise);		
-
-
-//				GuideFragment guideFragment = new GuideFragment();
-//				FragmentManager fragmentManager = ((MainActivity) thisActivity).getCurrentFragmentManager();
-//				FragmentTransaction fragmentTransaction = fragmentManager.BeginTransaction();
-//				fragmentTransaction.AddToBackStack("ExpertiseFragment").Replace(Resource.Id.main_fragment_container, guideFragment);
-//				fragmentTransaction.Commit();
-				thisActivity.StartActivity (gprofileActivity);
-
-			};
 		}
 
 		public override int ItemCount{
 			get { return mExpertise.Count; }
+		}
+
+		void OnClick (int position)
+		{
+			if (ItemClick != null) {
+				ItemClick (this, position);
+			}
+		}
+
+		public Expertise getExpertise(int position)
+		{
+			return mExpertise [position];
 		}
 	}
 }

@@ -15,11 +15,29 @@
 	<string name="SelectExpertise">Select Expertise</string>
 	<string name="SelectLanguages">Available Guide Languages</string>
 	<string name="ApplyFilter">Apply Filter</string>
+	<string name="Next">Next</string>
 	<color name="white">#FFFFFF</color>
 	<color name="dark_grey">#7e7e7e</color>
 	<color name="black">#000000</color>
 	<color name="light_blue">#d5e7fb</color>
 
+
+    <style name="DefaultButtonText">
+       <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#979797</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:shadowColor">#f9f9f9</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
+    </style>
+
+    <dimen name="activity_vertical_margin">5dp</dimen>
+    <dimen name="activity_horizontal_margin">5dp</dimen>
 
 
     <string-array name="nav_drawer_items">

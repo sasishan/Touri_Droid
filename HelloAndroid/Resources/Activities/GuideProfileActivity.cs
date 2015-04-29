@@ -15,7 +15,7 @@ using Android.Widget;
 
 namespace TouriDroid
 {
-	[Activity (Label = "GuideProfileActivity")]			
+	[Activity (Label = "Guide")]			
 	public class GuideProfileActivity : Activity
 	{
 		protected override void OnCreate (Bundle bundle)
@@ -23,6 +23,9 @@ namespace TouriDroid
 			base.OnCreate (bundle);
 
 			SetContentView (Resource.Layout.GuideProfile);
+
+			ActionBar.SetDisplayHomeAsUpEnabled (true);
+			ActionBar.SetHomeButtonEnabled (true);
 
 			string guideId = Intent.GetStringExtra ("GuideId") ?? "Data not available";
 			string fName = Intent.GetStringExtra ("FName") ?? "Data not available";
@@ -33,6 +36,17 @@ namespace TouriDroid
 			string availability = Intent.GetStringExtra ("Availability") ?? "Data not available";
 
 			loadProfile (guideId, fName, lName, description,languages,expertise );
+
+			Button button = FindViewById<Button>(Resource.Id.ChatButton);
+
+			button.Click += (o, e) => {
+				var chatActivity = new Intent (this, typeof(ActiveChat));
+
+				chatActivity.PutExtra ("TargetGuideId", guideId);
+				chatActivity.PutExtra ("TargetFirstName", fName);
+				chatActivity.PutExtra ("TargetLastName", lName);
+				this.StartActivity(chatActivity);
+			};
 		}
 		 
 		public override bool OnKeyDown(Android.Views.Keycode keyCode, Android.Views.KeyEvent e) {
@@ -51,6 +65,17 @@ namespace TouriDroid
 				return true;
 			}
 			return base.OnKeyUp(keyCode, e);
+		}
+
+		public override bool OnOptionsItemSelected (IMenuItem item)
+		{
+			switch (item.ItemId) {
+			case Android.Resource.Id.Home:
+				Finish ();
+				return true;
+			default:
+				return base.OnOptionsItemSelected (item);
+			}			
 		}
 
 		private void loadProfile(string guideId, string fName, string lName,string description, string languages, string expertise)

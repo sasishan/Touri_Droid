@@ -13,15 +13,35 @@ using Android.Widget;
 
 namespace TouriDroid
 {
-	[Activity (Label = "SigninSignupActivity")]			
-	public class SigninSignupActivity : Activity
+	[Activity (Label = "Log In or Sign Up")]			
+	public class LoginOrSignupActivity : Activity
 	{
+		public Guide newGuide;
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
-			SetContentView (Resource.Layout.LoginOrSignup);
+			SetContentView (Resource.Layout.SignInSignUp_layout);
 
-			// Create your application here
+			ActionBar.SetDisplayHomeAsUpEnabled (true);
+			ActionBar.SetHomeButtonEnabled (true);
+
+			newGuide = new Guide ();
+			//load the Guide Fragment
+			var newFragment = new SigninSignupFragment ();
+			var ft = FragmentManager.BeginTransaction ();
+			ft.Add (Resource.Id.signinup_fragment_container, newFragment);
+			ft.Commit ();
+		}
+
+		public override bool OnOptionsItemSelected (IMenuItem item)
+		{
+			switch (item.ItemId) {
+			case Android.Resource.Id.Home:
+				Finish ();
+				return true;
+			default:
+				return base.OnOptionsItemSelected (item);
+			}			
 		}
 	}
 }

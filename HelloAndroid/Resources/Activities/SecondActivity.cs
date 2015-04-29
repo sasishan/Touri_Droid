@@ -23,36 +23,32 @@ namespace TouriDroid
 	[Activity (Label = "Nativus", Theme = "@style/Theme.AppCompat")]			
 	public class SecondActivity : ActionBarActivity
 	{
-		private DrawerLayout mDrawer;
-		private ListView mDrawerList;
+		private DrawerLayout 	mDrawer;
+		private ListView 		mDrawerList;
 		//List<string> mDrawerItems = new List<string>();
-		ActionBarDrawerToggle drawerToggle;
+		ActionBarDrawerToggle 	drawerToggle;
 		private ArrayAdapter<string> mAdapterLanguages=null;
 		private ArrayAdapter<string> mAdapterMainMenu=null;
 		private ArrayAdapter<string> mAdapterExpertise=null;
-		public GuideSearch mGuideSearch;
 		private SparseBooleanArray mLastSparseArrayLanguages;
 		private SparseBooleanArray mLastSparseArrayExpertise;
-		public string mPlace="";
-		public string mExpertise="";
-		public List<String> availableLanguages = new List<String> ();
-		public List<string> checkedLanguages = new List<String>();
+		public List<String> 	availableLanguages = new List<String> ();
+		private	Activity thisActivity = null;
 
-		private static string[] placeSuggestions = {
-			"Toronto", "Sao Paulo", "Rio de Janeiro",
-			"Bahia", "Mato Grosso", "Minas Gerais",
-			"Tocantins", "Rio Grande do Sul"
-		};
+		//Variables referenced by child fragments
+		public GuideSearch 		mGuideSearch;
+		public string 			mPlace="";
+		public string 			mExpertise="";
+		public List<string> 	checkedLanguages = new List<String>();
 
-
-		//private MyActionBarDrawerToggle drawerToggle;
-
+		//SecondActivity_DrawerMainMenuId
 		private static readonly string[] mDrawerItems = new []
 		{
 			Constants.DrawerOptionLanguage, "Contact Method", "Rates"
 			//Constants.DrawerOptionLanguage, Constants.DrawerOptionExpertise, "Contact Method", "Rates"
 		};
 
+		//SecondActivity_SecondActivity_DrawerLanguageOptionsId
 		private static readonly string[] mDrawerLanguages = new []
 		{
 			"Done", "Chinese","Spanish","English","Arabic","Hindi","Croatian","Portuguese","Russian","Japanese","German","Macedonian","Vietnamese","French","Korean","Tamil","Italian","Urdu"
@@ -62,102 +58,82 @@ namespace TouriDroid
 		{
 			"Done", "All", "Restaurants", "Museums", "Nightlife", "Hot Spots", "Landmarks"
 		};
-
-
+			
 		protected override void OnCreate (Bundle savedInstanceState)
 		{
 			RequestWindowFeature(WindowFeatures.ActionBar);
 			base.OnCreate (savedInstanceState);
 
-			checkedLanguages.Add ("English");
-			//@remove
-			mPlace = Intent.GetStringExtra ("location") ?? "";
-			mExpertise = Intent.GetStringExtra ("expertise") ?? "";
-			// Create your application here
+			setDefaultValues();
+		
 			SetContentView (Resource.Layout.Second);
 
-
+			thisActivity = this;
 			mGuideSearch = new GuideSearch ();
-			//mGuideSearch.placesServedList.Add ("Toronto, ON, Canada");
 
-			mDrawer = this.FindViewById<DrawerLayout> (Resource.Id.drawer_layout);
-			mDrawerList = this.FindViewById<ListView> (Resource.Id.left_drawer);
+			//mDrawer = this.FindViewById<DrawerLayout> (Resource.Id.drawer_layout);
+			//mDrawerList = this.FindViewById<ListView> (Resource.Id.left_drawer);
 
 			//mDrawerList.Adapter = new ArrayAdapter<string> (this, Android.Resource.Layout.SimpleListItem1, mDrawerItems);
-			loadDrawerItems (Constants.DrawerMainMenuId);
+			//loadDrawerItems (Constants.SecondActivity_DrawerMainMenuId);
 			//mDrawerList.Id = Constants.DrawerMainMenuId;
-			drawerToggle = new ActionBarDrawerToggle (this, mDrawer,Resource.String.drawer_open, Resource.String.drawer_close);
+			//drawerToggle = new ActionBarDrawerToggle (this, mDrawer,Resource.String.drawer_open, Resource.String.drawer_close);
 
-			mDrawer.SetDrawerListener (drawerToggle);
+			//mDrawer.SetDrawerListener (drawerToggle);
 			SupportActionBar.SetDisplayHomeAsUpEnabled (true);
 			SupportActionBar.SetHomeButtonEnabled (true);
 			SupportActionBar.Title = mExpertise;				
-			mDrawerList.ItemClick += DrawerListOnItemClick;
+		//	mDrawerList.ItemClick += DrawerListOnItemClick;
 
-			//var places = new string [] { "Toronto", "Halifax", "Vancouver", "New York"};
-			//mSearchListView = FindViewById<ListView> (Resource.Id.SearchListview);
-			//mSearchAdapter = new SimpleAdapter (this, Android.Resource.Layout.SimpleListItem1, null, from, to);
-			//mSearchListAdapter = new ArrayAdapter<string> (this, Android.Resource.Layout.SimpleListItem1, places);
-			//mSearchListView.Adapter = mSearchListAdapter;
-
+			//load the Guide Fragment
 			var newFragment = new GuideFragment ();
 			var ft = FragmentManager.BeginTransaction ();
 			ft.Add (Resource.Id.fragment_container, newFragment);
 			ft.Commit ();
 		}
 			
+		private void setDefaultValues()
+		{
+			//@todo get default
+			checkedLanguages.Add ("English");	
+
+			//Get the selected location and expertise from the Main activity
+			// Set by ExpertiseFragment
+
+			mPlace = Intent.GetStringExtra (Constants.selectedLocation) ?? "";
+			mExpertise = Intent.GetStringExtra (Constants.selectedExpertise) ?? "";
+		}
+
 		protected override void OnPostCreate (Bundle savedInstanceState)
 		{
 			base.OnPostCreate (savedInstanceState);
-			drawerToggle.SyncState ();
+		//	drawerToggle.SyncState ();
 		}
 
 		public override bool OnOptionsItemSelected (IMenuItem item)
 		{
-			if (drawerToggle.OnOptionsItemSelected (item)) 
-			{
-				return (true);
-			}
-
-			return base.OnOptionsItemSelected (item);
+		//	if (drawerToggle.OnOptionsItemSelected (item)) 
+		//	{
+		//		return (true);
+		//	}
+			switch (item.ItemId) {
+			case Android.Resource.Id.Home:
+					// app icon in action bar clicked; go home
+					//Intent intent = new Intent(this, HomeActivity.class);
+					//intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					//startActivity(intent);
+				Finish ();
+				return true;
+				//base.OnBackPressed();
+				//return base.OnOptionsItemSelected (item);
+			default:
+				return base.OnOptionsItemSelected (item);
+			}			
 		}
 
 		public override bool OnCreateOptionsMenu(IMenu menu)
 		{
 			MenuInflater.Inflate(Resource.Menu.menu_guide, menu);
-
-			/*			var item = menu.FindItem (Resource.Id.search);
-			View v = (View) MenuItemCompat.GetActionView (item);
-			AutoCompleteTextView searchPlaces = (AutoCompleteTextView) v.FindViewById (Resource.Id.search_places);
-
-			PlacesAutoCompleteAdapter pacAdapter = new PlacesAutoCompleteAdapter (this, Android.Resource.Layout.SimpleListItem1);
-			searchPlaces.Adapter = pacAdapter;
-			searchPlaces.ItemClick += searchPlaces_ItemClick;
-
-			mPlace = Intent.GetStringExtra ("location") ?? "";
-			string expertise = Intent.GetStringExtra ("expertise") ?? "";
-			searchPlaces.Text = mPlace;
-			mGuideSearch.placesServedList.Clear ();
-			mGuideSearch.placesServedList.Add (mPlace);
-			mGuideSearch.expertiseList.Add (expertise);
-			GuideFragment gf = FragmentManager.FindFragmentById<GuideFragment> (Resource.Id.fragment_container);
-			gf.RefineSearch(mGuideSearch);
-
-*/
-
-			//ArrayAdapter<String> adapter = new ArrayAdapter<String> (this, Android.Resource.Layout.SimpleListItem1, placeSuggestions);
-			//searchPlaces.Adapter = adapter;
-
-			//var item = menu.FindItem (Resource.Id.action_search);
-			//var searchView = MenuItemCompat.GetActionView (item);
-			//mSearchView = searchView.JavaCast<SearchView> ();
-			//mSearchView.SetOnQueryTextListener ();
-			//mSearchView.QueryTextChange+=(s,else)=> mSearchListAdapter.F
-
-			//SearchManager searchManager = (SearchManager)GetSystemService (Context.SearchService);
-			//SearchView searchView = (SearchView)menu.FindItem (Resource.Id.action_search).ActionView;
-			//ComponentName n = new ComponentName ("component.android.);
-			//searchView.SetSearchableInfo(searchManager.GetSearchableInfo(SecondActivity));
 			return base.OnCreateOptionsMenu(menu);
 
 		} 
@@ -171,8 +147,7 @@ namespace TouriDroid
 				mGuideSearch.placesServedList.Add (place);
 				GuideFragment gf = FragmentManager.FindFragmentById<GuideFragment> (Resource.Id.fragment_container);
 				gf.RefineSearch(mGuideSearch);
-
-			//	string place = 
+				 
 			} else {
 				//@todo
 			}
@@ -181,24 +156,20 @@ namespace TouriDroid
 
 		private void DrawerListOnItemClick(object sender, AdapterView.ItemClickEventArgs itemClickEventArgs)
 		{
-			//Fragment fragment = null;
-	//		mDrawerList.SetItemChecked (itemClickEventArgs.Position, true);
-//			SupportActionBar.Title = mDrawerItems [itemClickEventArgs.Position];
-
 			switch (itemClickEventArgs.Parent.Id)
 			{
-			case Constants.DrawerMainMenuId:
+			case Constants.SecondActivity_DrawerMainMenuId:
 				if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.DrawerOptionLanguage)) {
-					loadDrawerItems (Constants.DrawerLanguageOptionsId);
+					loadDrawerItems (Constants.SecondActivity_DrawerLanguageOptionsId);
 				}else if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.DrawerOptionExpertise)) {
-					loadDrawerItems (Constants.DrawerExpertiseOptionsId);
+					loadDrawerItems (Constants.SecondActivity_DrawerExpertiseOptionsId);
 				}
 				break;
 
-			case Constants.DrawerLanguageOptionsId:
+			case Constants.SecondActivity_DrawerLanguageOptionsId:
 				if (mDrawerLanguages [itemClickEventArgs.Position].Equals (Constants.DrawerOptionDone)) {
 					//mDrawer.CloseDrawer (this.mDrawerList);
-					loadDrawerItems (Constants.DrawerMainMenuId);
+					loadDrawerItems (Constants.SecondActivity_DrawerMainMenuId);
 				} else {
 					mGuideSearch.languageList.Clear ();
 					var sparseArray = mDrawerList.CheckedItemPositions;
@@ -217,9 +188,9 @@ namespace TouriDroid
 				}
 				break;
 
-			case Constants.DrawerExpertiseOptionsId:
+			case Constants.SecondActivity_DrawerExpertiseOptionsId:
 				if (mDrawerLanguages [itemClickEventArgs.Position].Equals (Constants.DrawerOptionDone)) {
-					loadDrawerItems (Constants.DrawerMainMenuId);
+					loadDrawerItems (Constants.SecondActivity_DrawerMainMenuId);
 				} else {
 					mGuideSearch.expertiseList.Clear ();
 					var sparseArray = mDrawerList.CheckedItemPositions;
@@ -238,22 +209,21 @@ namespace TouriDroid
 			}				
 			//mDrawer.CloseDrawer (this.mDrawerList);
 		}
-
-
+			
 		private void loadDrawerItems (int option)
 		{
 			switch (option) {
 
-			case Constants.DrawerMainMenuId:
+			case Constants.SecondActivity_DrawerMainMenuId:
 				if (mAdapterMainMenu == null) {
 					mAdapterMainMenu = new ArrayAdapter<string> (this, Android.Resource.Layout.SimpleListItem1, mDrawerItems);
 				}
 				mDrawerList.ChoiceMode = Android.Widget.ChoiceMode.Single; 
 				mDrawerList.Adapter = mAdapterMainMenu;
-				mDrawerList.Id = Constants.DrawerMainMenuId;
+				mDrawerList.Id = Constants.SecondActivity_DrawerMainMenuId;
 				break;
 
-			case Constants.DrawerLanguageOptionsId:
+			case Constants.SecondActivity_DrawerLanguageOptionsId:
 				if (mAdapterLanguages == null) {
 					//	mAdapterDone = new ArrayAdapter<string> (this, Android.Resource.Layout.SimpleListItem1, Constants.DrawerOptionDone);
 					mAdapterLanguages = new ArrayAdapter<string> (this, Android.Resource.Layout.SimpleListItemMultipleChoice, mDrawerLanguages);
@@ -261,7 +231,7 @@ namespace TouriDroid
 				}
 				mDrawerList.Adapter = mAdapterLanguages;
 				mDrawerList.ChoiceMode = Android.Widget.ChoiceMode.Multiple; // Multiple
-				mDrawerList.Id = Constants.DrawerLanguageOptionsId;
+				mDrawerList.Id = Constants.SecondActivity_DrawerLanguageOptionsId;
 				if (mLastSparseArrayLanguages != null) {
 					for (int i = 0; i < mLastSparseArrayLanguages.Size(); i++ )
 					{					
@@ -272,13 +242,13 @@ namespace TouriDroid
 					}
 				}
 				break;
-			case Constants.DrawerExpertiseOptionsId:
+			case Constants.SecondActivity_DrawerExpertiseOptionsId:
 				if (mAdapterExpertise == null) {
 					mAdapterExpertise = new ArrayAdapter<string> (this, Android.Resource.Layout.SimpleListItemMultipleChoice, mDrawerExpertise);
 				}
 				mDrawerList.Adapter = mAdapterExpertise;
 				mDrawerList.ChoiceMode = Android.Widget.ChoiceMode.Multiple; // Multiple
-				mDrawerList.Id = Constants.DrawerExpertiseOptionsId;
+				mDrawerList.Id = Constants.SecondActivity_DrawerExpertiseOptionsId;
 				if (mLastSparseArrayExpertise != null) {
 					for (int i = 0; i < mLastSparseArrayExpertise.Size(); i++ )
 					{					
@@ -292,8 +262,7 @@ namespace TouriDroid
 			}
 		}
 	}
-
-
+		
 	public class PlacesAutoCompleteAdapter:ArrayAdapter,IFilterable
 	{
 		public List<string> resultList;
@@ -372,7 +341,7 @@ namespace TouriDroid
 			try {
 				StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON);
 				sb.Append("?key=" + API_KEY);
-			//	sb.Append("&components=country:uk");
+				//    sb.Append("&components=country:uk");
 				sb.Append("&input=" + URLEncoder.Encode(input, "utf8"));
 
 				URL url = new URL(sb.ToString());

@@ -1,5 +1,6 @@
 ﻿using System;
 using Android.Graphics;
+using System.Collections.Generic;
 
 namespace TouriDroid
 {
@@ -48,9 +49,15 @@ namespace TouriDroid
 		public const int MaxDescriptionLengthInCard = 100;
 
 		// Drawer Items and Identifiers - this is the order they're displayed
-		public const int DrawerMainMenuId = 1;
-		public const int DrawerLanguageOptionsId = 2;
-		public const int DrawerExpertiseOptionsId = 3;
+		public const int MainActivity_DrawerMainMenuId = 1;
+		public const string DrawerOptionBeAGuide = "Become A Guide";
+		public const string DrawerOptionLogout = "Log Out";
+		public const string DrawerOptionLoginOrSignUp = "Sign In or Sign Up";
+
+
+		public const int SecondActivity_DrawerMainMenuId = 2;
+		public const int SecondActivity_DrawerLanguageOptionsId = 3;
+		public const int SecondActivity_DrawerExpertiseOptionsId = 4;
 
 		public const string DrawerTitle = "Refine";
 		public const string DrawerOptionLanguage = "Languages";
@@ -67,6 +74,34 @@ namespace TouriDroid
 		public const int ProfileReqWidth=60;
 		public const int ProfileReqHeight=60;
 
+		//Second Activity passed in values
+		public const string selectedLocation = "location";
+		public const string selectedExpertise = "expertise";
+
+		public static bool isValidEmail(String target) {
+			if (target == null) 
+			{
+				return false;
+			}
+			return Android.Util.Patterns.EmailAddress.Matcher(target).Matches();
+		}
+
+		public static readonly string[] AvailableLanguages = new []
+		{
+			"Chinese","Spanish","English","Arabic","Hindi","Croatian","Portuguese","Russian","Japanese","German","Macedonian",
+			"Vietnamese","French","Korean","Tamil","Italian","Urdu"
+		};
+
+		//Expertise images
+		public static List<Tuple<int,int, string>> ExpertiseImages = new List<Tuple<int,int, string>> {
+					Tuple.Create(Resource.Drawable.bar48, Resource.Drawable.bar48_pressed, "Hotspots"),
+					Tuple.Create(Resource.Drawable.cup54, Resource.Drawable.cup54, "Bars"),
+					Tuple.Create(Resource.Drawable.camera, Resource.Drawable.camera, "Photography"),
+
+					Tuple.Create(Resource.Drawable.lunch4, Resource.Drawable.lunch4, "Restaurants"),
+					Tuple.Create(Resource.Drawable.hiking48, Resource.Drawable.hiking48_pressed, "Outdoors"),
+					Tuple.Create(Resource.Drawable.museum37, Resource.Drawable.museum37, "Museums")
+		};
 
 	}
 }
