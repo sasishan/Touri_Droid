@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:background="@drawable/linearlayout_bg"
+    android:padding="20dp"
+    android:layout_gravity="top">
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_bottom_bg"
+        android:layout_marginTop="-2dp"
+        android:layout_marginBottom="10dp"
+        android:padding="10dp"
+        android:hint="Email"
+        android:textColorHint="#cccccc"
+        android:textColor="@color/black" />
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_bottom_bg"
+        android:layout_marginTop="-2dp"
+        android:padding="10dp"
+        android:hint="Password"
+        android:textColorHint="#cccccc"
+        android:textColor="@color/black"
+        android:password="true" />
+    <Button
+        android:id="@+id/buttonNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:text="Sign In"
+        style="@style/DefaultButtonText"
+        android:background="@drawable/button_default_bg" />
+</LinearLayout>
