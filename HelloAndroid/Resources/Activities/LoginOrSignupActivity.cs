@@ -13,7 +13,7 @@ using Android.Widget;
 
 namespace TouriDroid
 {
-	[Activity (Label = "Log In or Sign Up")]			
+	[Activity (Label = "Sign In or Sign Up")]			
 	public class LoginOrSignupActivity : Activity
 	{
 		public Guide newGuide;

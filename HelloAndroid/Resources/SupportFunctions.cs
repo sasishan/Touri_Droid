@@ -23,6 +23,7 @@ namespace TouriDroid
 
 
 		private const String PrefName = "TouriPref";
+		private const String IsGuide = "IsGuide";
 		private const String IsLoggedIn = "IsLoggedIn";
 		public const String KeyEmail = "email";
 		public const String KeyToken = "token";
@@ -34,9 +35,10 @@ namespace TouriDroid
 			editor = pref.Edit ();
 		}
 
-		public void createLoginSession (String email, String token)
+		public void createLoginSession (String email, String token, Boolean pIsGuide)
 		{
 			editor.PutBoolean (IsLoggedIn, true);
+			editor.PutBoolean (IsGuide, pIsGuide);
 			editor.PutString (KeyEmail, email);
 			editor.PutString (KeyToken, token);
 			editor.Commit ();
@@ -47,6 +49,12 @@ namespace TouriDroid
 			String email = pref.GetString (KeyEmail, null);
 
 			return email;
+		}
+
+		public bool isGuide()
+		{
+			return pref.GetBoolean (IsGuide, false);
+
 		}
 
 		public String getAuthorizedToken()

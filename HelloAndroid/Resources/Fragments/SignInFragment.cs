@@ -31,7 +31,7 @@ namespace TouriDroid
 
 			if (token!=null) {
 				SessionManager sessionManager = new SessionManager (view.Context);
-				sessionManager.createLoginSession (username, token);
+				sessionManager.createLoginSession (username, token, true);
 
 				Toast.MakeText (view.Context, "Successfully logged in", ToastLength.Long).Show ();
 

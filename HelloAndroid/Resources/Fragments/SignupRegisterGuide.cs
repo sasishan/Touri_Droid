@@ -17,11 +17,14 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Web;
 using System.Security;
+using System.Collections.Specialized;
+using System.Json;
 
 namespace TouriDroid
 {
 	public class SignupRegisterGuide : Fragment
 	{
+		int guideId=-1;
 		public override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
@@ -30,6 +33,66 @@ namespace TouriDroid
 		}
 
 		public async void RegisterGuide(View view)
+		{
+			EditText username =view.FindViewById<EditText> (Resource.Id.username);
+			EditText password =view.FindViewById<EditText> (Resource.Id.password);
+			Button next = view.FindViewById<Button> (Resource.Id.buttonNext);
+
+			RegisterService rs = new RegisterService();
+			bool registered = await rs.Register(username.Text, password.Text, password.Text);
+
+			if (registered) {
+
+				NameValueCollection parameters = new NameValueCollection ();
+				parameters.Add ("username", username.Text);
+				parameters.Add ("profileImage", "1020");
+				PostDataSync (Constants.DEBUG_BASE_URL + "/api/guides", parameters);
+
+	/*			if (jsonResponse.ContainsKey ("GuideId")) {
+					((SignUpAsGuideActivity)Activity).newGuide.guideId = jsonResponse ["GuideId"];
+				}
+				*/
+				Toast.MakeText (view.Context, "You are now registered as a guide", ToastLength.Long).Show ();
+
+				LoginService ls = new LoginService ();
+
+				string token = await ls.Login (username.Text, password.Text);
+
+			} else {
+				Toast.MakeText (view.Context, "Error registering your profile", ToastLength.Long).Show ();
+			}
+		}
+
+		public void PostDataSync (string p_url, NameValueCollection parameters)
+		{
+			// Create an HTTP web request using the URL:
+			WebClient client = new WebClient();
+
+			Uri url = new Uri(p_url);
+
+			client.UploadValuesCompleted += Client_UploadValuesCompleted;
+			//@todo use UploadValuesAsync?
+			byte[] result = client.UploadValues (url, parameters);
+			string s = result.ToString ();
+//			JsonValue json = JsonObject.Parse (s);
+
+	//		return json;
+		}
+
+		void Client_UploadValuesCompleted (object sender, UploadValuesCompletedEventArgs e)
+		{
+			Activity.RunOnUiThread (() => {
+				string s = e.Result.ToString();
+				s.ToString();
+					
+		//		JsonValue jsonDoc =  JsonObject.Load (e.Result);
+		//		jsonDoc.ToString();
+			});
+
+		}	
+
+
+		public async void RegisterTraveller(View view)
 		{
 			EditText username =view.FindViewById<EditText> (Resource.Id.username);
 			EditText password =view.FindViewById<EditText> (Resource.Id.password);
@@ -50,8 +113,6 @@ namespace TouriDroid
 			}
 		}
 
-
-
 		public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
 			var view = inflater.Inflate(Resource.Layout.SignupRegister, container, false);
@@ -60,13 +121,28 @@ namespace TouriDroid
 			EditText password =view.FindViewById<EditText> (Resource.Id.password);
 			Button next = view.FindViewById<Button> (Resource.Id.buttonNext);
 
+			Boolean becomeAGuide = false;
+
+			//this fragment is called by two different activities - SignUpAsGuideActivity and LoginOrSignupActivity
+			//reason being that become a guide requires multiple steps
+			if (Activity.GetType() == typeof(SignUpAsGuideActivity)) {
+				becomeAGuide = true;
+			}
+
 			next.Click += (object IntentSender, EventArgs e) => {
 
 				if (!username.Text.Equals("") && !password.Text.Equals("") )
 				{					
 					if (Constants.isValidEmail(username.Text))
 					{
-						RegisterGuide(view);
+						if (becomeAGuide)
+						{
+							RegisterGuide(view);
+						}
+						else
+						{
+							RegisterTraveller(view);
+						}
 					}
 					else
 					{

@@ -16,6 +16,7 @@ using Java.Net;
 using Android.Views.Animations;
 using Android.Animation;
 using Android.Support.V4.View;
+using System.Collections.Specialized;
 
 namespace TouriDroid
 {
@@ -634,6 +635,21 @@ namespace TouriDroid
 				}
 			}
 		}
+
+		public void PostWebApiData (string p_url, NameValueCollection parameters)
+		{
+			// Create an HTTP web request using the URL:
+			WebClient client = new WebClient();
+			Uri url = new Uri(p_url);
+
+			client.UploadValuesCompleted += Client_UploadValuesCompleted;
+			client.UploadValuesAsync (url, parameters);
+		}
+
+		void Client_UploadValuesCompleted (object sender, UploadValuesCompletedEventArgs e)
+		{
+			
+		}	
 
 		public async Task<JsonValue> getWebApiData (string url)
 		{

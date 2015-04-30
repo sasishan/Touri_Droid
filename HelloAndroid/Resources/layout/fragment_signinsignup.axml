@@ -9,15 +9,6 @@
     android:padding="10dp"
     android:layout_gravity="center">
     <Button
-        android:id="@+id/buttonSignup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_margin="10dp"
-        android:text="Sign Up"
-        android:background="@drawable/button_default_bg"
-        style="@style/DefaultButtonText" />
-    <Button
         android:id="@+id/buttonSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,4 +17,13 @@
         android:text="Sign In"
         style="@style/DefaultButtonText"
         android:background="@drawable/button_default_bg" />
+    <Button
+        android:id="@+id/buttonSignup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:text="Sign Up"
+        android:background="@drawable/button_default_bg"
+        style="@style/DefaultButtonText" />
 </LinearLayout>
