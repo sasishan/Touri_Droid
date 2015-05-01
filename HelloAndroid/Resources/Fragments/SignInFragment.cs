@@ -11,6 +11,7 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using System.Json;
 
 namespace TouriDroid
 {
@@ -30,8 +31,23 @@ namespace TouriDroid
 			String token = await ls.Login (username, password);
 
 			if (token!=null) {
+				CallAPI ca = new CallAPI ();
+
+				//check if there is a guide record for this username
+				String url = Constants.DEBUG_BASE_URL + "/api/guides?username=" + username;
+				Boolean isGuide = false;
+				int guideId = Constants.Uninitialized;
+				JsonValue response = await ca.getWebApiData (url);
+				if (response != null) {
+					//not a guide
+					if (response.ContainsKey (Constants.Guide_WebAPI_Key_GuideId)) {						
+						guideId = response [Constants.Guide_WebAPI_Key_GuideId];
+						isGuide = true;					
+					}
+				}
+
 				SessionManager sessionManager = new SessionManager (view.Context);
-				sessionManager.createLoginSession (username, token, true);
+				sessionManager.createLoginSession (username, token, isGuide, guideId );
 
 				Toast.MakeText (view.Context, "Successfully logged in", ToastLength.Long).Show ();
 

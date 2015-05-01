@@ -51,6 +51,8 @@ namespace TouriDroid
 		// Drawer Items and Identifiers - this is the order they're displayed
 		public const int MainActivity_DrawerMainMenuId = 1;
 		public const string DrawerOptionBeAGuide = "Become A Guide";
+		public const string DrawerOptionSwitchGuide = "Switch To Guiding";
+
 		public const string DrawerOptionLogout = "Log Out";
 		public const string DrawerOptionLoginOrSignUp = "Sign In or Sign Up";
 

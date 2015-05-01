@@ -34,7 +34,6 @@ namespace TouriDroid
 
 		private List<string> mDrawerItems = new List<string>
 		{
-			Constants.DrawerOptionBeAGuide, "Settings"
 		};
 
 		//Each fragment that associates with this Activity should set it's type here
@@ -77,8 +76,14 @@ namespace TouriDroid
 
 			if (sessionManager.isLoggedIn ()) {
 				//mDrawerItems.Add ("Logout");
+				if (sessionManager.isGuide ()) {
+					mDrawerItems.Add (Constants.DrawerOptionSwitchGuide);
+				} else {
+					mDrawerItems.Add ("Favourite Guides");
+				}
 				mDrawerItems.Add (Constants.DrawerOptionLogout);
 			} else {
+				mDrawerItems.Add(Constants.DrawerOptionBeAGuide);
 				mDrawerItems.Add (Constants.DrawerOptionLoginOrSignUp);
 			}
 			mDrawer = this.FindViewById<DrawerLayout> (Resource.Id.main_drawer_layout);

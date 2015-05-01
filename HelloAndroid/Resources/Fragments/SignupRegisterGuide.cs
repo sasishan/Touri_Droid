@@ -43,27 +43,32 @@ namespace TouriDroid
 
 			if (registered) {
 
+				//add a guide record
 				NameValueCollection parameters = new NameValueCollection ();
 				parameters.Add ("username", username.Text);
 				parameters.Add ("profileImage", "1020");
-				PostDataSync (Constants.DEBUG_BASE_URL + "/api/guides", parameters);
+				JsonValue jsonResponse = PostDataSync (Constants.DEBUG_BASE_URL + "/api/guides", parameters);
 
-	/*			if (jsonResponse.ContainsKey ("GuideId")) {
-					((SignUpAsGuideActivity)Activity).newGuide.guideId = jsonResponse ["GuideId"];
+				if (jsonResponse.ContainsKey (Constants.Guide_WebAPI_Key_GuideId)) {
+					((SignUpAsGuideActivity)Activity).newGuide.guideId = jsonResponse [Constants.Guide_WebAPI_Key_GuideId];
 				}
-				*/
-				Toast.MakeText (view.Context, "You are now registered as a guide", ToastLength.Long).Show ();
 
-				LoginService ls = new LoginService ();
+				Toast.MakeText (view.Context, "You are now registered as a guide. Please sign in", ToastLength.Long).Show ();
 
-				string token = await ls.Login (username.Text, password.Text);
+				Intent i = new Intent(view.Context, typeof(LoginOrSignupActivity));
+				// Closing all the Activities
+				i.SetFlags(ActivityFlags.ClearTask | ActivityFlags.NewTask);
+				this.StartActivity (i);
+				//LoginService ls = new LoginService ();
+
+				//string token = await ls.Login (username.Text, password.Text);
 
 			} else {
 				Toast.MakeText (view.Context, "Error registering your profile", ToastLength.Long).Show ();
 			}
 		}
 
-		public void PostDataSync (string p_url, NameValueCollection parameters)
+		public JsonValue PostDataSync (string p_url, NameValueCollection parameters)
 		{
 			// Create an HTTP web request using the URL:
 			WebClient client = new WebClient();
@@ -73,7 +78,9 @@ namespace TouriDroid
 			client.UploadValuesCompleted += Client_UploadValuesCompleted;
 			//@todo use UploadValuesAsync?
 			byte[] result = client.UploadValues (url, parameters);
-			string s = result.ToString ();
+			string s = Encoding.UTF8.GetString (result);
+			JsonValue json = JsonObject.Parse (s);
+			return json;
 //			JsonValue json = JsonObject.Parse (s);
 
 	//		return json;
@@ -102,11 +109,12 @@ namespace TouriDroid
 			bool registered = await rs.Register(username.Text, password.Text, password.Text);
 
 			if (registered) {
-				Toast.MakeText (view.Context, "You are now registered", ToastLength.Long).Show ();
+				Toast.MakeText (view.Context, "You are now registered. Please sign in", ToastLength.Long).Show ();
 
-				LoginService ls = new LoginService ();
-
-				string token = await ls.Login (username.Text, password.Text);
+				Intent i = new Intent(view.Context, typeof(LoginOrSignupActivity));
+				// Closing all the Activities
+				i.SetFlags(ActivityFlags.ClearTask | ActivityFlags.NewTask);
+				this.StartActivity (i);
 
 			} else {
 				Toast.MakeText (view.Context, "Error registering your profile", ToastLength.Long).Show ();

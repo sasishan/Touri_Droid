@@ -27,6 +27,7 @@ namespace TouriDroid
 		private const String IsLoggedIn = "IsLoggedIn";
 		public const String KeyEmail = "email";
 		public const String KeyToken = "token";
+		public const String KeyGuideId = "guideId";
 
 		public SessionManager (Context pContext)
 		{
@@ -35,12 +36,14 @@ namespace TouriDroid
 			editor = pref.Edit ();
 		}
 
-		public void createLoginSession (String email, String token, Boolean pIsGuide)
+		public void createLoginSession (String email, String token, Boolean pIsGuide, int guideId)
 		{
 			editor.PutBoolean (IsLoggedIn, true);
 			editor.PutBoolean (IsGuide, pIsGuide);
 			editor.PutString (KeyEmail, email);
 			editor.PutString (KeyToken, token);
+			editor.PutInt (KeyGuideId, guideId);
+
 			editor.Commit ();
 		}
 
@@ -54,7 +57,16 @@ namespace TouriDroid
 		public bool isGuide()
 		{
 			return pref.GetBoolean (IsGuide, false);
+		}
 
+		public int getGuideId()
+		{
+			int guideId=Constants.Uninitialized;
+			if (isGuide ()) {
+				guideId = pref.GetInt (KeyGuideId, Constants.Uninitialized);
+			} 
+
+			return guideId;
 		}
 
 		public String getAuthorizedToken()
@@ -80,6 +92,8 @@ namespace TouriDroid
 		{
 			editor.Remove (KeyToken);
 			editor.PutBoolean (IsLoggedIn, false);
+			editor.Remove (IsGuide);
+			editor.Remove (KeyGuideId);
 			editor.Commit();
 
 			//editor.Clear ();
