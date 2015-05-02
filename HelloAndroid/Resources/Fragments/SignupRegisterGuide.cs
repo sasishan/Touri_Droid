@@ -43,14 +43,54 @@ namespace TouriDroid
 
 			if (registered) {
 
+				LoginService ls = new LoginService ();
+				String token = await ls.Login (username.Text, password.Text);
+
 				//add a guide record
+				Guide newGuide = ((SignUpAsGuideActivity)Activity).newGuide;
 				NameValueCollection parameters = new NameValueCollection ();
 				parameters.Add ("username", username.Text);
+				parameters.Add ("fName", newGuide.fName);
+				parameters.Add ("lName", newGuide.lName);
 				parameters.Add ("profileImage", "1020");
-				JsonValue jsonResponse = PostDataSync (Constants.DEBUG_BASE_URL + "/api/guides", parameters);
 
-				if (jsonResponse.ContainsKey (Constants.Guide_WebAPI_Key_GuideId)) {
-					((SignUpAsGuideActivity)Activity).newGuide.guideId = jsonResponse [Constants.Guide_WebAPI_Key_GuideId];
+				JsonValue jsonResponse = PostDataSync (Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile/*"/api/guides"*/, 
+					parameters, token);
+				string url;
+				if (jsonResponse.ContainsKey (Constants.Guide_WebAPI_Key_GuideId)) 
+				{
+					newGuide.guideId = jsonResponse [Constants.Guide_WebAPI_Key_GuideId];
+					parameters.Clear ();
+					url = String.Format (Constants.URL_AddGuideLocation, newGuide.guideId);
+
+					foreach (string l in newGuide.placesServedList) {
+						parameters.Add ("location", l);
+
+						jsonResponse = PostDataSync (Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile+
+							url, parameters, token);
+						parameters.Clear ();
+					}
+
+					url = String.Format (Constants.URL_AddGuideExpertise, newGuide.guideId);
+					foreach (Expertise expt in newGuide.expertise) 
+					{
+						parameters.Add (Constants.Guide_WebAPI_Key_ExpertiseId, expt.expertiseId.ToString());
+				
+						jsonResponse = PostDataSync (Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile +
+							url, parameters, token);
+						parameters.Clear ();
+					}
+
+					url = String.Format (Constants.URL_AddGuideLanguage, newGuide.guideId);
+					foreach (GuideLanguage lang in newGuide.languages) 
+					{
+						parameters.Add (Constants.Guide_WebAPI_Key_Language, lang.language);
+						parameters.Add (Constants.Guide_WebAPI_Key_LanguageId, lang.languageId.ToString());
+
+						jsonResponse = PostDataSync (Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile +
+							url, parameters, token);
+						parameters.Clear ();
+					}
 				}
 
 				Toast.MakeText (view.Context, "You are now registered as a guide. Please sign in", ToastLength.Long).Show ();
@@ -68,18 +108,28 @@ namespace TouriDroid
 			}
 		}
 
-		public JsonValue PostDataSync (string p_url, NameValueCollection parameters)
+		public JsonValue PostDataSync (string p_url, NameValueCollection parameters, string accessToken)
 		{
 			// Create an HTTP web request using the URL:
 			WebClient client = new WebClient();
 
 			Uri url = new Uri(p_url);
 
+			if (accessToken != null) {
+				client.Headers.Add("Authorization", String.Format("Bearer {0}", accessToken));
+			}
+
 			client.UploadValuesCompleted += Client_UploadValuesCompleted;
 			//@todo use UploadValuesAsync?
 			byte[] result = client.UploadValues (url, parameters);
-			string s = Encoding.UTF8.GetString (result);
-			JsonValue json = JsonObject.Parse (s);
+
+			string s;
+			JsonValue json = "";
+			if (result != null) {
+				s = Encoding.UTF8.GetString (result);
+				json = JsonObject.Parse (s);
+			}
+
 			return json;
 //			JsonValue json = JsonObject.Parse (s);
 
@@ -97,8 +147,7 @@ namespace TouriDroid
 			});
 
 		}	
-
-
+			
 		public async void RegisterTraveller(View view)
 		{
 			EditText username =view.FindViewById<EditText> (Resource.Id.username);

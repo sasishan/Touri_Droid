@@ -31,7 +31,7 @@ namespace TouriDroid
 
 			// build out the expertises table
 			TableLayout languagesTable = (TableLayout)view.FindViewById (Resource.Id.table_Languages);
-			List<string> languages = sf.BuildLanguagesTable (view, languagesTable, Resource.Layout.language_tablerow);
+			List<GuideLanguage> languages = sf.BuildLanguagesTable (view, languagesTable, Resource.Layout.language_tablerow);
 
 			languagesTable.RequestLayout();
 
@@ -40,7 +40,7 @@ namespace TouriDroid
 			next.Click += (object sender, EventArgs e) => {
 				if (languages.Count>0)
 				{
-					((SignUpAsGuideActivity)Activity).newGuide.languageList = languages;
+					((SignUpAsGuideActivity)Activity).newGuide.languages = languages;
 					var newFragment = new SignupNameFragment ();
 
 					FragmentTransaction transaction = FragmentManager.BeginTransaction();

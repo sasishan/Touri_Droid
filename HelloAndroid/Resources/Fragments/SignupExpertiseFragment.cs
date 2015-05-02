@@ -31,7 +31,7 @@ namespace TouriDroid
 
 			// build out the expertises table
 			TableLayout expertiseTable = (TableLayout)view.FindViewById (Resource.Id.table_Expertise);
-			List<string> expertises = sf.BuildExpertiseTable (view, expertiseTable, Resource.Layout.expertise_tablerow);
+			List<Expertise> expertises = sf.BuildExpertiseTable (view, expertiseTable, Resource.Layout.expertise_tablerow);
 
 			expertiseTable.RequestLayout();
 
@@ -40,15 +40,7 @@ namespace TouriDroid
 			next.Click += (object sender, EventArgs e) => {
 				if (expertises.Count>0)
 				{
-					List<Expertise> expertiseList = new List<Expertise>();
-					foreach(string expertiseString in expertises)
-					{
-						Expertise exp = new Expertise();
-						exp.expertise = expertiseString;
-						expertiseList.Add(exp);
-					}
-
-					((SignUpAsGuideActivity)Activity).newGuide.expertise = expertiseList;
+					((SignUpAsGuideActivity)Activity).newGuide.expertise = expertises;
 					var newFragment = new SignupLanguagesFragment ();
 
 					FragmentTransaction transaction = FragmentManager.BeginTransaction();

@@ -113,23 +113,39 @@ namespace TouriDroid
 		}
 
 		//Creates a list of languages that can be checked
-		public List<string> BuildLanguagesTable(View view, TableLayout languagesTable, int tableRow)
+		public List<GuideLanguage> BuildLanguagesTable(View view, TableLayout languagesTable, int tableRow)
 		{			
-			List<string> checkedLanguages = new List<string> ();
+			List<GuideLanguage> checkedLanguages = new List<GuideLanguage> ();
 
-			for (int i = 0; i < Constants.AvailableLanguages.Length; i++) {
+			for (int i = 0; i < Constants.AvailableLanguages.Count; i++) {
 				TableRow row = (TableRow)LayoutInflater.From (view.Context).Inflate (tableRow, null);
 				CheckBox c = row.FindViewById<CheckBox> (Resource.Id.languageCheck);
-				c.Text = Constants.AvailableLanguages [i];
+				c.Text = Constants.AvailableLanguages [i].Item2;
+				c.Id = Constants.AvailableLanguages [i].Item1;
+
 
 				c.Click += (object sender, EventArgs e) => {
 					if (c.Checked==true)
 					{
-						checkedLanguages.Add(c.Text);
+						GuideLanguage gl = new GuideLanguage();
+						gl.language = c.Text;
+						gl.languageId = c.Id;
+						checkedLanguages.Add(gl);
 					}
 					else
 					{
-						checkedLanguages.Remove(c.Text);
+						GuideLanguage gl = new GuideLanguage();
+						gl.language = c.Text;
+						gl.languageId = Convert.ToInt32(c.Tag);
+						for (int k=0; k<checkedLanguages.Count;k++)
+						{
+							if (checkedLanguages[k].languageId==c.Id)
+							{
+								checkedLanguages.RemoveAt(k);
+								break;
+							}
+						}
+
 					}
 				};
 				languagesTable.AddView(row);
@@ -140,9 +156,9 @@ namespace TouriDroid
 
 		//Creates expertise images and puts them in a 3x3 table
 		//images are held in Constants
-		public List<string> BuildExpertiseTable(View view, TableLayout expertiseTable, int tableRow)
+		public List<Expertise> BuildExpertiseTable(View view, TableLayout expertiseTable, int tableRow)
 		{			
-			List<string> selectedExpertises = new List<string> ();
+			List<Expertise> selectedExpertises = new List<Expertise> ();
 			for (int i = 0; i < Constants.ExpertiseImages.Count; i = i + 3) {
 				TableRow row = (TableRow)LayoutInflater.From (view.Context).Inflate (tableRow, null);
 
@@ -157,6 +173,7 @@ namespace TouriDroid
 					int downImage = Constants.ExpertiseImages [i + j].Item2;
 					int upImage = Constants.ExpertiseImages [i + j].Item1;
 					string value = Constants.ExpertiseImages[i+j].Item3;
+					int expId = Constants.ExpertiseImages[i+j].Item4;
 					b.SetImageResource (upImage);
 
 					b.Click += (object sender, EventArgs e) => {
@@ -164,14 +181,24 @@ namespace TouriDroid
 						{						
 							b.SetImageResource (downImage);
 							b.Selected=true;
-							selectedExpertises.Add(value);
-						
+							Expertise expert = new Expertise();
+							expert.expertise = value;
+							expert.expertiseId = expId;
+							selectedExpertises.Add(expert);						
 						}
 						else
 						{
 							b.SetImageResource (upImage);
 							b.Selected=false;
-							selectedExpertises.Remove(value);
+							for (int c=0; c<selectedExpertises.Count;c++)
+							{
+								if (selectedExpertises[c].expertiseId==expId)
+								{									
+									selectedExpertises.RemoveAt(c);
+									break;
+								}
+							}
+
 						}
 					};					
 				}								

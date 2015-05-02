@@ -11,8 +11,13 @@ namespace TouriDroid
 		public const string URL_Get_All_Guides = "/api/guides";
 		public const string URL_SearchGuides = "/api/guides/search?";
 		public const string URL_Get_All_Expertises = "/api/expertises";
+		public const string URL_MyGuideProfile = "/api/MyGuideProfile";
+		public const string URL_AddGuideLocation = "/{0}/location";
+		public const string URL_AddGuideExpertise = "/{0}/expertise";
+		public const string URL_AddGuideLanguage = "/{0}/language";
 
 		// WebApi Keys
+		public const string Guide_WebAPI_Key_Username="username";
 		public const string Guide_WebAPI_Key_FirstName="fName";
 		public const string Guide_WebAPI_Key_LastName="lName";
 		public const string Guide_WebAPI_Key_Description="description";
@@ -88,21 +93,31 @@ namespace TouriDroid
 			return Android.Util.Patterns.EmailAddress.Matcher(target).Matches();
 		}
 
-		public static readonly string[] AvailableLanguages = new []
-		{
-			"Chinese","Spanish","English","Arabic","Hindi","Croatian","Portuguese","Russian","Japanese","German","Macedonian",
-			"Vietnamese","French","Korean","Tamil","Italian","Urdu"
+//	public static readonly string[] AvailableLanguages = new []
+//		{
+//			"Chinese","Spanish","English","Arabic","Hindi","Croatian","Portuguese","Russian","Japanese","German","Macedonian",
+//			"Vietnamese","French","Korean","Tamil","Italian","Urdu"
+//		};
+
+		//Expertise images
+		public static List<Tuple<int, string>> AvailableLanguages = new List<Tuple<int, string>> {
+			Tuple.Create(1, "English"),
+			Tuple.Create(2, "French"),
+			Tuple.Create(3, "Tamil"),
+			Tuple.Create(4, "Macedonian"),
+			Tuple.Create(5, "Croatian"),
+			Tuple.Create(7, "Italian")
+
 		};
 
 		//Expertise images
-		public static List<Tuple<int,int, string>> ExpertiseImages = new List<Tuple<int,int, string>> {
-					Tuple.Create(Resource.Drawable.bar48, Resource.Drawable.bar48_pressed, "Hotspots"),
-					Tuple.Create(Resource.Drawable.cup54, Resource.Drawable.cup54, "Bars"),
-					Tuple.Create(Resource.Drawable.camera, Resource.Drawable.camera, "Photography"),
-
-					Tuple.Create(Resource.Drawable.lunch4, Resource.Drawable.lunch4, "Restaurants"),
-					Tuple.Create(Resource.Drawable.hiking48, Resource.Drawable.hiking48_pressed, "Outdoors"),
-					Tuple.Create(Resource.Drawable.museum37, Resource.Drawable.museum37, "Museums")
+		public static List<Tuple<int,int, string, int>> ExpertiseImages = new List<Tuple<int,int, string, int>> {
+					Tuple.Create(Resource.Drawable.bar48, Resource.Drawable.bar48_pressed, "Hot Spots", 1),
+					Tuple.Create(Resource.Drawable.cup54, Resource.Drawable.cup54, "Local life", 6),
+					Tuple.Create(Resource.Drawable.camera, Resource.Drawable.camera, "Landmarks", 5),
+					Tuple.Create(Resource.Drawable.lunch4, Resource.Drawable.lunch4, "Restaurants", 4),
+					Tuple.Create(Resource.Drawable.hiking48, Resource.Drawable.hiking48_pressed, "Outdoors", 7),
+					Tuple.Create(Resource.Drawable.museum37, Resource.Drawable.museum37, "Museums", 2)
 		};
 
 	}

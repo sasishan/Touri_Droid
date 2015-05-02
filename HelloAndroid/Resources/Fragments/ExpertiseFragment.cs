@@ -83,7 +83,7 @@ namespace TouriDroid
 		{
 			CallAPI ca = new CallAPI();
 
-			var json = await ca.getWebApiData(url);
+			var json = await ca.getWebApiData(url, null);
 			parseExpertises(json);
 
 			// load the images for each expertise now

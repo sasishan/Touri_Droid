@@ -34,10 +34,11 @@ namespace TouriDroid
 				CallAPI ca = new CallAPI ();
 
 				//check if there is a guide record for this username
-				String url = Constants.DEBUG_BASE_URL + "/api/guides?username=" + username;
+				String url = Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile;// "/api/guides?username=" + username;
+
 				Boolean isGuide = false;
 				int guideId = Constants.Uninitialized;
-				JsonValue response = await ca.getWebApiData (url);
+				JsonValue response = await ca.getWebApiData (url, token);
 				if (response != null) {
 					//not a guide
 					if (response.ContainsKey (Constants.Guide_WebAPI_Key_GuideId)) {						

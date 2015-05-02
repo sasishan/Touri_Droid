@@ -300,7 +300,7 @@ namespace TouriDroid
 			//List<Guide> myGuides = new List<Guide> ();
 
 			/****** Uncomment when webservice is running *****/
-			JsonValue json = await ca.getWebApiData(url);
+			JsonValue json = await ca.getWebApiData(url, null);
 			parseGuideProfiles(json);
 
 			string imageUrl;
@@ -430,7 +430,7 @@ namespace TouriDroid
 
 			//Set description.. for summary only partial description is shown
 			//@todo should their be a summary line for guides like Twitter?
-			if (mGuides [position].description.Length > Constants.MaxDescriptionLengthInCard) 
+			if ( (mGuides [position].description!=null) && (mGuides [position].description.Length > Constants.MaxDescriptionLengthInCard) )
 			{
 				myHolder.mDescription.Text = mGuides [position].description.Substring (0, Constants.MaxDescriptionLengthInCard-1) + "...";
 			} else 
@@ -651,10 +651,14 @@ namespace TouriDroid
 			
 		}	
 
-		public async Task<JsonValue> getWebApiData (string url)
+		public async Task<JsonValue> getWebApiData (string url, string accessToken)
 		{
 			// Create an HTTP web request using the URL:
 			HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create (new Uri (url));
+			if (accessToken != null) {
+				request.Headers.Add("Authorization", String.Format("Bearer {0}", accessToken));
+			}
+
 			request.ContentType = "application/json";
 			request.Method = "GET";
 

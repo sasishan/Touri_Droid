@@ -60,17 +60,17 @@ namespace TouriDroid
 
 			// build out the expertises table
 			TableLayout expertiseTable = (TableLayout)view.FindViewById (Resource.Id.table_Expertise);
-			List<string> expertises = sf.BuildExpertiseTable (view, expertiseTable, Resource.Layout.expertise_tablerow);
+			List<Expertise> expertises = sf.BuildExpertiseTable (view, expertiseTable, Resource.Layout.expertise_tablerow);
 			expertiseTable.RequestLayout();
 
 			//((SecondActivity)this.Activity).checkedLanguages.Clear ();
 			TableLayout languagesTable = (TableLayout)view.FindViewById (Resource.Id.table_Languages);
-			for (int i = 0; i < Constants.AvailableLanguages.Length; i++) {
+			for (int i = 0; i < Constants.AvailableLanguages.Count; i++) {
 				TableRow row = (TableRow)LayoutInflater.From (view.Context).Inflate (Resource.Layout.language_tablerow, null);
 				CheckBox c = row.FindViewById<CheckBox> (Resource.Id.languageCheck);
-				c.Text = Constants.AvailableLanguages [i];
+				c.Text = Constants.AvailableLanguages [i].Item2;
 
-				if (((SecondActivity)this.Activity).checkedLanguages.Contains (Constants.AvailableLanguages [i])) {
+				if (((SecondActivity)this.Activity).checkedLanguages.Contains (Constants.AvailableLanguages [i].Item2)) {
 					c.Checked = true;
 					//((SecondActivity)this.Activity).checkedLanguages.Add(c.Text);
 				}
