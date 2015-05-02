@@ -19,7 +19,7 @@ namespace TouriDroid
 			//_platform = platform;
 			_username = myUsername;
 			_targetGuideId = targetGuideId;
-			_connection = new HubConnection("http://192.168.0.12:50467", "username=" + _username+"&targetGuideId="+targetGuideId);
+			_connection = new HubConnection(Constants.DEBUG_BASE_URL, "username=" + _username+"&targetGuideId="+targetGuideId);
 			_proxy = _connection.CreateHubProxy("ChatHub");
 		}
 

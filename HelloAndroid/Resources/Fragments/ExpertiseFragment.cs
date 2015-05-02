@@ -92,10 +92,10 @@ namespace TouriDroid
 			foreach (Expertise e in mExpertiseList)
 			{
 				//@remove this if you want to always show all expertises
-				if (e.numberOfGuides >0) {
-					filteredE.Add (e);
+			//	if (e.numberOfGuides >0) {
+			//		filteredE.Add (e);
 					//mExpertiseList.Remove (e);
-				}
+			//	}
 
 				imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ e.expertiseImageId;
 

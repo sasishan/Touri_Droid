@@ -470,7 +470,9 @@ namespace TouriDroid
 			foreach (string l in mGuides[position].languageList) {
 				languages += "• "+l+"\r\n" ;
 			}				
-			languages = languages.Remove (languages.Length - 2);
+			if (languages.Length > 0) {
+				languages = languages.Remove (languages.Length - 2);
+			}
 
 			myHolder.mLanguages.Text = languages;
 

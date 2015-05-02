@@ -49,13 +49,14 @@ namespace TouriDroid
 				//add a guide record
 				Guide newGuide = ((SignUpAsGuideActivity)Activity).newGuide;
 				NameValueCollection parameters = new NameValueCollection ();
-				parameters.Add ("username", username.Text);
-				parameters.Add ("fName", newGuide.fName);
-				parameters.Add ("lName", newGuide.lName);
-				parameters.Add ("profileImage", "1020");
+				parameters.Add (Constants.Guide_WebAPI_Key_Username, username.Text);
+				parameters.Add (Constants.Guide_WebAPI_Key_FirstName, newGuide.fName);
+				parameters.Add (Constants.Guide_WebAPI_Key_LastName, newGuide.lName);
+				parameters.Add (Constants.Guide_WebAPI_Key_ProfileImageId, Constants.DefaultProfileId.ToString());
 
 				JsonValue jsonResponse = PostDataSync (Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile/*"/api/guides"*/, 
 					parameters, token);
+				
 				string url;
 				if (jsonResponse.ContainsKey (Constants.Guide_WebAPI_Key_GuideId)) 
 				{
@@ -145,7 +146,6 @@ namespace TouriDroid
 		//		JsonValue jsonDoc =  JsonObject.Load (e.Result);
 		//		jsonDoc.ToString();
 			});
-
 		}	
 			
 		public async void RegisterTraveller(View view)
@@ -245,6 +245,8 @@ namespace TouriDroid
 			}
 			catch (Exception ex)
 			{
+				//Toast.MakeText (, "Error ", ToastLength.Long).Show();
+				Log.Debug("Network error", ex.InnerException.ToString());
 				return false;
 			}
 		}
@@ -278,6 +280,7 @@ namespace TouriDroid
 			}
 			catch (Exception ex)
 			{
+				Log.Debug("Network error", ex.InnerException.ToString());
 				return null;
 			}
 		}

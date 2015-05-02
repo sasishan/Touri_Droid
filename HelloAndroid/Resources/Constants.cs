@@ -7,7 +7,7 @@ namespace TouriDroid
 	public static class Constants
 	{
 		//URL values for WebApi calls
-		public const string DEBUG_BASE_URL = "http://192.168.0.12:50467";//"http://192.168.1.14:50467";
+		public const string DEBUG_BASE_URL = "http://192.168.1.189:50467";//"http://192.168.43.247:50467";//"http://192.168.0.12:50467";//"http://192.168.1.14:50467";
 		public const string URL_Get_All_Guides = "/api/guides";
 		public const string URL_SearchGuides = "/api/guides/search?";
 		public const string URL_Get_All_Expertises = "/api/expertises";
@@ -99,18 +99,24 @@ namespace TouriDroid
 //			"Vietnamese","French","Korean","Tamil","Italian","Urdu"
 //		};
 
-		//Expertise images
+		public static int DefaultProfileId = 1;
+
+		//This must match the Languages table
+		//@todo pull dynamically
 		public static List<Tuple<int, string>> AvailableLanguages = new List<Tuple<int, string>> {
 			Tuple.Create(1, "English"),
 			Tuple.Create(2, "French"),
 			Tuple.Create(3, "Tamil"),
 			Tuple.Create(4, "Macedonian"),
 			Tuple.Create(5, "Croatian"),
+			Tuple.Create(6, "Turkish"),
 			Tuple.Create(7, "Italian")
 
 		};
 
 		//Expertise images
+		//This must match the Expertises table
+		//@todo pull dynamically
 		public static List<Tuple<int,int, string, int>> ExpertiseImages = new List<Tuple<int,int, string, int>> {
 					Tuple.Create(Resource.Drawable.bar48, Resource.Drawable.bar48_pressed, "Hot Spots", 1),
 					Tuple.Create(Resource.Drawable.cup54, Resource.Drawable.cup54, "Local life", 6),
