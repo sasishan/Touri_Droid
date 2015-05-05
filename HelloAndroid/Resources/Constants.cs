@@ -7,7 +7,7 @@ namespace TouriDroid
 	public static class Constants
 	{
 		//URL values for WebApi calls
-		public const string DEBUG_BASE_URL = "http://192.168.1.189:50467";//"http://192.168.43.247:50467";//"http://192.168.0.12:50467";//"http://192.168.1.14:50467";
+		public const string DEBUG_BASE_URL =  "http://192.168.0.28:50467";//"http://192.168.43.247:50467";//"http://192.168.0.12:50467";//"http://192.168.1.14:50467"; "http://192.168.1.189:50467"
 		public const string URL_Get_All_Guides = "/api/guides";
 		public const string URL_SearchGuides = "/api/guides/search?";
 		public const string URL_Get_All_Expertises = "/api/expertises";

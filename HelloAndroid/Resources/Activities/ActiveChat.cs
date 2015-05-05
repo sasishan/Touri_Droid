@@ -18,6 +18,7 @@ namespace TouriDroid
 	[Activity (Label = "Chat")]			
 	public class ActiveChat : Activity
 	{
+		
 		protected override async void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
@@ -26,11 +27,20 @@ namespace TouriDroid
 			ActionBar.SetDisplayHomeAsUpEnabled (true);
 			ActionBar.SetHomeButtonEnabled (true);
 
-			string guideId = Intent.GetStringExtra ("TargetGuideId") ?? "Data not available";
+			//get the information of who we want to chat WITH
+			string targetGuideId = Intent.GetStringExtra ("TargetGuideId") ?? "Data not available";
 			string fName = Intent.GetStringExtra ("TargetFirstName") ?? "Data not available";
 			string lName = Intent.GetStringExtra ("TargetLastName") ?? "Data not available";
 
-			ChatClient client = new ChatClient ("", guideId);
+			SessionManager sm = new SessionManager (this);
+
+			string myUsername = "";
+			if (sm.isLoggedIn() == true) {
+				myUsername = sm.getEmail ();
+			}
+
+			ChatClient client = new ChatClient (myUsername, targetGuideId);
+
 
 			var input = FindViewById<EditText> (Resource.Id.Input);
 			var messages = FindViewById<ListView> (Resource.Id.Messages);
@@ -41,6 +51,10 @@ namespace TouriDroid
 
 			await client.Connect();
 
+			if (sm.isLoggedIn () == false) {
+				await client.SendMyUsername();
+			}
+				
 			Button button = FindViewById<Button>(Resource.Id.sendMessageButton);
 
 			button.Click += (o, e) => {
@@ -49,7 +63,8 @@ namespace TouriDroid
 					return;
 				}
 
-				client.Send(input.Text);
+				//client.Send(input.Text);
+				client.SendPrivateMessage(input.Text);
 				input.Text ="";
 			};
 
@@ -60,13 +75,17 @@ namespace TouriDroid
 	//			{
 	//				return;
 		//		}
-		//
+		//	
 		//		client.Send(input.Text);
 		//		input.Text ="";
-		//	};*/
-				
-			client.OnMessageReceived+=(sender, message) => RunOnUiThread(() =>
-				adapter.Add(message));
+		//	};*/	
+			client.ReceiveMyUserName+=(sender, message) => RunOnUiThread( () =>
+				{client._myUsername=message;}
+			);
+			//client._myUsername=message
+			client.OnMessageReceived+=(sender, message) => RunOnUiThread( () =>
+				adapter.Add(message.message)
+			);
 		}
 
 		public override bool OnOptionsItemSelected (IMenuItem item)

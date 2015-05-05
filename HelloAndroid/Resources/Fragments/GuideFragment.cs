@@ -664,20 +664,34 @@ namespace TouriDroid
 			request.ContentType = "application/json";
 			request.Method = "GET";
 
-			// Send the request to the server and wait for the response:
-			using (WebResponse response = await request.GetResponseAsync ())
+			try
 			{
-				// Get a stream representation of the HTTP web response:
-				using (System.IO.Stream stream = response.GetResponseStream ())
+				// Send the request to the server and wait for the response:
+				using (WebResponse response = await request.GetResponseAsync ())
 				{
-					// Use this stream to build a JSON document object:
-					JsonValue jsonDoc = await Task.Run (() => JsonObject.Load (stream));
-					//Console.Out.WriteLine("Response: {0}", jsonDoc.ToString ());
+					try 
+					{
+						// Get a stream representation of the HTTP web response:
+						using (System.IO.Stream stream = response.GetResponseStream ())
+						{
+							// Use this stream to build a JSON document object:
+							JsonValue jsonDoc = await Task.Run (() => JsonObject.Load (stream));
+							//Console.Out.WriteLine("Response: {0}", jsonDoc.ToString ());
 
-					// Return the JSON document:
-					return jsonDoc;
-				}
+							// Return the JSON document:
+							return jsonDoc;
+						}						
+					}
+					catch (Exception e)
+					{						
+						return null;
+					}
+				}				
 			}
+			catch (Exception e) {				
+				return null;
+			}
+
 		}			
 	}
 }

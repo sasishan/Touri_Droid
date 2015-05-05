@@ -4,41 +4,71 @@ using Microsoft.AspNet.SignalR.Client;
 
 namespace TouriDroid
 {
+	public class Message 
+	{
+		public string fromUser {get;set;}
+		public string message { get; set; }
+	}
+
 	public class ChatClient
 	{
-		private readonly string _username;
-		private readonly string _targetGuideId;
+		public string _myUsername;
+		public string _targetGuideId;
+
 
 		private readonly HubConnection _connection;
 		private readonly IHubProxy _proxy;
 
-		public event EventHandler<string> OnMessageReceived;
+		public event EventHandler<Message> OnMessageReceived;
+		public event EventHandler<string> ReceivedMyConnectionId;
+		public event EventHandler<string> ReceiveMyUserName;
 
 		public ChatClient(string myUsername, string targetGuideId)
 		{
 			//_platform = platform;
-			_username = myUsername;
+			_myUsername = myUsername;
 			_targetGuideId = targetGuideId;
-			_connection = new HubConnection(Constants.DEBUG_BASE_URL, "username=" + _username+"&targetGuideId="+targetGuideId);
+			_connection = new HubConnection(Constants.DEBUG_BASE_URL, "username=" + _myUsername+"&targetGuideId="+targetGuideId);
 			_proxy = _connection.CreateHubProxy("ChatHub");
 		}
 
 		public async Task Connect()
 		{			
-			await _connection.Start();
-
-			_proxy.On("messageReceived", (string platform, string message) =>
+			_proxy.On("messageReceived", (string fromUser, string message) =>
 				{
 					if (OnMessageReceived != null)
-						OnMessageReceived(this, string.Format("{0}: {1}", platform, message));
+					{
+						Message m = new Message ();
+						m.fromUser = fromUser;
+						m.message = message;
+						OnMessageReceived(this, m);
+					}
 				});
 
-			await Send("Connected");
+			_proxy.On("receiveMyUserName", (string username) =>
+				{
+					if (ReceiveMyUserName != null)
+						ReceiveMyUserName(this, username);
+				});
+
+			await _connection.Start();
+
+		//	await Send("Connected");
+		}
+
+		public Task SendMyUsername()
+		{
+			return _proxy.Invoke("SendMyUserName");
+		}
+
+		public Task SendPrivateMessage(string message)
+		{
+			return _proxy.Invoke("SendPrivateMessage", message, _myUsername, _targetGuideId);
 		}
 
 		public Task Send(string message)
 		{
-			return _proxy.Invoke("Send", _username, message);
+			return _proxy.Invoke("Send", _myUsername, message);
 		}
 	}
 }

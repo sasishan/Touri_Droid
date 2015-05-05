@@ -28,7 +28,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <AndroidLinkMode>None</AndroidLinkMode>
-    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -37,12 +37,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <AndroidKeyStore>True</AndroidKeyStore>
-    <AndroidSigningKeyStore>C:\Users\Sasi\AppData\Local\Xamarin\Mono for Android\debug.keystore</AndroidSigningKeyStore>
-    <AndroidSigningStorePass>android</AndroidSigningStorePass>
-    <AndroidSigningKeyAlias>debugandroid</AndroidSigningKeyAlias>
-    <AndroidSigningKeyPass>android</AndroidSigningKeyPass>
+    <AndroidSigningKeyStore>C:\Bitbucket\Touri_Droid\HelloAndroid</AndroidSigningKeyStore>
+    <AndroidSigningStorePass>touri123</AndroidSigningStorePass>
+    <AndroidSigningKeyAlias>touriKey</AndroidSigningKeyAlias>
+    <AndroidSigningKeyPass>touri123</AndroidSigningKeyPass>
+    <DebugSymbols>true</DebugSymbols>
+    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <AndroidCreatePackagePerAbi>true</AndroidCreatePackagePerAbi>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -115,6 +118,10 @@
     <Compile Include="Resources\Fragments\SignupRegisterGuide.cs" />
     <Compile Include="Resources\Fragments\SignInFragment.cs" />
     <Compile Include="Resources\Activities\SignUpAsGuideActivity.cs" />
+    <Compile Include="Resources\ChatServiceBinder.cs" />
+    <Compile Include="Resources\ChatMessageDB.cs" />
+    <Compile Include="SQLite.cs" />
+    <Compile Include="SQLiteAsync.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

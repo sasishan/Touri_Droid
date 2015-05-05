@@ -84,6 +84,10 @@ namespace TouriDroid
 			CallAPI ca = new CallAPI();
 
 			var json = await ca.getWebApiData(url, null);
+			if (json == null) {		
+				Toast.MakeText (View.Context, "Could not connect to server", ToastLength.Short);
+				return;
+			}
 			parseExpertises(json);
 
 			// load the images for each expertise now
