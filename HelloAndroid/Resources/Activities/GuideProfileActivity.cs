@@ -40,12 +40,21 @@ namespace TouriDroid
 			Button button = FindViewById<Button>(Resource.Id.ChatButton);
 
 			button.Click += (o, e) => {
-				var chatActivity = new Intent (this, typeof(ActiveChat));
+				//if not logged in
+				SessionManager sm = new SessionManager(this);
+				if (sm.isLoggedIn()==false)
+				{
+					Toast.MakeText(this, "Please sign in to chat", ToastLength.Short).Show();
+				}
+				else
+				{
+					var chatActivity = new Intent (this, typeof(ActiveChat));
 
-				chatActivity.PutExtra ("TargetGuideId", guideId);
-				chatActivity.PutExtra ("TargetFirstName", fName);
-				chatActivity.PutExtra ("TargetLastName", lName);
-				this.StartActivity(chatActivity);
+					chatActivity.PutExtra ("TargetGuideId", guideId);
+					chatActivity.PutExtra ("TargetFirstName", fName);
+					chatActivity.PutExtra ("TargetLastName", lName);
+					this.StartActivity(chatActivity);
+				}
 			};
 		}
 		 

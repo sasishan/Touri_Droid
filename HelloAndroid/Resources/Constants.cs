@@ -6,6 +6,11 @@ namespace TouriDroid
 {
 	public static class Constants
 	{
+		//Main Tab positions
+		public const int Main_Expertise_Tab=0;
+		public const int Main_Chat_Tab=1;
+
+
 		//URL values for WebApi calls
 		public const string DEBUG_BASE_URL =  "http://192.168.0.28:50467";//"http://192.168.43.247:50467";//"http://192.168.0.12:50467";//"http://192.168.1.14:50467"; "http://192.168.1.189:50467"
 		public const string URL_Get_All_Guides = "/api/guides";

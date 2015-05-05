@@ -14,13 +14,12 @@ namespace TouriDroid
 	{
 		public string _myUsername;
 		public string _targetGuideId;
-
+		public string _myId;
 
 		private readonly HubConnection _connection;
 		private readonly IHubProxy _proxy;
 
 		public event EventHandler<Message> OnMessageReceived;
-		public event EventHandler<string> ReceivedMyConnectionId;
 		public event EventHandler<string> ReceiveMyUserName;
 
 		public ChatClient(string myUsername, string targetGuideId)

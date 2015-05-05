@@ -122,6 +122,7 @@
     <Compile Include="Resources\ChatMessageDB.cs" />
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteAsync.cs" />
+    <Compile Include="Resources\Fragments\ChatListFragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

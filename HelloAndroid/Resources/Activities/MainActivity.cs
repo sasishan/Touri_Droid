@@ -229,16 +229,36 @@ namespace TouriDroid
 			//Log.Debug(Tag, "The tab {0} was re-selected.", tab.Text);
 		}
 
+		public void OnTabChanged (string tabId)
+		{
+		}
+
 		public void OnTabSelected(Android.Support.V7.App.ActionBar.Tab tab, Android.Support.V4.App.FragmentTransaction ft)
 		{
-			// Display the fragment the user should see
-			//Log.Debug(Tag, "The tab {0} has been selected.", tab.Text);
+			// Tab0 = main, Tab1 = chat
+			// Display the Chat fragment
+			FragmentTransaction transaction = FragmentManager.BeginTransaction ();
+			if (tab.Position == Constants.Main_Chat_Tab) {
+				var newFragment = new ChatListFragment ();
+
+				transaction.Replace (Resource.Id.main_fragment_container, newFragment);
+			} else if (tab.Position == Constants.Main_Expertise_Tab) {
+				var newFragment = new ExpertiseFragment ();
+				transaction.Replace (Resource.Id.main_fragment_container, newFragment);			
+			}						
+			transaction.Commit ();
 		}
 
 		public void OnTabUnselected(Android.Support.V7.App.ActionBar.Tab  tab, Android.Support.V4.App.FragmentTransaction ft)
 		{
 			// Save any state in the displayed fragment.
 			//Log.Debug(Tag, "The tab {0} as been unselected.", tab.Text);
+			FragmentTransaction transaction = FragmentManager.BeginTransaction ();
+			Fragment currentFrag= FragmentManager.FindFragmentById(Resource.Id.main_fragment_container);
+
+			transaction.Remove (currentFrag);
+			transaction.Commit ();
+
 		}
 
 		void AddTabToActionBar(int labelResourceId, int iconResourceId)
