@@ -8,6 +8,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
         android:hint="@string/search_hint_places"
         android:minWidth="150dp">
         <requestFocus />

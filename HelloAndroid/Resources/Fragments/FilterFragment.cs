@@ -59,9 +59,9 @@ namespace TouriDroid
 			SupportFunctions sf = new SupportFunctions ();
 
 			// build out the expertises table
-			TableLayout expertiseTable = (TableLayout)view.FindViewById (Resource.Id.table_Expertise);
-			List<Expertise> expertises = sf.BuildExpertiseTable (view, expertiseTable, Resource.Layout.expertise_tablerow);
-			expertiseTable.RequestLayout();
+		//	TableLayout expertiseTable = (TableLayout)view.FindViewById (Resource.Id.table_Expertise);
+		//	List<Expertise> expertises = sf.BuildExpertiseTable (view, expertiseTable, Resource.Layout.expertise_tablerow);
+		//	expertiseTable.RequestLayout();
 
 			//((SecondActivity)this.Activity).checkedLanguages.Clear ();
 			TableLayout languagesTable = (TableLayout)view.FindViewById (Resource.Id.table_Languages);

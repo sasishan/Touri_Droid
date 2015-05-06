@@ -29,6 +29,7 @@ namespace TouriDroid
 
 			//get the information of who we want to chat WITH
 			string targetGuideId = Intent.GetStringExtra ("TargetGuideId") ?? "Data not available";
+			string targetUserName = Intent.GetStringExtra ("TargetUserName") ?? "Data not available";
 			string fName = Intent.GetStringExtra ("TargetFirstName") ?? "Data not available";
 			string lName = Intent.GetStringExtra ("TargetLastName") ?? "Data not available";
 
@@ -39,18 +40,27 @@ namespace TouriDroid
 				myUsername = sm.getEmail ();
 			}
 
-			ChatClient client = new ChatClient (myUsername, targetGuideId);
-
+			ChatClient client = new ChatClient (myUsername, targetUserName);
 
 			var input = FindViewById<EditText> (Resource.Id.Input);
 			var messages = FindViewById<ListView> (Resource.Id.Messages);
 
 			var inputManager = (InputMethodManager)GetSystemService (InputMethodService);
-			var adapter = new ArrayAdapter<string> (this, Android.Resource.Layout.SimpleListItem1, new List<string> ());
+
+			DataManager dm = new DataManager ();
+			dm.SetContext (this);
+			List<ChatMessage> myChatMessages = dm.GetMessagesFromUser(myUsername, targetUserName);
+			List<string> myMessages = new List<string>();
+			foreach (ChatMessage m in myChatMessages) {
+				myMessages.Add (targetUserName + " ["+m.Msgtimestamp+"]: "+ m.Message);
+			}
+
+			var adapter = new ArrayAdapter<string> (this, Android.Resource.Layout.SimpleListItem1, myMessages);
 			messages.Adapter = adapter;
 
 			await client.Connect();
 
+			// if i'm not logged in, get a username from the chat hub
 			if (sm.isLoggedIn () == false) {
 				await client.SendMyUsername();
 			}

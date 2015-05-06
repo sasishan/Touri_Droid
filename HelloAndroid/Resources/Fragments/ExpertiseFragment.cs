@@ -23,6 +23,7 @@ namespace TouriDroid
 		private RecyclerView.LayoutManager mLayoutManager;
 		private RecyclerView.Adapter mAdapter;
 		protected List<Expertise> mExpertiseList = new List<Expertise> ();
+		private ProgressBar progress;
 
 		public override void OnCreate (Bundle savedInstanceState)
 		{
@@ -58,9 +59,13 @@ namespace TouriDroid
 			} else {
 				place = ((MainActivity)this.Activity).getPlace();
 			}
+
 			url+=place;
 
+			progress = (ProgressBar) view.FindViewById(Resource.Id.progressBar);
 			loadExpertises (url);
+
+			//new ProgressTask().execute();
 
 			return view;
 		}
@@ -83,8 +88,11 @@ namespace TouriDroid
 		{
 			CallAPI ca = new CallAPI();
 
+			progress.Visibility = ViewStates.Visible;
 			var json = await ca.getWebApiData(url, null);
+
 			if (json == null) {		
+				progress.Visibility = ViewStates.Gone;
 				Toast.MakeText (View.Context, "Could not connect to server", ToastLength.Short);
 				return;
 			}
@@ -102,12 +110,11 @@ namespace TouriDroid
 			//	}
 
 				imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ e.expertiseImageId;
-
 				Bitmap image = (Bitmap) await ca.getImage (imageUrl);
-
 				e.expertiseImage = image;
 			}
-			mExpertiseList.RemoveAll(item => item.numberOfGuides ==0);
+		//	mExpertiseList.RemoveAll(item => item.numberOfGuides ==0);
+			progress.Visibility = ViewStates.Gone;
 			mAdapter.NotifyDataSetChanged ();
 		}
 

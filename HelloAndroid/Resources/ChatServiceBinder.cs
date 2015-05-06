@@ -18,6 +18,7 @@ namespace TouriDroid
 		bool mAllowRebind;
 
 		DataManager dm;
+		ChatClient client ;
 
 		/** Called when the service is being created. */
 		public override void OnCreate() {
@@ -35,6 +36,8 @@ namespace TouriDroid
 
 		/** Called when all clients have unbound with unbindService() */
 		public override Boolean OnUnbind(Intent intent) {
+			Toast.MakeText(this, "Chat server disconnect", ToastLength.Long).Show();
+			client.disconnect ();
 			return mAllowRebind;
 		}
 
@@ -45,7 +48,8 @@ namespace TouriDroid
 
 		/** Called when The service is no longer used and is being destroyed */
 		public override void OnDestroy() {
-
+			Toast.MakeText(this, "Chat server disconnect", ToastLength.Long).Show();
+			client.disconnect ();
 		}
 
 		public override StartCommandResult OnStartCommand (Intent intent, StartCommandFlags flags, int startId)
@@ -53,19 +57,20 @@ namespace TouriDroid
 			// Let it continue running until it is stopped.
 			Toast.MakeText(this, "Service Started", ToastLength.Long).Show();
 			StartChatConnection ();
+
 			return StartCommandResult.Sticky;
 		}	
 
 		public async void StartChatConnection () {
 			SessionManager sm = new SessionManager (this);
 			string myUsername = sm.getEmail ();
-			ChatClient client = new ChatClient (myUsername, "0");
+			client= new ChatClient (myUsername, "0");
 			await client.Connect ();
 			Toast.MakeText(this, "Connected to Chat Server", ToastLength.Long).Show();
 
 			dm = new DataManager ();
 			dm.SetContext (this);
-									
+
 			//assume only guides get messages for now so there will be a ToUser name
 			client.OnMessageReceived += (sender, message) => { 
 				ChatMessage cm = new ChatMessage ();

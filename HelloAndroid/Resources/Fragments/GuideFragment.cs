@@ -223,6 +223,12 @@ namespace TouriDroid
 				g.jsonText = json;
 
 				JsonValue values = json [i];
+
+				if (values.ContainsKey (Constants.Guide_WebAPI_Key_Username)) {
+					string username = values [Constants.Guide_WebAPI_Key_Username];
+					g.userName= username;
+				}
+
 				if (values.ContainsKey (Constants.Guide_WebAPI_Key_FirstName)) {
 					string fName = values [Constants.Guide_WebAPI_Key_FirstName];
 
@@ -497,6 +503,7 @@ namespace TouriDroid
 
 				var gprofileActivity = new Intent (thisActivity, typeof(GuideProfileActivity));
 				gprofileActivity.PutExtra ("GuideId", mGuides[itemPosition].guideId.ToString());
+				gprofileActivity.PutExtra ("UName", mGuides[itemPosition].userName);
 				gprofileActivity.PutExtra ("FName", mGuides[itemPosition].fName);
 				gprofileActivity.PutExtra ("LName", mGuides[itemPosition].lName);
 

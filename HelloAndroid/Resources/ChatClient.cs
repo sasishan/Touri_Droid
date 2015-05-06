@@ -13,7 +13,7 @@ namespace TouriDroid
 	public class ChatClient
 	{
 		public string _myUsername;
-		public string _targetGuideId;
+		public string _targetUserName;
 		public string _myId;
 
 		private readonly HubConnection _connection;
@@ -22,12 +22,12 @@ namespace TouriDroid
 		public event EventHandler<Message> OnMessageReceived;
 		public event EventHandler<string> ReceiveMyUserName;
 
-		public ChatClient(string myUsername, string targetGuideId)
+		public ChatClient(string myUsername, string targetUserName)
 		{
 			//_platform = platform;
 			_myUsername = myUsername;
-			_targetGuideId = targetGuideId;
-			_connection = new HubConnection(Constants.DEBUG_BASE_URL, "username=" + _myUsername+"&targetGuideId="+targetGuideId);
+			_targetUserName = targetUserName;
+			_connection = new HubConnection(Constants.DEBUG_BASE_URL, "username=" + _myUsername+"&targetUserName="+_targetUserName);
 			_proxy = _connection.CreateHubProxy("ChatHub");
 		}
 
@@ -55,6 +55,11 @@ namespace TouriDroid
 		//	await Send("Connected");
 		}
 
+		public async Task disconnect()
+		{
+			_connection.Stop ();
+		}
+
 		public Task SendMyUsername()
 		{
 			return _proxy.Invoke("SendMyUserName");
@@ -62,7 +67,7 @@ namespace TouriDroid
 
 		public Task SendPrivateMessage(string message)
 		{
-			return _proxy.Invoke("SendPrivateMessage", message, _myUsername, _targetGuideId);
+			return _proxy.Invoke("SendPrivateMessage", message, _myUsername, _targetUserName);
 		}
 
 		public Task Send(string message)

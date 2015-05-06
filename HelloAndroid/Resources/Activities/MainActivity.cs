@@ -16,12 +16,13 @@ using Android.Support.V7.App;
 using Android.Support.V4.View;
 using Android.Util;
 using Android.Content;
+using Android.Views.InputMethods;
 
 namespace TouriDroid
 {
 	//[Activity (Label = "HelloAndroid", MainLauncher = true, Icon = "@drawable/icon")]
 	/* This is the Activity that displays all the expertises and is the Main Activity */
-	[Activity (Label = "Touri", MainLauncher = true, Theme = "@style/Theme.AppCompat")]			
+	[Activity (Label="Touri", MainLauncher = true, Theme = "@style/Theme.AppCompat")]			
 	public class MainActivity : ActionBarActivity, Android.Support.V7.App.ActionBar.ITabListener
 	{
 		private DrawerLayout 	mDrawer;
@@ -31,6 +32,8 @@ namespace TouriDroid
 		public Expertise 		mExpertise;
 		private GuideSearch 	mGuideSearch;
 		protected int 			currentFragment = Constants.Uninitialized;
+		private	AutoCompleteTextView searchPlaces;
+		IMenu					searchMenu;
 
 		private List<string> mDrawerItems = new List<string>
 		{
@@ -81,11 +84,13 @@ namespace TouriDroid
 				} else {
 					mDrawerItems.Add ("Favourite Guides");
 				}
+				mDrawerItems.Add (Constants.MyPreferences);
 				mDrawerItems.Add (Constants.DrawerOptionLogout);
 			} else {
 				mDrawerItems.Add(Constants.DrawerOptionBeAGuide);
 				mDrawerItems.Add (Constants.DrawerOptionLoginOrSignUp);
 			}
+
 			mDrawer = this.FindViewById<DrawerLayout> (Resource.Id.main_drawer_layout);
 			mDrawerList = this.FindViewById<ListView> (Resource.Id.main_left_drawer);
 
@@ -106,7 +111,6 @@ namespace TouriDroid
 			var ft = FragmentManager.BeginTransaction ();
 			ft.Add (Resource.Id.main_fragment_container, newFragment);
 			ft.Commit ();
-
 		}	
 
 		public override bool OnCreateOptionsMenu(IMenu menu)
@@ -115,8 +119,10 @@ namespace TouriDroid
 
 			//set up the action bar menu's search 
 			var item = menu.FindItem (Resource.Id.search);
+			searchMenu = menu;
 			View v = (View) MenuItemCompat.GetActionView (item);
-			AutoCompleteTextView searchPlaces = (AutoCompleteTextView) v.FindViewById (Resource.Id.search_places);
+
+			searchPlaces = (AutoCompleteTextView) v.FindViewById (Resource.Id.search_places);
 			//AutoCompleteTextView searchPlaces = (AutoCompleteTextView)FindViewById (Resource.Id.search_places);
 
 			PlacesAutoCompleteAdapter pacAdapter = new PlacesAutoCompleteAdapter (this, Android.Resource.Layout.SimpleListItem1);
@@ -126,10 +132,23 @@ namespace TouriDroid
 			//@remove replace with get current location
 			searchPlaces.Text = "Toronto, ON, Canada";
 			mPlace = searchPlaces.Text;
+			SetActivityLabel (mPlace);
 
 			return base.OnCreateOptionsMenu(menu);
 
 		} 
+
+		private void SetActivityLabel(string place)
+		{
+			char[] splits = {',' };
+			string[] placeArray= searchPlaces.Text.Split (splits, 3);
+
+			if (placeArray.Length > 1) {
+				this.Title = placeArray [0] + ", " + placeArray [1];
+			} else {
+				this.Title = placeArray [0] ;
+			}
+		}
 
 		protected override void OnPostCreate (Bundle savedInstanceState)
 		{
@@ -160,10 +179,19 @@ namespace TouriDroid
 					mPlace = place;
 					string url = Constants.DEBUG_BASE_URL + "/api/expertises/search?locs="+place;
 
+					SetActivityLabel (mPlace);
+
 					//mGuideSearch.placesServedList.Clear ();
 					//mGuideSearch.placesServedList.Add (place);
 					ExpertiseFragment ef = FragmentManager.FindFragmentById<ExpertiseFragment> (Resource.Id.main_fragment_container);
-					ef.loadExpertises (url);					
+					ef.loadExpertises (url);	
+
+					var item = searchMenu.FindItem (Resource.Id.search);
+					item.CollapseActionView ();
+					//ef.View.RequestFocus ();
+					InputMethodManager imm = (InputMethodManager) GetSystemService(Activity.InputMethodService);
+					imm.HideSoftInputFromWindow(CurrentFocus.WindowToken, 0);
+										
 				} 
 				else if (currentFragment == Constants.GuideFragment) 
 				{
@@ -204,6 +232,10 @@ namespace TouriDroid
 				mDrawer.CloseDrawers ();
 				this.StartActivity (typeof(LoginOrSignupActivity));
 			}
+			else if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.DrawerOptionSwitchGuide)) {
+				mDrawer.CloseDrawers ();
+				this.StartActivity (typeof(GuidingActivity));
+			}
 		}
 			
 		public override bool OnOptionsItemSelected (IMenuItem item)
@@ -214,6 +246,9 @@ namespace TouriDroid
 			}
 
 			switch (item.ItemId) {
+			case Resource.Id.search:
+				searchPlaces.Text = "";
+				return base.OnOptionsItemSelected (item);
 			case Android.Resource.Id.Home:
 				Finish ();
 				return true;

@@ -10,21 +10,6 @@
             android:id="@+id/text33"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/SelectExpertise"
-            android:layout_marginTop="10dp"
-            android:textSize="15dp"
-            android:gravity="center" />
-        <TableLayout
-            android:id="@+id/table_Expertise"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="00dp"
-            android:stretchColumns="*"
-            android:layout_margin="30dp" />
-        <TextView
-            android:id="@+id/text33"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
             android:hint="@string/SelectLanguages"
             android:layout_marginTop="10dp"
             android:textSize="15dp"

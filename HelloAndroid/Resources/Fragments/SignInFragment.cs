@@ -17,7 +17,6 @@ namespace TouriDroid
 {
 	public class SignInFragment : Fragment
 	{
-		Intent mChatIntent;
 		public override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
@@ -57,8 +56,14 @@ namespace TouriDroid
 
 				Toast.MakeText (view.Context, "Successfully logged in", ToastLength.Long).Show ();
 
-				Intent i = new Intent(view.Context, typeof(MainActivity));
-				// Closing all the Activities
+				Intent i = null;
+				if (isGuide) {
+					i = new Intent(view.Context, typeof(GuidingActivity));
+				} else {
+					i = new Intent(view.Context, typeof(MainActivity));
+				}
+
+				// Closing all the backstack Activities
 				i.SetFlags(ActivityFlags.ClearTask | ActivityFlags.NewTask);
 				this.StartActivity (i);
 			

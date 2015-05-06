@@ -123,6 +123,8 @@
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteAsync.cs" />
     <Compile Include="Resources\Fragments\ChatListFragment.cs" />
+    <Compile Include="Resources\Activities\GuidingActivity.cs" />
+    <Compile Include="Resources\Fragments\GuidingFragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -192,6 +194,8 @@
     <AndroidResource Include="Resources\layout\SignupExpertise.axml" />
     <AndroidResource Include="Resources\layout\SignupRegister.axml" />
     <AndroidResource Include="Resources\layout\SignIn.axml" />
+    <AndroidResource Include="Resources\layout\ChatList.axml" />
+    <AndroidResource Include="Resources\layout\GuideEditProfile_fragment.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

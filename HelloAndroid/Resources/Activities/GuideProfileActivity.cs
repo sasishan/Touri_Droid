@@ -28,6 +28,7 @@ namespace TouriDroid
 			ActionBar.SetHomeButtonEnabled (true);
 
 			string guideId = Intent.GetStringExtra ("GuideId") ?? "Data not available";
+			string userName = Intent.GetStringExtra ("UName") ?? "Data not available";
 			string fName = Intent.GetStringExtra ("FName") ?? "Data not available";
 			string lName = Intent.GetStringExtra ("LName") ?? "Data not available";
 			string description = Intent.GetStringExtra ("Description") ?? "Data not available";
@@ -49,8 +50,8 @@ namespace TouriDroid
 				else
 				{
 					var chatActivity = new Intent (this, typeof(ActiveChat));
-
 					chatActivity.PutExtra ("TargetGuideId", guideId);
+					chatActivity.PutExtra ("TargetUserName", userName);
 					chatActivity.PutExtra ("TargetFirstName", fName);
 					chatActivity.PutExtra ("TargetLastName", lName);
 					this.StartActivity(chatActivity);

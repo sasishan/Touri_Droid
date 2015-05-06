@@ -6,7 +6,7 @@
 	<string name="drawer_open">open</string>
 	<string name="drawer_close">close</string>
 	<string name="action_settings">Settings</string>
-	<string name="search_hint_places">Search places</string>
+	<string name="search_hint_places">Enter location to find guides</string>
 	<string name="city_name">Enter a destination</string>
 	<string name="where_text">Where are you going?</string>
 	<string name="FindGuide">Find A Guide</string>

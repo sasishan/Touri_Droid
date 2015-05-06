@@ -62,9 +62,11 @@ namespace TouriDroid
 		public const int MainActivity_DrawerMainMenuId = 1;
 		public const string DrawerOptionBeAGuide = "Become A Guide";
 		public const string DrawerOptionSwitchGuide = "Switch To Guiding";
+		public const string DrawerOptionSwitchTravel = "Switch To Travelling";
 
 		public const string DrawerOptionLogout = "Log Out";
 		public const string DrawerOptionLoginOrSignUp = "Sign In or Sign Up";
+		public const string MyPreferences = "My Preferences";
 
 
 		public const int SecondActivity_DrawerMainMenuId = 2;
