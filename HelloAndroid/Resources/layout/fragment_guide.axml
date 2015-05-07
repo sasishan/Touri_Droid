@@ -3,6 +3,16 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
+    <TextView
+        android:text="No guides found for this criteria"
+        android:id="@+id/noguides"
+        android:layout_width="fill_parent"
+        android:layout_height="300dp"
+        android:gravity="center"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:textSize="30dp"
+        android:textColor="@color/dark_grey"
+        android:visibility="gone" />
     <RelativeLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"

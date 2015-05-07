@@ -13,6 +13,7 @@
             android:id="@+id/guide_photo"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:scaleType="centerCrop"
             android:layout_marginRight="10dp" />
         <TextView
             android:layout_width="wrap_content"

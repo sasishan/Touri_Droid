@@ -37,7 +37,6 @@ namespace TouriDroid
 		/** Called when all clients have unbound with unbindService() */
 		public override Boolean OnUnbind(Intent intent) {
 			Toast.MakeText(this, "Chat server disconnect", ToastLength.Long).Show();
-			client.disconnect ();
 			return mAllowRebind;
 		}
 
@@ -79,10 +78,15 @@ namespace TouriDroid
 				cm.Message = message.message;
 				cm.Msgtimestamp = DateTime.Now.ToString ();
 
-				long id = dm.AddMessage (cm);
-				Toast.MakeText (this, "Message added", ToastLength.Long).Show ();
+				// dont record messages from myself back (eg. could not deliver a message is returned)
+				if (!cm.FromUser.Equals(myUsername))
+				{
+					long id = dm.AddMessage (cm);
+				}
+
 			};						
 		}
+
 
 		public event EventHandler<string> messageChanged = delegate { };
 	}

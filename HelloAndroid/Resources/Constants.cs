@@ -49,9 +49,9 @@ namespace TouriDroid
 		public const int NotAvailableForChatValue = 0;
 
 		//Avaialibtility value mapping strings - this is done in the app based on DB value
-		public const string AvailableNowString = "Available now";
+		public const string AvailableNowString = "Online for chat";
 		public const string AvailableLaterString = "Available later";
-		public const string NotAvailableForChatString = "Not Available for Chat";
+		public const string NotAvailableForChatString = "Not online";
 
 		public const string NoValue = "N/A";
 

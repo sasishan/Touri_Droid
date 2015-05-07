@@ -1,11 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:layout_margin="1dp">
-    <ListView
-        android:layout_width="fill_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/GuideProfileRows" />
-</LinearLayout>
+        android:layout_centerInParent="true"
+        android:background="@color/light_blue"
+        android:layout_gravity="top">
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="250dp"
+            android:id="@+id/guide_photo"
+            android:scaleType="centerCrop"
+            android:layout_alignParentTop="true" />
+        <Switch
+            android:id="@+id/toggleChatOn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chat Status"
+            android:textOn="Online for Chat"
+            android:textOff="Offline for Chat"
+            android:textColor="@color/black"
+            android:layout_gravity="center" />
+        <TextView
+            android:id="@+id/guideUsername"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:background="@color/white" />
+        <TextView
+            android:id="@+id/username_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textSize="15dp"
+            android:gravity="center"
+            android:paddingBottom="20dp"
+            android:textColor="@android:color/holo_red_dark"
+            android:background="@color/white" />
+        <TextView
+            android:id="@+id/guideName"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:background="@color/white" />
+        <TextView
+            android:id="@+id/editGuideName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit name"
+            android:textSize="15dp"
+            android:gravity="center"
+            android:paddingBottom="20dp"
+            android:textColor="@android:color/holo_red_dark"
+            android:background="@color/white" />
+        <TextView
+            android:id="@+id/shortAboutme"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="1dp"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:background="@color/white" />
+        <TextView
+            android:id="@+id/editShortAboutme"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit short about me"
+            android:textSize="15dp"
+            android:gravity="center"
+            android:paddingBottom="20dp"
+            android:textColor="@android:color/holo_red_dark"
+            android:background="@color/white" />
+        <TextView
+            android:id="@+id/aboutme"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="1dp"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:background="@color/white" />
+        <TextView
+            android:id="@+id/editAboutme"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit about me"
+            android:textSize="15dp"
+            android:gravity="center"
+            android:paddingBottom="20dp"
+            android:textColor="@android:color/holo_red_dark"
+            android:background="@color/white" />
+        <TextView
+            android:id="@+id/locations"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="1dp"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:background="@color/white" />
+        <TextView
+            android:id="@+id/editLocations"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit locations I serve"
+            android:textSize="15dp"
+            android:gravity="center"
+            android:paddingBottom="20dp"
+            android:textColor="@android:color/holo_red_dark"
+            android:background="@color/white" />
+        <TextView
+            android:id="@+id/languages"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="1dp"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:background="@color/white" />
+        <TextView
+            android:id="@+id/editLanguages"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit languages I speak"
+            android:textSize="15dp"
+            android:gravity="center"
+            android:paddingBottom="20dp"
+            android:textColor="@android:color/holo_red_dark"
+            android:background="@color/white" />
+        <ListView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/GuideProfileRows" />
+    </LinearLayout>
+</ScrollView>

@@ -12,6 +12,7 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using System.Json;
+using Android.Graphics;
 
 namespace TouriDroid
 {
@@ -29,7 +30,6 @@ namespace TouriDroid
 			var view = inflater.Inflate(Resource.Layout.GuideEditProfile_fragment, container, false);
 
 			loadMyProfile (view);
-
 			return view;
 		}
 
@@ -44,10 +44,27 @@ namespace TouriDroid
 			var json = await ca.getWebApiData (url, token);
 			Guide myProfile = parseGuideProfiles (json);
 
-			if (myProfile == null)
+			Switch online = view.FindViewById<Switch> (Resource.Id.toggleChatOn);
+
+			if (myProfile.availability == Constants.AvailableNowValue) {
+				online.Checked = true;
+			}
+
+			if (myProfile == null) {
 				return;
+			}
+
+			string imageUrl;
+			if (myProfile.profileImageId == Constants.Uninitialized) {
+				myProfile.profileImage = null;
+			} else {
+				imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ myProfile.profileImageId;
+
+				Bitmap image = (Bitmap) await ca.getScaledImage (imageUrl);
+				myProfile.profileImage = image;
+			}
 			
-			profileRows.Add ("Photo TBD");
+		/*	profileRows.Add ("Photo TBD");
 			profileRows.Add ("Name: " + myProfile.fName + " " + myProfile.lName);
 			profileRows.Add ("Address: "+ myProfile.address1 );
 			profileRows.Add ("Email: TBD");
@@ -61,9 +78,57 @@ namespace TouriDroid
 			var guideProfile = view.FindViewById<ListView> (Resource.Id.GuideProfileRows);
 
 			var adapter = new ArrayAdapter<string> (Activity, Android.Resource.Layout.SimpleListItem1, profileRows);
-			guideProfile.Adapter = adapter;
+			guideProfile.Adapter = adapter;*/
+
+			TextView guideName = view.FindViewById<TextView> (Resource.Id.guideName);
+			TextView userName = view.FindViewById<TextView> (Resource.Id.guideUsername);
+			TextView aboutMe = view.FindViewById<TextView> (Resource.Id.aboutme);
+			TextView shortAboutme = view.FindViewById<TextView> (Resource.Id.shortAboutme);
+			TextView locations = view.FindViewById<TextView> (Resource.Id.locations);
+			TextView languages = view.FindViewById<TextView> (Resource.Id.languages);
+			ImageView photo = view.FindViewById<ImageView> (Resource.Id.guide_photo);
+
+			userName.Text = myProfile.userName;
+			guideName.Text = myProfile.fName + " " + myProfile.lName;
+			aboutMe.Text = myProfile.description;
+			shortAboutme.Text = myProfile.description;
+			foreach (string l in myProfile.placesServedList) {
+				locations.Text += "• "+l+"\r\n" ;
+			}
+
+			foreach (string l in myProfile.languageList) {
+				languages.Text += "• "+l+"\r\n" ;
+			}
+
+			if (myProfile.profileImage == null) {
+				photo.SetImageResource (Resource.Drawable.placeholder_photo);
+			} else {
+				photo.SetImageBitmap (myProfile.profileImage);
+			}	
+
+			online.Click += (o, e) => {
+				// Perform action on clicks
+				if (online.Checked)
+				{
+					Toast.MakeText(view.Context, "Online", ToastLength.Short).Show ();
+				}
+				else
+				{
+					Toast.MakeText(view.Context, "Offline", ToastLength.Short).Show ();
+				}
+			};
 		}
 
+		public void onToggleClicked(View view) {
+			// Is the toggle on?
+			Boolean on = ((ToggleButton) view).Checked;
+
+			if (on) {
+				// Enable vibrate
+			} else {
+				// Disable vibrate
+			}
+		}
 		public Guide parseGuideProfiles(JsonValue json)
 		{
 			if (json == null) {
@@ -80,6 +145,11 @@ namespace TouriDroid
 				g.fName = fName;
 				g.guideId = values [Constants.Guide_WebAPI_Key_GuideId];
 
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Username)) {
+				string userName = values [Constants.Guide_WebAPI_Key_Username];
+				g.userName= userName;
 			}
 
 			if (values.ContainsKey (Constants.Guide_WebAPI_Key_LastName)) {

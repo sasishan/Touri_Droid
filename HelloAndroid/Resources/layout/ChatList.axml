@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         <TextView
@@ -13,10 +13,22 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:textSize="18dp"
             android:layout_marginTop="20dp" />
+        <TextView
+            android:text="No messages"
+            android:id="@+id/nomsgs"
+            android:layout_width="fill_parent"
+            android:layout_height="300dp"
+            android:gravity="center"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:textSize="30dp"
+            android:textColor="@color/dark_grey" />
     </LinearLayout>
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/Messages" />
+        android:layout_marginTop="15dp"
+        android:id="@+id/Messages"
+        android:textAlignment="textStart" />
 </LinearLayout>

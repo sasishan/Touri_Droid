@@ -76,7 +76,8 @@ namespace TouriDroid
 				//client.Send(input.Text);
 				//Send the message and reflect it back on the screen
 				client.SendPrivateMessage(input.Text);
-				adapter.Add(input.Text);
+
+				adapter.Add(myUsername + " ["+ DateTime.Now+"]: "+ input.Text);
 				input.Text ="";
 			};
 

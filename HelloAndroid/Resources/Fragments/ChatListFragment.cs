@@ -45,6 +45,11 @@ namespace TouriDroid
 			var adapter = new ArrayAdapter<string> (Activity, Android.Resource.Layout.SimpleListItem1, users);
 			messages.Adapter = adapter;
 
+			TextView noMsgs = view.FindViewById<TextView> (Resource.Id.nomsgs);
+			if (messages.Count > 0) {
+				noMsgs.Visibility = ViewStates.Gone;
+			}
+
 			messages.ItemClick += (object sender, AdapterView.ItemClickEventArgs e) => 
 			{
 				var chatActivity = new Intent (view.Context, typeof(ActiveChat));

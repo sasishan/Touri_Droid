@@ -28,11 +28,13 @@ namespace TouriDroid
 		protected List<Guide> 				mGuideList = new List<Guide> ();
 		public string 						mPlace="";
 		public GuideSearch 					mGuideSearch;
+		private TextView noGuides = null;
 
 		public override void OnCreate (Bundle savedInstanceState)
 		{
 			mGuideSearch = ((SecondActivity)this.Activity).mGuideSearch;
 			base.OnCreate (savedInstanceState);
+
 
 			SetHasOptionsMenu(true);
 		}			
@@ -65,6 +67,7 @@ namespace TouriDroid
 
 			//var item = menu.FindItem (Resource.Id.filter);
 			//item.SetOnMenuItemClickListener(
+
 			base.OnCreateOptionsMenu(menu, menuInflater);
 		}
 
@@ -158,6 +161,7 @@ namespace TouriDroid
 			//TextView text =  view.FindViewById<TextView> (Resource.Id.guideFirstName);
 
 	//		Button button = (Button) ((SecondActivity)this.Activity).FindViewById(Resource.Id.moreButton);
+			noGuides= view.FindViewById<TextView> (Resource.Id.noguides);
 			mRecyclerView = view.FindViewById<RecyclerView> (Resource.Id.my_recycler_view);
 
 			mLayoutManager =  new LinearLayoutManager(view.Context);//new GridLayoutManager(view.Context, 2, GridLayoutManager.Horizontal, false);
@@ -323,7 +327,14 @@ namespace TouriDroid
 			}
 
 			//mGuideList = myGuides;
+
 			mAdapter.NotifyDataSetChanged ();
+
+			if (mGuideList.Count == 0) {
+				noGuides.Visibility = ViewStates.Visible;
+			} else {
+				noGuides.Visibility = ViewStates.Gone;
+			}
 
 			return mGuideList;
 //			mAdapter = new RecyclerAdapter (mGuideList, this.Activity);
@@ -445,7 +456,7 @@ namespace TouriDroid
 			}	
 
 			// Set availability and colors
-			Color AvailableNowColor = Color.Green;
+			Color AvailableNowColor = Color.SeaGreen;
 			Color AvailableLaterColor = Color.DarkOrange;
 			Color NotAvailableForChatColor = Color.Red;
 
