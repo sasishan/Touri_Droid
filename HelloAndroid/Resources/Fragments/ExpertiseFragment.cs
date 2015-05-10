@@ -24,6 +24,7 @@ namespace TouriDroid
 		private RecyclerView.Adapter mAdapter;
 		protected List<Expertise> mExpertiseList = new List<Expertise> ();
 		private ProgressBar progress;
+		private View myView=null;
 
 		public override void OnCreate (Bundle savedInstanceState)
 		{
@@ -37,6 +38,7 @@ namespace TouriDroid
 			// Use this to return your custom view for this Fragment
 			// return inflater.Inflate(Resource.Layout.YourFragment, container, false);
 			var view = inflater.Inflate(Resource.Layout.fragment_expertise, container, false);
+			myView = view;
 			((MainActivity)this.Activity).setCurrentFragment (Constants.ExpertiseFragment);
 
 			mRecyclerView = view.FindViewById<RecyclerView> (Resource.Id.expertise_recycler_view);
@@ -93,7 +95,7 @@ namespace TouriDroid
 
 			if (json == null) {		
 				progress.Visibility = ViewStates.Gone;
-				Toast.MakeText (View.Context, "Could not connect to server", ToastLength.Short);
+				Toast.MakeText (((MainActivity)this.Activity), "Could not connect to server", ToastLength.Short);
 				return;
 			}
 			parseExpertises(json);

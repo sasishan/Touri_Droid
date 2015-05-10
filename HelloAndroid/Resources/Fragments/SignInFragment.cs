@@ -28,7 +28,11 @@ namespace TouriDroid
 		{
 			LoginService ls = new LoginService ();
 
+			ProgressBar progress = (ProgressBar) view.FindViewById(Resource.Id.progressBar);
+
+			progress.Visibility = ViewStates.Visible;
 			String token = await ls.Login (username, password);
+			progress.Visibility = ViewStates.Gone;
 
 			if (token!=null) {
 				CallAPI ca = new CallAPI ();
@@ -38,7 +42,9 @@ namespace TouriDroid
 
 				Boolean isGuide = false;
 				int guideId = Constants.Uninitialized;
+				progress.Visibility = ViewStates.Visible;
 				JsonValue response = await ca.getWebApiData (url, token);
+				progress.Visibility = ViewStates.Gone;
 				if (response != null) {
 					//not a guide
 					if (response.ContainsKey (Constants.Guide_WebAPI_Key_GuideId)) {						

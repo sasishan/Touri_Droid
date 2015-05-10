@@ -28,7 +28,7 @@ namespace TouriDroid
 		protected List<Guide> 				mGuideList = new List<Guide> ();
 		public string 						mPlace="";
 		public GuideSearch 					mGuideSearch;
-		private TextView noGuides = null;
+		private TextView 					noGuides = null;
 
 		public override void OnCreate (Bundle savedInstanceState)
 		{
@@ -583,7 +583,7 @@ namespace TouriDroid
 			
 		public async Task<Bitmap> getScaledImage (string imageUrl)
 		{
-			HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create (new Uri (imageUrl));
+			HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(new Uri (imageUrl));
 			request.ContentType = "image/png";
 			request.Method = "GET";
 			BitmapFactory.Options options = new BitmapFactory.Options();
@@ -660,7 +660,7 @@ namespace TouriDroid
 		{
 			// Create an HTTP web request using the URL:
 			WebClient client = new WebClient();
-			Uri url = new Uri(p_url);
+			Uri url = new Uri(p_url);	
 
 			client.UploadValuesCompleted += Client_UploadValuesCompleted;
 			client.UploadValuesAsync (url, parameters);

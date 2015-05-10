@@ -2,8 +2,11 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.08f7f593031f50f3" />
   <MonoDevelop.Ide.Workbench>
     <Files>
-      <File FileName="HelloAndroid\Resources\Fragments\GuideFragment.cs" Line="165" Column="1" />
-      <File FileName="HelloAndroid\Resources\Fragments\ExpertiseFragment.cs" Line="65" Column="67" />
+      <File FileName="HelloAndroid\Resources\Fragments\SignInFragment.cs" Line="33" Column="1" />
+      <File FileName="c:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Activities\MainActivity.cs" Line="135" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\SignupRegisterGuide.cs" Line="257" Column="3" />
+      <File FileName="HelloAndroid\Resources\Fragments\SigninSignupFragment.cs" Line="1" Column="1" />
+      <File FileName="c:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Fragments\ExpertiseFragment.cs" Line="133" Column="6" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

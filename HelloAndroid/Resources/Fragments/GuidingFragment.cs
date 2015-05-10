@@ -88,6 +88,12 @@ namespace TouriDroid
 			TextView languages = view.FindViewById<TextView> (Resource.Id.languages);
 			ImageView photo = view.FindViewById<ImageView> (Resource.Id.guide_photo);
 
+			TextView editName = view.FindViewById<TextView> (Resource.Id.editGuideName);
+			TextView editAboutMe = view.FindViewById<TextView> (Resource.Id.editAboutme);
+			TextView editShortAboutMe = view.FindViewById<TextView> (Resource.Id.editShortAboutme);
+			TextView editLocations = view.FindViewById<TextView> (Resource.Id.locations);
+			TextView editLanguages = view.FindViewById<TextView> (Resource.Id.languages);
+
 			userName.Text = myProfile.userName;
 			guideName.Text = myProfile.fName + " " + myProfile.lName;
 			aboutMe.Text = myProfile.description;
@@ -116,6 +122,30 @@ namespace TouriDroid
 				{
 					Toast.MakeText(view.Context, "Offline", ToastLength.Short).Show ();
 				}
+			};
+
+			editName.Click += (sender, e) => 
+			{
+			};
+
+			editAboutMe.Click += (sender, e) => 
+			{
+			};
+
+			editAboutMe.Click += (sender, e) => 
+			{
+			};
+
+			editShortAboutMe.Click += (sender, e) => 
+			{
+			};
+
+			editLanguages.Click += (sender, e) => 
+			{
+			};
+
+			editLocations.Click += (sender, e) => 
+			{
 			};
 		}
 

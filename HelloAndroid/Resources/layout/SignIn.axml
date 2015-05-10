@@ -39,4 +39,11 @@
         android:text="Sign In"
         style="@style/DefaultButtonText"
         android:background="@drawable/button_default_bg" />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 </LinearLayout>
