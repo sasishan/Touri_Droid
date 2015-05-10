@@ -17,6 +17,7 @@ using Android.Views.Animations;
 using Android.Animation;
 using Android.Support.V4.View;
 using System.Collections.Specialized;
+using System.Text;
 
 namespace TouriDroid
 {
@@ -557,6 +558,34 @@ namespace TouriDroid
 	{
 		public CallAPI()
 		{
+		}
+
+		public JsonValue PostDataSync (string p_url, NameValueCollection parameters, string accessToken)
+		{
+			// Create an HTTP web request using the URL:
+			WebClient client = new WebClient();
+
+			Uri url = new Uri(p_url);
+
+			if (accessToken != null) {
+				client.Headers.Add("Authorization", String.Format("Bearer {0}", accessToken));
+			}
+
+			client.UploadValuesCompleted += Client_UploadValuesCompleted;
+			//@todo use UploadValuesAsync?
+			byte[] result = client.UploadValues (url, parameters);
+
+			string s;
+			JsonValue json = "";
+			if (result != null) {
+				s = Encoding.UTF8.GetString (result);
+				json = JsonObject.Parse (s);
+			}
+
+			return json;
+			//			JsonValue json = JsonObject.Parse (s);
+
+			//		return json;
 		}
 
 		public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {

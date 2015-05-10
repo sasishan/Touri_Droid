@@ -21,6 +21,7 @@ namespace TouriDroid
 		private DrawerLayout 	mDrawer;
 		private ListView		mDrawerList;
 		ActionBarDrawerToggle 	drawerToggle;
+		public Guide			currentGuide;
 
 		private List<string> mDrawerItems = new List<string>
 		{

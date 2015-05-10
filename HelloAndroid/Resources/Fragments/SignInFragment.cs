@@ -50,7 +50,7 @@ namespace TouriDroid
 					if (response.ContainsKey (Constants.Guide_WebAPI_Key_GuideId)) {						
 						guideId = response [Constants.Guide_WebAPI_Key_GuideId];
 						isGuide = true;					
-						Activity.StartService (new Intent (Activity, typeof(ChatService)));
+
 
 				//		mChatIntent = new Intent (Activity, typeof(ChatService));
 				//		mChatIntent.SetData ();

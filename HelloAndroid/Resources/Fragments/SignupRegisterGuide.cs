@@ -24,12 +24,9 @@ namespace TouriDroid
 {
 	public class SignupRegisterGuide : Fragment
 	{
-		int guideId=-1;
 		public override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
-
-			// Create your fragment here
 		}
 
 		public async void RegisterGuide(View view)
@@ -41,8 +38,8 @@ namespace TouriDroid
 			RegisterService rs = new RegisterService();
 			bool registered = await rs.Register(username.Text, password.Text, password.Text);
 
-			if (registered) {
-
+			if (registered) 
+			{
 				LoginService ls = new LoginService ();
 				String token = await ls.Login (username.Text, password.Text);
 

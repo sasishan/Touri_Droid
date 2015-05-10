@@ -125,6 +125,7 @@
     <Compile Include="Resources\Fragments\ChatListFragment.cs" />
     <Compile Include="Resources\Activities\GuidingActivity.cs" />
     <Compile Include="Resources\Fragments\GuidingFragment.cs" />
+    <Compile Include="Resources\Activities\EditGuideValueActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

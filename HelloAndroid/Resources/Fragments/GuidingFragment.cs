@@ -18,6 +18,7 @@ namespace TouriDroid
 {
 	public class GuidingFragment : Fragment
 	{
+		View myView;
 		public override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
@@ -28,7 +29,7 @@ namespace TouriDroid
 		public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
 			var view = inflater.Inflate(Resource.Layout.GuideEditProfile_fragment, container, false);
-
+			myView = view;
 			loadMyProfile (view);
 			return view;
 		}
@@ -43,6 +44,7 @@ namespace TouriDroid
 			string url = Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile;
 			var json = await ca.getWebApiData (url, token);
 			Guide myProfile = parseGuideProfiles (json);
+			((GuidingActivity)Activity).currentGuide = myProfile;
 
 			Switch online = view.FindViewById<Switch> (Resource.Id.toggleChatOn);
 
@@ -116,16 +118,28 @@ namespace TouriDroid
 				// Perform action on clicks
 				if (online.Checked)
 				{
+					Activity.StartService (new Intent (Activity, typeof(ChatService)));
 					Toast.MakeText(view.Context, "Online", ToastLength.Short).Show ();
 				}
 				else
 				{
+					Activity.StopService (new Intent (Activity, typeof(ChatService)));
 					Toast.MakeText(view.Context, "Offline", ToastLength.Short).Show ();
 				}
 			};
 
+			photo.Click += (sender, e) => 
+			{
+			};
+
 			editName.Click += (sender, e) => 
 			{
+				var editGuide = new Intent (Activity, typeof(EditGuideValueActivity));
+				editGuide.PutExtra (Constants.guideFirstName, myProfile.fName);
+				editGuide.PutExtra (Constants.guideLastName, myProfile.lName);	
+				editGuide.PutExtra (Constants.Action, Constants.Action_EditName);	
+
+				this.StartActivity (editGuide);
 			};
 
 			editAboutMe.Click += (sender, e) => 
@@ -154,9 +168,11 @@ namespace TouriDroid
 			Boolean on = ((ToggleButton) view).Checked;
 
 			if (on) {
-				// Enable vibrate
+				Activity.StartService (new Intent (Activity, typeof(ChatService)));
+
 			} else {
 				// Disable vibrate
+				Activity.StopService (new Intent (Activity, typeof(ChatService)));
 			}
 		}
 		public Guide parseGuideProfiles(JsonValue json)

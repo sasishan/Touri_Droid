@@ -22,7 +22,7 @@ namespace TouriDroid
 		public const string URL_AddGuideLocation = "/{0}/location";
 		public const string URL_AddGuideExpertise = "/{0}/expertise";
 		public const string URL_AddGuideLanguage = "/{0}/language";
-
+		public const string URL_PutGuideNames = "/{0}/name";
 		// WebApi Keys
 		public const string Guide_WebAPI_Key_Username="username";
 		public const string Guide_WebAPI_Key_FirstName="fName";
@@ -93,6 +93,10 @@ namespace TouriDroid
 		//Second Activity passed in values
 		public const string selectedLocation = "location";
 		public const string selectedExpertise = "expertise";
+		public const string guideFirstName = "fName";
+		public const string guideLastName = "lName";
+		public const string Action = "Action";
+		public const string Action_EditName = "Edit Name";
 
 		public static bool isValidEmail(String target) {
 			if (target == null) 

@@ -1,12 +1,15 @@
 ﻿<Properties StartupItem="HelloAndroid\TouriDroid.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.08f7f593031f50f3" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Fragments\SignupNameFragment.cs">
     <Files>
-      <File FileName="HelloAndroid\Resources\Fragments\SignInFragment.cs" Line="33" Column="1" />
-      <File FileName="c:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Activities\MainActivity.cs" Line="135" Column="1" />
-      <File FileName="HelloAndroid\Resources\Fragments\SignupRegisterGuide.cs" Line="257" Column="3" />
-      <File FileName="HelloAndroid\Resources\Fragments\SigninSignupFragment.cs" Line="1" Column="1" />
-      <File FileName="c:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Fragments\ExpertiseFragment.cs" Line="133" Column="6" />
+      <File FileName="HelloAndroid\Resources\Fragments\GuidingFragment.cs" Line="29" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\SignInFragment.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\SignupNameFragment.cs" Line="63" Column="8" />
+      <File FileName="HelloAndroid\Resources\Activities\EditGuideValueActivity.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\Activities\SecondActivity.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\SignupRegisterGuide.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\GuideFragment.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\ExpertiseFragment.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
