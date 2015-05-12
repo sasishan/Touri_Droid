@@ -261,7 +261,10 @@ namespace TouriDroid
 			byte[] bytes = Encoding.UTF8.GetBytes(postString);
 			using (Stream requestStream = await request.GetRequestStreamAsync())
 			{
-				requestStream.Write(bytes, 0, bytes.Length);
+				if (requestStream != null) {
+					requestStream.Write(bytes, 0, bytes.Length);
+				}
+				requestStream.Close ();
 			}
 
 			try
@@ -277,7 +280,7 @@ namespace TouriDroid
 			}
 			catch (Exception ex)
 			{
-				Log.Debug("Network error", ex.InnerException.ToString());
+				//Log.Debug("Network error", ex.InnerException.ToString());
 				return null;
 			}
 		}

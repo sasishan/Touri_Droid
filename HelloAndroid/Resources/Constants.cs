@@ -23,6 +23,7 @@ namespace TouriDroid
 		public const string URL_AddGuideExpertise = "/{0}/expertise";
 		public const string URL_AddGuideLanguage = "/{0}/language";
 		public const string URL_PutGuideNames = "/{0}/name";
+		public const string URL_PutProfileImage = "/{0}/profileImage";
 		// WebApi Keys
 		public const string Guide_WebAPI_Key_Username="username";
 		public const string Guide_WebAPI_Key_FirstName="fName";
@@ -70,6 +71,7 @@ namespace TouriDroid
 		public const string DrawerOptionLoginOrSignUp = "Sign In or Sign Up";
 		public const string MyPreferences = "My Preferences";
 
+		public const int REQUEST_IMAGE =0;
 
 		public const int SecondActivity_DrawerMainMenuId = 2;
 		public const int SecondActivity_DrawerLanguageOptionsId = 3;
@@ -86,15 +88,20 @@ namespace TouriDroid
 		public const int ExpertiseFragment=1;
 		public const int Uninitialized=-1;
 
-		//image size for profile pictures
-		public const int ProfileReqWidth=60;
-		public const int ProfileReqHeight=60;
+		//image size for guide listing
+		public const int GuideListingReqWidth=60;
+		public const int GuideListingReqHeight=60;
+
+		//image size for guide profile 
+		public const int ProfileReqWidth=200;
+		public const int ProfileReqHeight=200;
 
 		//Second Activity passed in values
 		public const string selectedLocation = "location";
 		public const string selectedExpertise = "expertise";
 		public const string guideFirstName = "fName";
 		public const string guideLastName = "lName";
+		public const string guideId= "guideId";
 		public const string Action = "Action";
 		public const string Action_EditName = "Edit Name";
 

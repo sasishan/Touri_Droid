@@ -10,13 +10,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 <!-- The navigation drawer -->
-    <ListView
-        android:id="@+id/main_left_drawer"
-        android:layout_width="240dp"
+    <RelativeLayout
+        android:id="@+id/relative_layout"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="left"
-        android:choiceMode="singleChoice"
-        android:divider="#D2D2D2"
-        android:dividerHeight="1dp"
-        android:background="#555" />
+        android:layout_gravity="start">
+        <ListView
+            android:id="@+id/main_left_drawer"
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:choiceMode="singleChoice"
+            android:divider="#D2D2D2"
+            android:dividerHeight="1dp"
+            android:background="#555" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+            <TextView
+                android:id="@+id/drawer_bottom_text1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="5dp" />
+        </RelativeLayout>
+    </RelativeLayout>
 </android.support.v4.widget.DrawerLayout>

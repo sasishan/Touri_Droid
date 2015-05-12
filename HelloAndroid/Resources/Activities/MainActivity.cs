@@ -77,6 +77,8 @@ namespace TouriDroid
 
 			SupportActionBar.AddTab (tab);
 
+			TextView drawerFooter = this.FindViewById<TextView> (Resource.Id.drawer_bottom_text1);
+
 			if (sessionManager.isLoggedIn ()) {
 				//mDrawerItems.Add ("Logout");
 				if (sessionManager.isGuide ()) {
@@ -85,9 +87,12 @@ namespace TouriDroid
 					mDrawerItems.Add ("Favourite Guides");
 				}
 				mDrawerItems.Add (Constants.MyPreferences);
+				drawerFooter.Text = "Signed in as " + sessionManager.getEmail ();
 				mDrawerItems.Add (Constants.DrawerOptionLogout);
+
 			} else {
 				mDrawerItems.Add(Constants.DrawerOptionBeAGuide);
+				//drawerFooter.Text = Constants.DrawerOptionLoginOrSignUp;
 				mDrawerItems.Add (Constants.DrawerOptionLoginOrSignUp);
 			}
 

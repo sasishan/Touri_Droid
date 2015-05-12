@@ -322,7 +322,7 @@ namespace TouriDroid
 				} else {
 					imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ g.profileImageId;
 
-					Bitmap image = (Bitmap) await ca.getScaledImage (imageUrl);
+					Bitmap image = (Bitmap) await ca.getScaledImage (imageUrl, Constants.GuideListingReqWidth, Constants.GuideListingReqHeight);
 					g.profileImage = image;
 				}
 			}
@@ -560,6 +560,26 @@ namespace TouriDroid
 		{
 		}
 
+		public JsonValue PostFile (string p_url, string filename, string accessToken)
+		{
+			// Create an HTTP web request using the URL:
+			WebClient client = new WebClient();
+
+			Uri url = new Uri(p_url);
+
+			if (accessToken != null) {
+				client.Headers.Add("Authorization", String.Format("Bearer {0}", accessToken));
+			}
+
+			client.UploadValuesCompleted += Client_UploadValuesCompleted;
+			//@todo use UploadValuesAsync?
+			//byte[] result = 
+			client.UploadFileAsync (url, filename);
+		
+
+			return null;
+		}
+
 		public JsonValue PostDataSync (string p_url, NameValueCollection parameters, string accessToken)
 		{
 			// Create an HTTP web request using the URL:
@@ -588,7 +608,7 @@ namespace TouriDroid
 			//		return json;
 		}
 
-		public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+		private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
 			// Raw height and width of image
 			int height = options.OutHeight;
 			int width = options.OutWidth;
@@ -610,7 +630,7 @@ namespace TouriDroid
 			return inSampleSize;
 		}
 			
-		public async Task<Bitmap> getScaledImage (string imageUrl)
+		public async Task<Bitmap> getScaledImage (string imageUrl, int scaledWidth, int scaledHeight)
 		{
 			HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(new Uri (imageUrl));
 			request.ContentType = "image/png";
@@ -628,7 +648,7 @@ namespace TouriDroid
 					bitMap = await Task.Run (() => BitmapFactory.DecodeStream (stream, null, options));
 					//Bitmap bitMap =  await Task.Run (() => BitmapFactory.DecodeStream(stream));
 
-					options.InSampleSize = calculateInSampleSize (options, Constants.ProfileReqWidth, Constants.ProfileReqHeight);
+					options.InSampleSize = calculateInSampleSize (options, scaledWidth, scaledHeight);
 				}
 			}
 			//@todo - reuse the stream!!
@@ -642,8 +662,6 @@ namespace TouriDroid
 					int imageHeight = options.OutHeight;
 					int imageWidth = options.OutWidth;
 					String imageType = options.OutMimeType;
-
-					//Console.Out.WriteLine("Response: {0}", jsonDoc.ToString ());
 
 					// Return the bitmap:
 					return bitMap;

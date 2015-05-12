@@ -50,8 +50,6 @@ namespace TouriDroid
 					if (response.ContainsKey (Constants.Guide_WebAPI_Key_GuideId)) {						
 						guideId = response [Constants.Guide_WebAPI_Key_GuideId];
 						isGuide = true;					
-
-
 				//		mChatIntent = new Intent (Activity, typeof(ChatService));
 				//		mChatIntent.SetData ();
 					}
@@ -74,7 +72,7 @@ namespace TouriDroid
 				this.StartActivity (i);
 			
 			} else {
-				Toast.MakeText (view.Context, "Error logging in", ToastLength.Long).Show ();
+				Toast.MakeText (view.Context, "Username or password was incorrect", ToastLength.Long).Show ();
 			}
 		}
 

@@ -13,6 +13,8 @@ using Android.Views;
 using Android.Widget;
 using System.Json;
 using Android.Graphics;
+using Android.Database;
+using Android.Net;
 
 namespace TouriDroid
 {
@@ -62,7 +64,7 @@ namespace TouriDroid
 			} else {
 				imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ myProfile.profileImageId;
 
-				Bitmap image = (Bitmap) await ca.getScaledImage (imageUrl);
+				Bitmap image = (Bitmap) await ca.getScaledImage (imageUrl,  Constants.ProfileReqWidth, Constants.ProfileReqHeight);
 				myProfile.profileImage = image;
 			}
 			
@@ -130,6 +132,12 @@ namespace TouriDroid
 
 			photo.Click += (sender, e) => 
 			{
+				var selectImage = new Intent (Activity, typeof(ImageSelectActivity));
+				selectImage.PutExtra (Constants.guideId, myProfile.guideId);
+
+				this.StartActivity(selectImage);
+
+
 			};
 
 			editName.Click += (sender, e) => 
@@ -163,6 +171,8 @@ namespace TouriDroid
 			};
 		}
 
+
+
 		public void onToggleClicked(View view) {
 			// Is the toggle on?
 			Boolean on = ((ToggleButton) view).Checked;
@@ -175,6 +185,7 @@ namespace TouriDroid
 				Activity.StopService (new Intent (Activity, typeof(ChatService)));
 			}
 		}
+
 		public Guide parseGuideProfiles(JsonValue json)
 		{
 			if (json == null) {

@@ -126,6 +126,7 @@
     <Compile Include="Resources\Activities\GuidingActivity.cs" />
     <Compile Include="Resources\Fragments\GuidingFragment.cs" />
     <Compile Include="Resources\Activities\EditGuideValueActivity.cs" />
+    <Compile Include="Resources\Activities\ImageSelectActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -198,6 +199,7 @@
     <AndroidResource Include="Resources\layout\ChatList.axml" />
     <AndroidResource Include="Resources\layout\GuideEditProfile_fragment.axml" />
     <AndroidResource Include="Resources\drawable\touri_logo.png" />
+    <AndroidResource Include="Resources\layout\ImageSelect_Layout.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

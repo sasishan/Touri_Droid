@@ -48,11 +48,13 @@ namespace TouriDroid
 			SupportActionBar.AddTab (tab);
 
 			SessionManager sessionManager = new SessionManager (this);
+			TextView drawerFooter = this.FindViewById<TextView> (Resource.Id.drawer_bottom_text1);
 
 			if (sessionManager.isLoggedIn ()) {
 				//mDrawerItems.Add ("Logout");
 				mDrawerItems.Add (Constants.DrawerOptionSwitchTravel);
 				mDrawerItems.Add (Constants.DrawerOptionLogout);
+				drawerFooter.Text = "Signed in as " + sessionManager.getEmail ();
 			} else {
 				mDrawerItems.Add (Constants.DrawerOptionLoginOrSignUp);
 			}
