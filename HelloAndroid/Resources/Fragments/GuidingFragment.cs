@@ -152,10 +152,11 @@ namespace TouriDroid
 
 			editAboutMe.Click += (sender, e) => 
 			{
-			};
+				var editGuide = new Intent (Activity, typeof(EditGuideValueActivity));
+				editGuide.PutExtra (Constants.guideDescription, myProfile.description);	
+				editGuide.PutExtra (Constants.Action, Constants.Action_EditDescription);	
 
-			editAboutMe.Click += (sender, e) => 
-			{
+				this.StartActivity (editGuide);
 			};
 
 			editShortAboutMe.Click += (sender, e) => 

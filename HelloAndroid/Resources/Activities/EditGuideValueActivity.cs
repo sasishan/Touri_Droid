@@ -37,6 +37,13 @@ namespace TouriDroid
 				//load the Guide Fragment
 				newFragment = new EditNameFragment ();
 			}
+			else if (action.Equals(Constants.Action_EditDescription))
+			{
+				string description = Intent.GetStringExtra (Constants.guideDescription) ?? "Data not available";
+				currentGuide.description = description;
+
+				newFragment = new EditDescriptionFragment ();
+			}
 
 			var ft = FragmentManager.BeginTransaction ();
 			ft.Add (Resource.Id.signinup_fragment_container, newFragment);

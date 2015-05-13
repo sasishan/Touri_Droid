@@ -24,6 +24,9 @@ namespace TouriDroid
 		public const string URL_AddGuideLanguage = "/{0}/language";
 		public const string URL_PutGuideNames = "/{0}/name";
 		public const string URL_PutProfileImage = "/{0}/profileImage";
+		public const string URL_PutGuideDescription = "/{0}/description";
+		public const string URL_PutGuideSummary= "/{0}/summary";
+
 		// WebApi Keys
 		public const string Guide_WebAPI_Key_Username="username";
 		public const string Guide_WebAPI_Key_FirstName="fName";
@@ -102,8 +105,12 @@ namespace TouriDroid
 		public const string guideFirstName = "fName";
 		public const string guideLastName = "lName";
 		public const string guideId= "guideId";
+		public const string guideDescription = "description";
+		public const string guideSummary = "summary";
+
 		public const string Action = "Action";
 		public const string Action_EditName = "Edit Name";
+		public const string Action_EditDescription = "Edit Description";		
 
 		public static bool isValidEmail(String target) {
 			if (target == null) 

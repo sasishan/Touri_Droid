@@ -16,6 +16,7 @@ namespace TouriDroid
 		public string address1 { get; set; }
 		public string address2 { get; set; }
 		public string description { get; set; }
+		public string summary { get; set; }
 		public int availability { get; set; }
 		public int profileImageId { get; set; }
 		public Bitmap profileImage { get; set; }
