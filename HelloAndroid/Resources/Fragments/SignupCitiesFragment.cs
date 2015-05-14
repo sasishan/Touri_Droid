@@ -65,7 +65,14 @@ namespace TouriDroid
 
 				if (locations.Count>0)
 				{
-					((SignUpAsGuideActivity)Activity).newGuide.placesServedList = locations;
+					List<LocationWrapper> lwList = new List<LocationWrapper>();
+					foreach (string l in locations)
+					{
+						LocationWrapper lw = new LocationWrapper();
+						lw.location = l;
+						lwList.Add(lw);
+					}
+					((SignUpAsGuideActivity)Activity).newGuide.placesServedList = lwList;
 
 					var newFragment = new SignupExpertiseFragment ();
 

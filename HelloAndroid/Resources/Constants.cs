@@ -1,9 +1,101 @@
 ﻿using System;
 using Android.Graphics;
 using System.Collections.Generic;
+using System.Json;
 
 namespace TouriDroid
 {
+	public class Converter
+	{
+		public Guide parseOneGuideProfile(JsonValue json)
+		{
+			if (json == null) {
+				return null;
+			}
+
+			Guide g = new Guide ();
+			g.jsonText = json;
+
+			JsonValue values = json;
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_FirstName)) {
+				string fName = values [Constants.Guide_WebAPI_Key_FirstName];
+
+				g.fName = fName;
+				g.guideId = values [Constants.Guide_WebAPI_Key_GuideId];
+
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Username)) {
+				string userName = values [Constants.Guide_WebAPI_Key_Username];
+				g.userName= userName;
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_LastName)) {
+				string lName = values [Constants.Guide_WebAPI_Key_LastName];
+				g.lName= lName;
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Address1)) {
+				g.address1 = values [Constants.Guide_WebAPI_Key_Address1];
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Address2)) {
+				g.address2 = values [Constants.Guide_WebAPI_Key_Address2];
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Description)) {
+				g.description = values [Constants.Guide_WebAPI_Key_Description];
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Availability)) {
+				g.availability = values [Constants.Guide_WebAPI_Key_Availability];
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_ProfileImageId)) {
+				g.profileImageId = values [Constants.Guide_WebAPI_Key_ProfileImageId];
+			} else {
+				g.profileImageId = Constants.Uninitialized;
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_LanguageList)) {
+				JsonValue temp = values [Constants.Guide_WebAPI_Key_LanguageList];
+				for (int j=0; j<temp.Count;j++)
+				{
+					JsonValue l = temp[j];
+					g.languageList.Add (l [Constants.Guide_WebAPI_Key_Language]);
+					//@todo get languageId too
+				}
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_LocationList)) {
+				JsonValue temp = values [Constants.Guide_WebAPI_Key_LocationList];
+				for (int j=0; j<temp.Count;j++)
+				{
+					JsonValue l = temp[j];
+					LocationWrapper lw = new LocationWrapper ();
+					lw.location = l [Constants.Guide_WebAPI_Key_Location];
+					lw.longitude = l [Constants.Guide_WebAPI_Key_Location_long];
+					lw.latitude = l [Constants.Guide_WebAPI_Key_Location_Lat];
+					lw.locationId = l [Constants.Guide_WebAPI_Key_Location_Id];
+					g.placesServedList.Add (lw);
+					//@todo 
+				}
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_ExpertiseList)) {
+				JsonValue temp = values [Constants.Guide_WebAPI_Key_ExpertiseList];
+				for (int j=0; j<temp.Count;j++)
+				{
+					JsonValue l = temp[j];
+					g.expertise.Add (new Expertise() {expertise=l [Constants.Guide_WebAPI_Key_Expertise], expertiseId=l [Constants.Guide_WebAPI_Key_ExpertiseId]});
+					//@todo 
+				}
+			}
+			return g;
+		}
+
+
+	}
 	public static class Constants
 	{
 		//Main Tab positions
@@ -41,6 +133,9 @@ namespace TouriDroid
 		public const string Guide_WebAPI_Key_LanguageId="languageId";
 		public const string Guide_WebAPI_Key_LocationList="locationsServed";
 		public const string Guide_WebAPI_Key_Location="location";
+		public const string Guide_WebAPI_Key_Location_Id="locationId";
+		public const string Guide_WebAPI_Key_Location_Lat="latitude";
+		public const string Guide_WebAPI_Key_Location_long="longitude";
 		public const string Guide_WebAPI_Key_LocationId="locationId";
 		public const string Guide_WebAPI_Key_Availability ="availability";
 		public const string Guide_WebAPI_Key_ExpertiseList ="expertises";

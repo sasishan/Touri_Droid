@@ -129,6 +129,7 @@
     <Compile Include="Resources\Activities\ImageSelectActivity.cs" />
     <Compile Include="Resources\Fragments\EditNameFragment.cs" />
     <Compile Include="Resources\Fragments\EditDescriptionFragment.cs" />
+    <Compile Include="Resources\Fragments\Map_Fragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -204,6 +205,7 @@
     <AndroidResource Include="Resources\layout\ImageSelect_Layout.axml" />
     <AndroidResource Include="Resources\layout\Guide_summary.axml" />
     <AndroidResource Include="Resources\layout\Guide_Description.axml" />
+    <AndroidResource Include="Resources\layout\MapView.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

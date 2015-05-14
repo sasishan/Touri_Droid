@@ -61,8 +61,8 @@ namespace TouriDroid
 					parameters.Clear ();
 					url = String.Format (Constants.URL_AddGuideLocation, newGuide.guideId);
 
-					foreach (string l in newGuide.placesServedList) {
-						parameters.Add ("location", l);
+					foreach (LocationWrapper l in newGuide.placesServedList) {
+						parameters.Add ("location", l.location);
 
 						jsonResponse = PostDataSync (Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile+
 							url, parameters, token);

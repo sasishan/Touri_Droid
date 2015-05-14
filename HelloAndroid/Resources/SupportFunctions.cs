@@ -26,6 +26,8 @@ namespace TouriDroid
 		private const String IsGuide = "IsGuide";
 		private const String IsLoggedIn = "IsLoggedIn";
 		public const String KeyEmail = "email";
+		public const String KeyCurrentLatitude = "latitude";
+		public const String KeyCurrentLongitude = "longitude";
 		public const String KeyToken = "token";
 		public const String KeyGuideId = "guideId";
 
@@ -34,6 +36,23 @@ namespace TouriDroid
 			context = pContext;
 			pref = context.GetSharedPreferences (PrefName, FileCreationMode.Private);
 			editor = pref.Edit ();
+		}
+
+		public void setCurrentLatitudeLongitude (float lati, float longi)
+		{
+			editor.PutFloat (KeyCurrentLatitude, lati);
+			editor.PutFloat (KeyCurrentLongitude, longi);
+			editor.Commit ();
+		}
+
+		public float getCurrentLatitude()
+		{
+			return pref.GetFloat (KeyCurrentLatitude, Constants.Uninitialized);
+		}
+
+		public float getCurrentLongitude()
+		{
+			return pref.GetFloat (KeyCurrentLongitude, Constants.Uninitialized);
 		}
 
 		public void createLoginSession (String email, String token, Boolean pIsGuide, int guideId)

@@ -102,8 +102,8 @@ namespace TouriDroid
 			guideName.Text = myProfile.fName + " " + myProfile.lName;
 			aboutMe.Text = myProfile.description;
 			shortAboutme.Text = myProfile.description;
-			foreach (string l in myProfile.placesServedList) {
-				locations.Text += "• "+l+"\r\n" ;
+			foreach (LocationWrapper l in myProfile.placesServedList) {
+				locations.Text += "• "+l.location+"\r\n" ;
 			}
 
 			foreach (string l in myProfile.languageList) {
@@ -252,7 +252,12 @@ namespace TouriDroid
 				for (int j=0; j<temp.Count;j++)
 				{
 					JsonValue l = temp[j];
-					g.placesServedList.Add (l [Constants.Guide_WebAPI_Key_Location]);
+					LocationWrapper lw = new LocationWrapper ();
+					lw.location = l [Constants.Guide_WebAPI_Key_Location];
+					lw.longitude = l [Constants.Guide_WebAPI_Key_Location_long];
+					lw.latitude = l [Constants.Guide_WebAPI_Key_Location_Lat];
+					lw.locationId = l [Constants.Guide_WebAPI_Key_Location_Id];
+					g.placesServedList.Add (lw);
 					//@todo 
 				}
 			}

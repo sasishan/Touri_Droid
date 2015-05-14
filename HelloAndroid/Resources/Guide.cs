@@ -23,7 +23,7 @@ namespace TouriDroid
 		public JsonValue jsonText { get; set; }
 
 		public List<string> languageList = new List<string>();
-		public List<string> placesServedList = new List<string>();
+		public List<LocationWrapper> placesServedList = new List<LocationWrapper>();
 		public List<GuideLanguage> languages = new List<GuideLanguage>();
 		public List<Expertise> expertise = new List<Expertise>();
 
@@ -42,6 +42,19 @@ namespace TouriDroid
 		public GuideLanguage ()
 		{
 
+		}
+	}
+
+	public class LocationWrapper
+	{
+		public int locationId { get; set; }
+		public string location { get; set; }
+		public double latitude { get; set; }
+		public double longitude { get; set; }
+
+		public void Location()
+		{
+			// keep for serializable
 		}
 	}
 

@@ -37,6 +37,7 @@ namespace TouriDroid
 
 		//Variables referenced by child fragments
 		public GuideSearch 		mGuideSearch;
+		public List<Guide> 	mGuideList;
 		public string 			mPlace="";
 		public string 			mExpertise="";
 		public List<string> 	checkedLanguages = new List<String>();

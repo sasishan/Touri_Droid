@@ -17,14 +17,19 @@ using Android.Support.V4.View;
 using Android.Util;
 using Android.Content;
 using Android.Views.InputMethods;
+using Android.Locations;
+using Android.Gms.Maps.Model;
 
 namespace TouriDroid
 {
 	//[Activity (Label = "HelloAndroid", MainLauncher = true, Icon = "@drawable/icon")]
 	/* This is the Activity that displays all the expertises and is the Main Activity */
 	[Activity (Label="Touri", MainLauncher = true, Theme = "@style/Theme.AppCompat")]			
-	public class MainActivity : ActionBarActivity, Android.Support.V7.App.ActionBar.ITabListener
+	public class MainActivity : ActionBarActivity,  ILocationListener, Android.Support.V7.App.ActionBar.ITabListener
 	{
+		private LocationManager _locationManager = null;
+		public Location 		_currentLocation;
+
 		private DrawerLayout 	mDrawer;
 		private ListView		mDrawerList;
 		ActionBarDrawerToggle 	drawerToggle;
@@ -34,6 +39,7 @@ namespace TouriDroid
 		protected int 			currentFragment = Constants.Uninitialized;
 		private	AutoCompleteTextView searchPlaces;
 		IMenu					searchMenu;
+		private SessionManager sessionManager;
 
 		private List<string> mDrawerItems = new List<string>
 		{
@@ -58,7 +64,10 @@ namespace TouriDroid
 		{
 			RequestWindowFeature(WindowFeatures.ActionBar);
 			base.OnCreate (bundle);
-			SessionManager sessionManager = new SessionManager (this);
+
+			_locationManager = GetSystemService (LocationService) as LocationManager;
+
+			sessionManager = new SessionManager (this);
 
 			SupportActionBar.NavigationMode = (int) ActionBarNavigationMode.Tabs;
 
@@ -304,6 +313,51 @@ namespace TouriDroid
 		void AddTabToActionBar(int labelResourceId, int iconResourceId)
 		{
 
+		}
+
+		protected override void OnPause ()
+		{
+			base.OnPause ();
+			_locationManager.RemoveUpdates (this);
+		}
+
+		protected override void OnResume ()
+		{
+			base.OnResume ();
+			string Provider = LocationManager.GpsProvider;
+
+			if(_locationManager.IsProviderEnabled(Provider))
+			{
+				_locationManager.RequestLocationUpdates (Provider, 0, 100, this);
+			} 
+			else 
+			{
+				Log.Info( "loc", Provider + " is not available. Does the device have location services enabled?");
+			}
+		}
+
+		public void OnLocationChanged (Location location)
+		{
+			_currentLocation = location;
+			sessionManager.setCurrentLatitudeLongitude ((float) location.Latitude, (float) location.Longitude);
+			//LatLng loc = new LatLng (_currentLocation.Latitude, _currentLocation.Longitude);
+			//setMapLocation (loc, "Your Location", "", BitmapDescriptorFactory.DefaultMarker (BitmapDescriptorFactory.HueCyan));
+			//setCameraLocation(loc);
+			//markGuides ();
+			_locationManager.RemoveUpdates (this);
+
+		}
+
+		public void OnProviderEnabled (string provider)
+		{
+		}
+
+		public void OnProviderDisabled (string provider)
+		{
+		}
+
+		public void OnStatusChanged (string provider, Availability status, Bundle extras)
+		{
 		}
 			
 	}		

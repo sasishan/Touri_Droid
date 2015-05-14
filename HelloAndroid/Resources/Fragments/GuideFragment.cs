@@ -1,4 +1,4 @@
-﻿using System;
+﻿	using System;
 using System.Net;
 using System.IO;
 using System.Json;
@@ -30,12 +30,12 @@ namespace TouriDroid
 		public string 						mPlace="";
 		public GuideSearch 					mGuideSearch;
 		private TextView 					noGuides = null;
+		private bool 						guidesLoaded = true;
 
 		public override void OnCreate (Bundle savedInstanceState)
 		{
 			mGuideSearch = ((SecondActivity)this.Activity).mGuideSearch;
 			base.OnCreate (savedInstanceState);
-
 
 			SetHasOptionsMenu(true);
 		}			
@@ -57,7 +57,6 @@ namespace TouriDroid
 				searchPlaces.Adapter = pacAdapter;
 				searchPlaces.ItemClick += searchPlaces_ItemClick;
 				searchPlaces.Text = mPlace;
-
 			}
 				
 			mGuideSearch.placesServedList.Clear ();
@@ -66,8 +65,20 @@ namespace TouriDroid
 
 			RefineSearch(mGuideSearch);
 
-			//var item = menu.FindItem (Resource.Id.filter);
-			//item.SetOnMenuItemClickListener(
+			ImageView mapIcon  = Activity.FindViewById<ImageView> (Resource.Id.mapicon);
+			mapIcon.Click += (object sender, EventArgs e) => {
+
+				if (guidesLoaded==true)
+				{
+					var newFragment = new Map_Fragment ();
+					//var ft = FragmentManager.BeginTransaction ();
+					FragmentTransaction transaction = FragmentManager.BeginTransaction();
+					transaction.Replace(Resource.Id.fragment_container, newFragment);
+					//transaction.AddToBackStack(null);
+					transaction.Commit();
+				}
+			};
+
 
 			base.OnCreateOptionsMenu(menu, menuInflater);
 		}
@@ -148,7 +159,9 @@ namespace TouriDroid
 				url = Constants.DEBUG_BASE_URL+Constants.URL_Get_All_Guides;
 			}
 				
+			guidesLoaded = false;
 			await loadGuideProfiles (url);
+			guidesLoaded = true;
 		}
 
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -285,7 +298,12 @@ namespace TouriDroid
 					for (int j=0; j<temp.Count;j++)
 					{
 						JsonValue l = temp[j];
-						g.placesServedList.Add (l [Constants.Guide_WebAPI_Key_Location]);
+						LocationWrapper lw = new LocationWrapper ();
+						lw.location = l [Constants.Guide_WebAPI_Key_Location];
+						lw.longitude = l [Constants.Guide_WebAPI_Key_Location_long];
+						lw.latitude = l [Constants.Guide_WebAPI_Key_Location_Lat];
+						lw.locationId = l [Constants.Guide_WebAPI_Key_Location_Id];
+						g.placesServedList.Add (lw);
 						//@todo 
 					}
 				}
@@ -337,6 +355,7 @@ namespace TouriDroid
 				noGuides.Visibility = ViewStates.Gone;
 			}
 
+			((SecondActivity)this.Activity).mGuideList = mGuideList;
 			return mGuideList;
 //			mAdapter = new RecyclerAdapter (mGuideList, this.Activity);
 	//		mRecyclerView.SetAdapter (mAdapter);
@@ -494,8 +513,8 @@ namespace TouriDroid
 
 			myHolder.mLanguages.Text = languages;
 
-			foreach (string l in mGuides[position].placesServedList) {
-				placesServed += "• "+l+"\r\n" ;
+			foreach (LocationWrapper l in mGuides[position].placesServedList) {
+				placesServed += "• "+l.location+"\r\n" ;
 			}				
 			//placesServed = placesServed.Remove (placesServed.Length - 2);
 			myHolder.mLocations.Text = placesServed;
