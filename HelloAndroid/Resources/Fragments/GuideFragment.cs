@@ -475,34 +475,9 @@ namespace TouriDroid
 				myHolder.mDescription.Text = mGuides [position].description;
 			}	
 
-			// Set availability and colors
-			Color AvailableNowColor = Color.SeaGreen;
-			Color AvailableLaterColor = Color.DarkOrange;
-			Color NotAvailableForChatColor = Color.Red;
-
-			switch (mGuides [position].availability) 
-			{
-
-			case Constants.AvailableLaterValue:
-				myHolder.mAvailability.Text = Constants.AvailableLaterString;
-				myHolder.mAvailability.SetTextColor (AvailableLaterColor);
-				break;
-			
-			case Constants.AvailableNowValue:
-				myHolder.mAvailability.Text = Constants.AvailableNowString;
-				myHolder.mAvailability.SetTextColor (AvailableNowColor);
-				break;
-
-			case Constants.NotAvailableForChatValue:
-				myHolder.mAvailability.Text = Constants.NotAvailableForChatString;
-				myHolder.mAvailability.SetTextColor (NotAvailableForChatColor);
-				break;
-			
-			default:
-				myHolder.mAvailability.Text = Constants.NoValue;
-				myHolder.mAvailability.SetTextColor (NotAvailableForChatColor);
-				break;
-			}
+			Converter converter = new Converter ();
+			myHolder.mAvailability.Text = converter.getOnlineStatusString (mGuides [position].availability);
+			myHolder.mAvailability.SetTextColor( converter.getOnlineStatusColor (mGuides [position].availability));
 
 			foreach (string l in mGuides[position].languageList) {
 				languages += "• "+l+"\r\n" ;

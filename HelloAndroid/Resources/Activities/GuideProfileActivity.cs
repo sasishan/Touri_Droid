@@ -105,7 +105,8 @@ namespace TouriDroid
 			TextView gExpertise = this.FindViewById<TextView> (Resource.Id.expertise);
 			TextView gLanguages = this.FindViewById<TextView> (Resource.Id.languages);
 			ImageView photo = this.FindViewById<ImageView> (Resource.Id.guide_photo);
-			photo.SetImageResource(Resource.Drawable.placeholder_photo);
+
+			//photo.SetImageResource(Resource.Drawable.placeholder_photo);
 
 			CallAPI ca = new CallAPI ();
 			String url = Constants.DEBUG_BASE_URL + "/api/guides/" + guideId;
@@ -127,8 +128,28 @@ namespace TouriDroid
 
 			progress.Visibility = ViewStates.Gone;
 
+			TextView availability = this.FindViewById<TextView> (Resource.Id.availability);
+			availability.Text = converter.getOnlineStatusString(thisGuide.availability);
+			availability.SetTextColor(converter.getOnlineStatusColor(thisGuide.availability));
+
 			gName.Text = thisGuide.fName+" " +thisGuide.lName;
 			gAbout.Text = thisGuide.description;
+
+			foreach (string l in thisGuide.languageList) {
+				gLanguages.Text += "• " + l + "\r\n";	 
+			}
+
+			foreach (Expertise e in thisGuide.expertise) {
+				gExpertise.Text +="• " + e.expertise+ "\r\n";	 
+			}
+	
+			// set the titles to visible so it appears at the same times after loading
+			TextView holders = this.FindViewById<TextView> (Resource.Id.languages_text);
+			holders.Visibility = ViewStates.Visible;
+			holders = this.FindViewById<TextView> (Resource.Id.expertise_text);
+			holders.Visibility = ViewStates.Visible;
+			holders = this.FindViewById<TextView> (Resource.Id.about_text);
+			holders.Visibility = ViewStates.Visible;
 			//gLanguages.Text = g.languages;
 			//gExpertise.Text = expertise;
 		}

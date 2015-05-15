@@ -2,16 +2,10 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.08f7f593031f50f3" />
   <MonoDevelop.Ide.Workbench>
     <Files>
-      <File FileName="HelloAndroid\Resources\Activities\MainActivity.cs" Line="63" Column="6" />
-      <File FileName="HelloAndroid\Resources\Fragments\Map_Fragment.cs" Line="24" Column="57" />
-      <File FileName="HelloAndroid\Resources\Fragments\ExpertiseFragment.cs" Line="67" Column="4" />
-      <File FileName="HelloAndroid\Resources\Fragments\GuideFragment.cs" Line="709" Column="73" />
-      <File FileName="c:\Bitbucket\Touri_Droid\HelloAndroid\Resources\SupportFunctions.cs" Line="45" Column="1" />
-      <File FileName="HelloAndroid\Resources\Activities\ImageSelectActivity.cs" Line="97" Column="4" />
-      <File FileName="HelloAndroid\Resources\Activities\GuideProfileActivity.cs" Line="130" Column="54" />
-      <File FileName="HelloAndroid\Resources\Fragments\SignInFragment.cs" Line="58" Column="6" />
+      <File FileName="HelloAndroid\Resources\Activities\GuideProfileActivity.cs" Line="133" Column="85" />
       <File FileName="HelloAndroid\Resources\Constants.cs" Line="10" Column="36" />
-      <File FileName="HelloAndroid\Resources\Fragments\FilterFragment.cs" Line="10" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\ExpertiseFragment.cs" Line="33" Column="8" />
+      <File FileName="HelloAndroid\Resources\Fragments\GuideFragment.cs" Line="477" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

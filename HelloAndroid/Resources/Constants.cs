@@ -7,6 +7,54 @@ namespace TouriDroid
 {
 	public class Converter
 	{
+		public Color getOnlineStatusColor (int availability)
+		{
+			Color AvailableNowColor = Color.SeaGreen;
+			Color AvailableLaterColor = Color.DarkOrange;
+			Color NotAvailableForChatColor = Color.Red;
+			switch (availability) 
+			{
+
+			case Constants.AvailableLaterValue:
+				return AvailableLaterColor;
+				break;
+
+			case Constants.AvailableNowValue:
+				return AvailableNowColor;
+				break;
+
+			case Constants.NotAvailableForChatValue:
+			default:
+				return NotAvailableForChatColor;
+				break;
+			}
+		}
+
+		public string getOnlineStatusString (int availability)
+		{
+			string status;
+			switch (availability) 
+			{
+
+			case Constants.AvailableLaterValue:
+				status = Constants.AvailableLaterString;
+				break;
+
+			case Constants.AvailableNowValue:
+				status = Constants.AvailableNowString;
+				break;
+
+			case Constants.NotAvailableForChatValue:
+				status = Constants.NotAvailableForChatString;
+				break;
+
+			default:
+				status = Constants.NoValue;
+				break;
+			}
+			return status;
+		}
+
 		public Guide parseOneGuideProfile(JsonValue json)
 		{
 			if (json == null) {

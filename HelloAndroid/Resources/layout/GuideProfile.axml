@@ -1,101 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:visibility="gone" />
-    <ImageView
+    android:layout_height="fill_parent"
+    android:layout_centerInParent="true"
+    android:paddingBottom="10dp"
+    android:paddingTop="1dp"
+    android:layout_gravity="top">
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="150dp"
-        android:id="@+id/guide_photo"
-        android:layout_alignParentLeft="true"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:visibility="gone" />
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:id="@+id/guide_photo"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop" />
+            <TextView
+                android:id="@+id/availability"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:layout_gravity="center"
+                android:layout_marginTop="2dp" />
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/availability"
+                android:padding="15dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/guide_name"
+                    android:layout_alignParentTop="true"
+                    android:textSize="30sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/languages_text"
+                    android:layout_below="@+id/guide_name"
+                    android:layout_marginTop="20dp"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:text="Languages Spoken:"
+                    android:visibility="gone" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/languages"
+                    android:layout_below="@+id/languages_text" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/expertise_text"
+                    android:layout_marginTop="20dp"
+                    android:layout_below="@+id/languages"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:text="Expertise Areas:"
+                    android:visibility="gone" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/expertise"
+                    android:layout_below="@+id/expertise_text" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/about_text"
+                    android:layout_below="@+id/expertise"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:text="About me:"
+                    android:visibility="gone" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/about"
+                    android:layout_below="@+id/about_text" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:id="@+id/ChatButton"
+        android:textSize="15sp"
+        android:text="Chat"
+        android:layout_marginRight="5dp"
         android:layout_alignParentTop="true"
-        android:scaleType="centerCrop"
-        android:layout_marginRight="10dp" />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:padding="20dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/guide_name"
-            android:layout_alignParentTop="true"
-            android:textSize="30sp" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/languages_text"
-            android:layout_below="@+id/guide_photo"
-            android:layout_marginTop="20dp"
-            android:textStyle="bold"
-            android:text="Languages Spoken:" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/languages"
-            android:layout_below="@+id/languages_text" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/expertise_text"
-            android:layout_marginTop="20dp"
-            android:layout_below="@+id/languages"
-            android:textStyle="bold"
-            android:text="Expertise Areas:" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/expertise"
-            android:layout_below="@+id/expertise_text" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:id="@+id/about_text"
-            android:layout_below="@+id/expertise"
-            android:textStyle="bold"
-            android:text="About me:" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/about"
-            android:layout_below="@+id/about_text" />
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:id="@+id/ChatButton"
-            android:textSize="20dp"
-            android:text="Chat"
-            android:layout_below="@+id/about"
-            android:layout_marginTop="50dp"
-            android:layout_toLeftOf="@+id/EmailButton" />
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:id="@+id/EmailButton"
-            android:textSize="20dp"
-            android:text="Email"
-            android:layout_below="@+id/about"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="50dp" />
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:id="@+id/CallButton"
-            android:textSize="20dp"
-            android:text="Call"
-            android:layout_below="@+id/about"
-            android:layout_toRightOf="@+id/EmailButton"
-            android:layout_marginTop="50dp" />
-    </RelativeLayout>
-</LinearLayout>
+        android:layout_toLeftOf="@+id/EmailButton" />
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:id="@+id/EmailButton"
+        android:textSize="15sp"
+        android:text="Message"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true" />
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:id="@+id/CallButton"
+        android:textSize="15sp"
+        android:text="Call"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/EmailButton" />
+</RelativeLayout>
