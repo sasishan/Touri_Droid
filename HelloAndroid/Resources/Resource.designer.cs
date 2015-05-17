@@ -1962,17 +1962,17 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c0039
 			public const int action_mode_close_button = 2131492921;
 			
-			// aapt resource value: 0x7f0c00d3
-			public const int action_search = 2131493075;
+			// aapt resource value: 0x7f0c00d5
+			public const int action_search = 2131493077;
 			
-			// aapt resource value: 0x7f0c00d4
-			public const int action_settings = 2131493076;
+			// aapt resource value: 0x7f0c00d6
+			public const int action_settings = 2131493078;
 			
 			// aapt resource value: 0x7f0c003a
 			public const int activity_chooser_view_content = 2131492922;
 			
-			// aapt resource value: 0x7f0c00cb
-			public const int addCity = 2131493067;
+			// aapt resource value: 0x7f0c00cd
+			public const int addCity = 2131493069;
 			
 			// aapt resource value: 0x7f0c0023
 			public const int adjust_height = 2131492899;
@@ -2010,11 +2010,11 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c0030
 			public const int book_now = 2131492912;
 			
-			// aapt resource value: 0x7f0c00c7
-			public const int btnSingIn = 2131493063;
+			// aapt resource value: 0x7f0c00c9
+			public const int btnSingIn = 2131493065;
 			
-			// aapt resource value: 0x7f0c00c4
-			public const int buttonNext = 2131493060;
+			// aapt resource value: 0x7f0c00c6
+			public const int buttonNext = 2131493062;
 			
 			// aapt resource value: 0x7f0c004a
 			public const int buttonPanel = 2131492938;
@@ -2048,9 +2048,6 @@ namespace TouriDroid
 			
 			// aapt resource value: 0x7f0c004c
 			public const int checkbox = 2131492940;
-			
-			// aapt resource value: 0x7f0c00cc
-			public const int cityList = 2131493068;
 			
 			// aapt resource value: 0x7f0c0034
 			public const int classic = 2131492916;
@@ -2097,14 +2094,17 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c00ac
 			public const int drawer_bottom_text1 = 2131493036;
 			
-			// aapt resource value: 0x7f0c00bf
-			public const int drawer_layout = 2131493055;
+			// aapt resource value: 0x7f0c00c1
+			public const int drawer_layout = 2131493057;
 			
 			// aapt resource value: 0x7f0c00af
 			public const int drawer_text = 2131493039;
 			
 			// aapt resource value: 0x7f0c001c
 			public const int dropdown = 2131492892;
+			
+			// aapt resource value: 0x7f0c00ce
+			public const int dynamicSelections = 2131493070;
 			
 			// aapt resource value: 0x7f0c0097
 			public const int editAboutme = 2131493015;
@@ -2127,14 +2127,14 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c0014
 			public const int end = 2131492884;
 			
-			// aapt resource value: 0x7f0c00c9
-			public const int etEmail = 2131493065;
+			// aapt resource value: 0x7f0c00cb
+			public const int etEmail = 2131493067;
 			
-			// aapt resource value: 0x7f0c00c6
-			public const int etPass = 2131493062;
+			// aapt resource value: 0x7f0c00c8
+			public const int etPass = 2131493064;
 			
-			// aapt resource value: 0x7f0c00c5
-			public const int etUserName = 2131493061;
+			// aapt resource value: 0x7f0c00c7
+			public const int etUserName = 2131493063;
 			
 			// aapt resource value: 0x7f0c007e
 			public const int exp1 = 2131492990;
@@ -2166,17 +2166,17 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c009d
 			public const int expertise_text = 2131493021;
 			
-			// aapt resource value: 0x7f0c00d0
-			public const int filter = 2131493072;
+			// aapt resource value: 0x7f0c00d2
+			public const int filter = 2131493074;
 			
 			// aapt resource value: 0x7f0c0088
 			public const int filterButton = 2131493000;
 			
-			// aapt resource value: 0x7f0c00ce
-			public const int fname = 2131493070;
+			// aapt resource value: 0x7f0c00d0
+			public const int fname = 2131493072;
 			
-			// aapt resource value: 0x7f0c00c0
-			public const int fragment_container = 2131493056;
+			// aapt resource value: 0x7f0c00c2
+			public const int fragment_container = 2131493058;
 			
 			// aapt resource value: 0x7f0c0035
 			public const int grayscale = 2131492917;
@@ -2232,6 +2232,9 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c003c
 			public const int image = 2131492924;
 			
+			// aapt resource value: 0x7f0c00bf
+			public const int item = 2131493055;
+			
 			// aapt resource value: 0x7f0c00a6
 			public const int languageCheck = 2131493030;
 			
@@ -2244,8 +2247,8 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c009c
 			public const int languages_text = 2131493020;
 			
-			// aapt resource value: 0x7f0c00c1
-			public const int left_drawer = 2131493057;
+			// aapt resource value: 0x7f0c00c3
+			public const int left_drawer = 2131493059;
 			
 			// aapt resource value: 0x7f0c0009
 			public const int listMode = 2131492873;
@@ -2253,8 +2256,8 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c003e
 			public const int list_item = 2131492926;
 			
-			// aapt resource value: 0x7f0c00cf
-			public const int lname = 2131493071;
+			// aapt resource value: 0x7f0c00d1
+			public const int lname = 2131493073;
 			
 			// aapt resource value: 0x7f0c0098
 			public const int locations = 2131493016;
@@ -2262,8 +2265,8 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c0078
 			public const int locationsServed = 2131492984;
 			
-			// aapt resource value: 0x7f0c00ca
-			public const int locationsText = 2131493066;
+			// aapt resource value: 0x7f0c00cc
+			public const int locationsText = 2131493068;
 			
 			// aapt resource value: 0x7f0c0077
 			public const int locationsTitle = 2131492983;
@@ -2337,8 +2340,8 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c0041
 			public const int parentPanel = 2131492929;
 			
-			// aapt resource value: 0x7f0c00c3
-			public const int password = 2131493059;
+			// aapt resource value: 0x7f0c00c5
+			public const int password = 2131493061;
 			
 			// aapt resource value: 0x7f0c00b7
 			public const int play_pause = 2131493047;
@@ -2361,6 +2364,9 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c00aa
 			public const int relative_layout = 2131493034;
 			
+			// aapt resource value: 0x7f0c00c0
+			public const int remove = 2131493056;
+			
 			// aapt resource value: 0x7f0c00b2
 			public const int route_name = 2131493042;
 			
@@ -2379,8 +2385,8 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c008c
 			public const int scrollview = 2131493004;
 			
-			// aapt resource value: 0x7f0c00d1
-			public const int search = 2131493073;
+			// aapt resource value: 0x7f0c00d3
+			public const int search = 2131493075;
 			
 			// aapt resource value: 0x7f0c0058
 			public const int search_badge = 2131492952;
@@ -2442,8 +2448,8 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c0011
 			public const int showTitle = 2131492881;
 			
-			// aapt resource value: 0x7f0c00c8
-			public const int signinup_fragment_container = 2131493064;
+			// aapt resource value: 0x7f0c00ca
+			public const int signinup_fragment_container = 2131493066;
 			
 			// aapt resource value: 0x7f0c0007
 			public const int split_action_bar = 2131492871;
@@ -2475,8 +2481,8 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c000b
 			public const int tabMode = 2131492875;
 			
-			// aapt resource value: 0x7f0c00cd
-			public const int table_Expertise = 2131493069;
+			// aapt resource value: 0x7f0c00cf
+			public const int table_Expertise = 2131493071;
 			
 			// aapt resource value: 0x7f0c0084
 			public const int table_Languages = 2131492996;
@@ -2496,8 +2502,8 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c00a3
 			public const int textselect = 2131493027;
 			
-			// aapt resource value: 0x7f0c00d2
-			public const int textview_search = 2131493074;
+			// aapt resource value: 0x7f0c00d4
+			public const int textview_search = 2131493076;
 			
 			// aapt resource value: 0x7f0c0040
 			public const int title = 2131492928;
@@ -2523,8 +2529,8 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c0012
 			public const int useLogo = 2131492882;
 			
-			// aapt resource value: 0x7f0c00c2
-			public const int username = 2131493058;
+			// aapt resource value: 0x7f0c00c4
+			public const int username = 2131493060;
 			
 			// aapt resource value: 0x7f0c001a
 			public const int withText = 2131492890;
@@ -2724,55 +2730,58 @@ namespace TouriDroid
 			public const int row_guide = 2130903090;
 			
 			// aapt resource value: 0x7f030033
-			public const int search_layout = 2130903091;
+			public const int RowwithDeleteLayout = 2130903091;
 			
 			// aapt resource value: 0x7f030034
-			public const int Second = 2130903092;
+			public const int search_layout = 2130903092;
 			
 			// aapt resource value: 0x7f030035
-			public const int Second_backup = 2130903093;
+			public const int Second = 2130903093;
 			
 			// aapt resource value: 0x7f030036
-			public const int select_dialog_item_material = 2130903094;
+			public const int Second_backup = 2130903094;
 			
 			// aapt resource value: 0x7f030037
-			public const int select_dialog_multichoice_material = 2130903095;
+			public const int select_dialog_item_material = 2130903095;
 			
 			// aapt resource value: 0x7f030038
-			public const int select_dialog_singlechoice_material = 2130903096;
+			public const int select_dialog_multichoice_material = 2130903096;
 			
 			// aapt resource value: 0x7f030039
-			public const int SignIn = 2130903097;
+			public const int select_dialog_singlechoice_material = 2130903097;
 			
 			// aapt resource value: 0x7f03003a
-			public const int Signin_screen = 2130903098;
+			public const int SignIn = 2130903098;
 			
 			// aapt resource value: 0x7f03003b
-			public const int SignInSignUp_layout = 2130903099;
+			public const int Signin_screen = 2130903099;
 			
 			// aapt resource value: 0x7f03003c
-			public const int Signup_screen = 2130903100;
+			public const int SignInSignUp_layout = 2130903100;
 			
 			// aapt resource value: 0x7f03003d
-			public const int SignupCities = 2130903101;
+			public const int Signup_screen = 2130903101;
 			
 			// aapt resource value: 0x7f03003e
-			public const int SignupExpertise = 2130903102;
+			public const int SignupCities = 2130903102;
 			
 			// aapt resource value: 0x7f03003f
-			public const int SignupLanguages = 2130903103;
+			public const int SignupExpertise = 2130903103;
 			
 			// aapt resource value: 0x7f030040
-			public const int SignupName = 2130903104;
+			public const int SignupLanguages = 2130903104;
 			
 			// aapt resource value: 0x7f030041
-			public const int SignupRegister = 2130903105;
+			public const int SignupName = 2130903105;
 			
 			// aapt resource value: 0x7f030042
-			public const int support_simple_spinner_dropdown_item = 2130903106;
+			public const int SignupRegister = 2130903106;
 			
 			// aapt resource value: 0x7f030043
-			public const int test = 2130903107;
+			public const int support_simple_spinner_dropdown_item = 2130903107;
+			
+			// aapt resource value: 0x7f030044
+			public const int test = 2130903108;
 			
 			static Layout()
 			{

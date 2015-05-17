@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:hint="@string/search_hint_places"
+        android:hint="Locations you can guide in"
         android:minWidth="150dp"
         android:imeOptions="actionNext">
         <requestFocus />
@@ -36,13 +36,11 @@
         android:text="Add Location"
         style="@style/DefaultButtonText"
         android:background="@drawable/button_default_bg" />
-    <TextView
-        android:id="@+id/cityList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="#D2D2D2"
-        android:dividerHeight="1dp"
-        android:layout_margin="10dp" />
+    <LinearLayout
+        android:id="@+id/dynamicSelections"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <Button
         android:id="@+id/buttonNext"
         android:layout_width="match_parent"

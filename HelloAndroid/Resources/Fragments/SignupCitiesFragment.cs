@@ -38,10 +38,17 @@ namespace TouriDroid
 			Button addCity = view.FindViewById<Button> (Resource.Id.addCity);
 			Button next = view.FindViewById<Button> (Resource.Id.buttonNext);
 
-			TextView cityList = (TextView) view.FindViewById (Resource.Id.cityList);
+			LinearLayout cityList = (LinearLayout) view.FindViewById (Resource.Id.dynamicSelections);
+
 			addCity.Click += (object IntentSender, EventArgs e) => {
 
 				Boolean duplicate =false;
+				if (searchPlaces.Text.Equals(""))
+				{
+					Toast.MakeText (view.Context, "Location cannot be blank", ToastLength.Short).Show();
+					return;
+				}
+					
 				foreach (string s in locations)
 				{
 					if (s.Equals(searchPlaces.Text))
@@ -52,7 +59,21 @@ namespace TouriDroid
 				if (!duplicate)
 				{
 					locations.Add(searchPlaces.Text);
-					cityList.Text+=searchPlaces.Text+"\r\n";
+
+					View cityRow = LayoutInflater.From(Activity).Inflate(Resource.Layout.RowwithDeleteLayout, null);
+
+					TextView city = cityRow.FindViewById<TextView> (Resource.Id.item);
+					ImageView remove = cityRow.FindViewById<ImageView> (Resource.Id.remove);
+
+					remove.Click += (object sender, EventArgs events) => 
+					{
+						locations.Remove(city.Text);
+						cityList.RemoveView(cityRow);
+					};
+					city.Text = searchPlaces.Text;
+					cityList.AddView(cityRow);
+
+					//cityList.Text+=searchPlaces.Text+"\r\n";
 				}
 				else
 				{

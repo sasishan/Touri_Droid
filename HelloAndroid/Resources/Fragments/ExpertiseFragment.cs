@@ -14,6 +14,8 @@ using Android.Widget;
 using Android.Graphics;
 using System.Json;
 using Android.Support.V7.Widget;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace TouriDroid
 {
@@ -39,7 +41,7 @@ namespace TouriDroid
 			// return inflater.Inflate(Resource.Layout.YourFragment, container, false);
 			var view = inflater.Inflate(Resource.Layout.fragment_expertise, container, false);
 			myView = view;
-			((MainActivity)this.Activity).setCurrentFragment (Constants.ExpertiseFragment);
+			((MainActivity)this.Activity).setCurrentFragment (typeof(ExpertiseFragment));
 
 			mRecyclerView = view.FindViewById<RecyclerView> (Resource.Id.expertise_recycler_view);
 
@@ -88,6 +90,20 @@ namespace TouriDroid
 
 		public async void loadExpertises(string url)
 		{
+			int timeOut=0;
+			progress.Visibility = ViewStates.Visible;
+			while ( ((MainActivity) Activity).mPlace.Equals(""))
+			{
+				if (timeOut++ > 10) {
+					return;
+				} else {
+					await Task.Delay (1000);
+				}
+			}
+
+			string place = ((MainActivity)Activity).mPlace;
+			string URL = Constants.DEBUG_BASE_URL + "/api/expertises/search?locs="+place;
+
 			CallAPI ca = new CallAPI();
 
 			progress.Visibility = ViewStates.Visible;

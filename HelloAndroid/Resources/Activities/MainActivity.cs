@@ -40,6 +40,7 @@ namespace TouriDroid
 		private	AutoCompleteTextView searchPlaces;
 		IMenu					searchMenu;
 		private SessionManager sessionManager;
+		Type					mCurrentFragment;
 
 		private List<string> mDrawerItems = new List<string>
 		{
@@ -49,15 +50,24 @@ namespace TouriDroid
 		//within the fragment code itself (in OnCreateView)
 		//This allows the activity to call actionbar functions for the right fragment
 		//type is defined in Constants class
-		public void setCurrentFragment(int type)
+		public void setCurrentFragment(Type type)
 		{
-			currentFragment = type;
+			mCurrentFragment = type;
 		}
 
 		//This allows fragment to get the search bar place value from the activity
 		public string getPlace()
 		{
 			return mPlace;
+		}
+
+		public void setMyPlace(string address)
+		{
+			mPlace = address;
+			searchPlaces.Text = address;
+			SetActivityLabel (mPlace);
+			mGuideSearch.placesServedList.Clear ();
+			mGuideSearch.placesServedList.Add (mPlace);
 		}
 
 		protected override void OnCreate (Bundle bundle)
@@ -74,17 +84,6 @@ namespace TouriDroid
 			// Set our view from the "main" layout resource
 			//SetContentView (Resource.Layout.Second);
 			SetContentView (Resource.Layout.Main);
-
-			Android.Support.V7.App.ActionBar.Tab tab = SupportActionBar.NewTab ();
-			tab.SetText ("Search");
-			tab.SetTabListener(this);
-			SupportActionBar.AddTab (tab);
-
-			tab =  SupportActionBar.NewTab ();
-			tab.SetTabListener(this);
-			tab.SetText ("Chat");
-
-			SupportActionBar.AddTab (tab);
 
 			TextView drawerFooter = this.FindViewById<TextView> (Resource.Id.drawer_bottom_text1);
 
@@ -122,9 +121,21 @@ namespace TouriDroid
 			mGuideSearch = new GuideSearch ();
 
 			var newFragment = new ExpertiseFragment ();
+			mCurrentFragment = typeof(ExpertiseFragment);
 			var ft = FragmentManager.BeginTransaction ();
 			ft.Add (Resource.Id.main_fragment_container, newFragment);
 			ft.Commit ();
+
+			Android.Support.V7.App.ActionBar.Tab tab = SupportActionBar.NewTab ();
+			tab.SetText ("Search");
+			tab.SetTabListener(this);
+			SupportActionBar.AddTab (tab);
+
+			tab =  SupportActionBar.NewTab ();
+			tab.SetTabListener(this);
+			tab.SetText ("Chat");
+
+			SupportActionBar.AddTab (tab);
 		}	
 
 		public override bool OnCreateOptionsMenu(IMenu menu)
@@ -144,10 +155,8 @@ namespace TouriDroid
 			searchPlaces.ItemClick += searchPlaces_ItemClick;
 
 			//@remove replace with get current location
-			searchPlaces.Text = "Toronto, ON, Canada";
-			mPlace = searchPlaces.Text;
-			SetActivityLabel (mPlace);
-
+			//setMyPlace("Toronto, ON, Canada");
+			setMyPlace("");
 			return base.OnCreateOptionsMenu(menu);
 
 		} 
@@ -187,16 +196,12 @@ namespace TouriDroid
 		private void searchPlaces_ItemClick (object sender, AdapterView.ItemClickEventArgs e)
 		{
 			if (sender != null) {
-				if (currentFragment == Constants.ExpertiseFragment) 
+				if (mCurrentFragment == typeof(ExpertiseFragment)) 
 				{
 					string place = ((AutoCompleteTextView)sender).Text;
-					mPlace = place;
+					setMyPlace (place);
 					string url = Constants.DEBUG_BASE_URL + "/api/expertises/search?locs="+place;
 
-					SetActivityLabel (mPlace);
-
-					//mGuideSearch.placesServedList.Clear ();
-					//mGuideSearch.placesServedList.Add (place);
 					ExpertiseFragment ef = FragmentManager.FindFragmentById<ExpertiseFragment> (Resource.Id.main_fragment_container);
 					ef.loadExpertises (url);	
 
@@ -207,11 +212,11 @@ namespace TouriDroid
 					imm.HideSoftInputFromWindow(CurrentFocus.WindowToken, 0);
 										
 				} 
-				else if (currentFragment == Constants.GuideFragment) 
+				else if (mCurrentFragment == typeof(GuideFragment) )
 				{
 					string place = ((AutoCompleteTextView)sender).Text;
-					mGuideSearch.placesServedList.Clear ();
-					mGuideSearch.placesServedList.Add (place);
+
+					setMyPlace (place);
 					GuideFragment gf = FragmentManager.FindFragmentById<GuideFragment> (Resource.Id.main_fragment_container);
 					gf.RefineSearch(mGuideSearch);
 				}					
@@ -286,14 +291,21 @@ namespace TouriDroid
 		{
 			// Tab0 = main, Tab1 = chat
 			// Display the Chat fragment
+
 			FragmentTransaction transaction = FragmentManager.BeginTransaction ();
 			if (tab.Position == Constants.Main_Chat_Tab) {
 				var newFragment = new ChatListFragment ();
 
-				transaction.Replace (Resource.Id.main_fragment_container, newFragment);
+				if (mCurrentFragment != typeof( ChatListFragment)) {
+					mCurrentFragment = typeof( ChatListFragment);
+					transaction.Replace (Resource.Id.main_fragment_container, newFragment);
+				}
 			} else if (tab.Position == Constants.Main_Expertise_Tab) {
 				var newFragment = new ExpertiseFragment ();
-				transaction.Replace (Resource.Id.main_fragment_container, newFragment);			
+				if (mCurrentFragment != typeof(ExpertiseFragment)) {
+					mCurrentFragment = typeof( ExpertiseFragment);
+					transaction.Replace (Resource.Id.main_fragment_container, newFragment);			
+				}
 			}						
 			transaction.Commit ();
 		}
@@ -324,16 +336,29 @@ namespace TouriDroid
 		protected override void OnResume ()
 		{
 			base.OnResume ();
-			string Provider = LocationManager.GpsProvider;
+			//string Provider = LocationManager.GpsProvider;
+			string Provider = LocationManager.NetworkProvider;
 
 			if(_locationManager.IsProviderEnabled(Provider))
 			{
-				_locationManager.RequestLocationUpdates (Provider, 0, 100, this);
+				_locationManager.RequestLocationUpdates (Provider, 0, 0, this);
 			} 
 			else 
 			{
 				Log.Info( "loc", Provider + " is not available. Does the device have location services enabled?");
 			}
+		}
+
+		private string reverseFindLocation (double lati, double longi)
+		{
+			string mPlace = "Toronto, ON, Canada";
+			var g = new Geocoder (this);
+
+			IList<Address> address = g.GetFromLocation (lati, longi,1);
+			if (address.Count > 0) {
+				mPlace = (address [0].SubLocality ?? (address [0].Locality ?? "")) + ", " + (address [0].AdminArea ?? "") + ", " + (address [0].CountryName ?? "");
+			}
+			return mPlace;
 		}
 
 		public void OnLocationChanged (Location location)
@@ -345,6 +370,12 @@ namespace TouriDroid
 			//setCameraLocation(loc);
 			//markGuides ();
 			_locationManager.RemoveUpdates (this);
+			string mPlace = reverseFindLocation (location.Latitude, location.Longitude);
+			setMyPlace (mPlace);
+			//GuideFragment gf = Activity.F<GuideFragment> (Resource.Id.main_fragment_container);
+		//	gf.RefineSearch(mGuideSearch);
+
+		//	address[0].
 
 		}
 
