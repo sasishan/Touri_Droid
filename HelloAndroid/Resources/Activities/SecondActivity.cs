@@ -65,32 +65,27 @@ namespace TouriDroid
 			RequestWindowFeature(WindowFeatures.ActionBar);
 			base.OnCreate (savedInstanceState);
 
+			//if (savedInstanceState != null)
+			//return;
+
 			setDefaultValues();
 		
 			SetContentView (Resource.Layout.Second);
 
 			thisActivity = this;
 			mGuideSearch = new GuideSearch ();
-
-			//mDrawer = this.FindViewById<DrawerLayout> (Resource.Id.drawer_layout);
-			//mDrawerList = this.FindViewById<ListView> (Resource.Id.left_drawer);
-
-			//mDrawerList.Adapter = new ArrayAdapter<string> (this, Android.Resource.Layout.SimpleListItem1, mDrawerItems);
-			//loadDrawerItems (Constants.SecondActivity_DrawerMainMenuId);
-			//mDrawerList.Id = Constants.DrawerMainMenuId;
-			//drawerToggle = new ActionBarDrawerToggle (this, mDrawer,Resource.String.drawer_open, Resource.String.drawer_close);
-
-			//mDrawer.SetDrawerListener (drawerToggle);
 			SupportActionBar.SetDisplayHomeAsUpEnabled (true);
 			SupportActionBar.SetHomeButtonEnabled (true);
-			SupportActionBar.Title = mExpertise;				
-		//	mDrawerList.ItemClick += DrawerListOnItemClick;
+			SupportActionBar.Title = mExpertise;
 
-			//load the Guide Fragment
-			var newFragment = new GuideFragment ();
-			var ft = FragmentManager.BeginTransaction ();
-			ft.Add (Resource.Id.fragment_container, newFragment);
-			ft.Commit ();
+			if (savedInstanceState == null) {
+				//load the Guide Fragment
+				var newFragment = new GuideFragment ();
+				var ft = FragmentManager.BeginTransaction ();
+				ft.Add (Resource.Id.fragment_container, newFragment);
+				ft.Commit ();				
+			}
+
 		}
 			
 		private void setDefaultValues()

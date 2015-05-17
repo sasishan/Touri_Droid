@@ -42,6 +42,7 @@ namespace TouriDroid
 			var view = inflater.Inflate(Resource.Layout.fragment_expertise, container, false);
 			myView = view;
 			((MainActivity)this.Activity).setCurrentFragment (typeof(ExpertiseFragment));
+			progress = (ProgressBar) view.FindViewById(Resource.Id.progressBar);
 
 			mRecyclerView = view.FindViewById<RecyclerView> (Resource.Id.expertise_recycler_view);
 
@@ -54,20 +55,20 @@ namespace TouriDroid
 			mRecyclerView.SetAdapter (mAdapter);
 
 			//string url = Constants.DEBUG_BASE_URL + Constants.URL_Get_All_Expertises;
-			string url = Constants.DEBUG_BASE_URL + "/api/expertises/search?locs=";
-			string place = ((MainActivity)this.Activity).getPlace();
+			//string url = Constants.DEBUG_BASE_URL + "/api/expertises/search?locs=";
+			//string place = ((MainActivity)this.Activity).getPlace();
 
-			if (place.Equals("")) {
+//			if (place.Equals("")) {
 				//@todo get current location
-				place="Toronto, ON, Canada";
-			} else {
-				place = ((MainActivity)this.Activity).getPlace();
-			}
+//				place="Toronto, ON, Canada";
+//			} else {
+//				place = ((MainActivity)this.Activity).getPlace();
+//			}
 
-			url+=place;
+//			url+=place;
 
 			progress = (ProgressBar) view.FindViewById(Resource.Id.progressBar);
-			loadExpertises (url);
+			loadExpertises ();
 
 			//new ProgressTask().execute();
 
@@ -88,8 +89,12 @@ namespace TouriDroid
 			this.StartActivity (gprofileActivity);
 		}
 
-		public async void loadExpertises(string url)
+
+		/* Load the expertises list based on the gloabl mPlace value held by MainActivity */
+		public async void loadExpertises()
 		{
+			// mPlace may be uninitialized initially until the GPS location service comes back with the current location
+			// so wait for 10s for it to be set
 			int timeOut=0;
 			progress.Visibility = ViewStates.Visible;
 			while ( ((MainActivity) Activity).mPlace.Equals(""))
@@ -102,11 +107,13 @@ namespace TouriDroid
 			}
 
 			string place = ((MainActivity)Activity).mPlace;
-			string URL = Constants.DEBUG_BASE_URL + "/api/expertises/search?locs="+place;
+			string url = Constants.DEBUG_BASE_URL + "/api/expertises/search?locs="+place;
 
 			CallAPI ca = new CallAPI();
 
 			progress.Visibility = ViewStates.Visible;
+
+			// retrieve the expertises for this location
 			var json = await ca.getWebApiData(url, null);
 
 			if (json == null) {		
@@ -115,6 +122,7 @@ namespace TouriDroid
 				return;
 			}
 			parseExpertises(json);
+			mAdapter.NotifyDataSetChanged ();
 
 			// load the images for each expertise now
 			string imageUrl;
@@ -130,13 +138,14 @@ namespace TouriDroid
 				imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ e.expertiseImageId;
 				Bitmap image = (Bitmap) await ca.getImage (imageUrl);
 				e.expertiseImage = image;
+				mAdapter.NotifyDataSetChanged ();
 			}
 		//	mExpertiseList.RemoveAll(item => item.numberOfGuides ==0);
 			progress.Visibility = ViewStates.Gone;
-			mAdapter.NotifyDataSetChanged ();
+
 		}
 
-		private async void parseExpertises(JsonValue json)
+		private void parseExpertises(JsonValue json)
 		{
 			mExpertiseList.Clear ();
 

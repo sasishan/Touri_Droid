@@ -34,18 +34,13 @@ namespace TouriDroid
 
 		public override void OnCreate (Bundle savedInstanceState)
 		{
-			mGuideSearch = ((SecondActivity)this.Activity).mGuideSearch;
 			base.OnCreate (savedInstanceState);
-
-			SetHasOptionsMenu(true);
 		}			
 
 		public override void OnCreateOptionsMenu(IMenu menu, MenuInflater menuInflater)
 		{
 			//menu.Clear ();
 			menuInflater.Inflate(Resource.Menu.menu_filters, menu);
-			mPlace = Activity.Intent.GetStringExtra (Constants.selectedLocation) ?? "";
-			string expertise = Activity.Intent.GetStringExtra (Constants.selectedExpertise) ?? "";
 
 			var item = menu.FindItem (Resource.Id.search);
 
@@ -58,29 +53,8 @@ namespace TouriDroid
 				searchPlaces.ItemClick += searchPlaces_ItemClick;
 				searchPlaces.Text = mPlace;
 			}
-				
-			mGuideSearch.placesServedList.Clear ();
-			mGuideSearch.placesServedList.Add (mPlace);
-			mGuideSearch.expertiseList.Add (expertise);
 
-			RefineSearch(mGuideSearch);
-
-			ImageView mapIcon  = Activity.FindViewById<ImageView> (Resource.Id.mapicon);
-			mapIcon.Click += (object sender, EventArgs e) => {
-
-				if (guidesLoaded==true)
-				{
-					var newFragment = new Map_Fragment ();
-					//var ft = FragmentManager.BeginTransaction ();
-					FragmentTransaction transaction = FragmentManager.BeginTransaction();
-					transaction.Replace(Resource.Id.fragment_container, newFragment);
-					//transaction.AddToBackStack(null);
-					transaction.Commit();
-				}
-			};
-
-
-			base.OnCreateOptionsMenu(menu, menuInflater);
+			base.OnCreateOptionsMenu(menu, menuInflater);				
 		}
 
 		private void searchPlaces_ItemClick (object sender, AdapterView.ItemClickEventArgs e)
@@ -155,7 +129,8 @@ namespace TouriDroid
 			}
 			url = url.Remove (url.Length - 1);	
 
-			if (atLeastOneSearchParameter == false) {
+			if (atLeastOneSearchParameter == false) 
+			{
 				url = Constants.DEBUG_BASE_URL+Constants.URL_Get_All_Guides;
 			}
 				
@@ -167,63 +142,43 @@ namespace TouriDroid
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
 			var view = inflater.Inflate(Resource.Layout.fragment_guide, container, false);
-			//((MainActivity)this.Activity).setCurrentFragment (Constants.GuideFragment);
+			SetHasOptionsMenu(true);
 
-			// Get our button from the layout resource,
-			// and attach an event to it
-			//Button button = view.FindViewById<Button> (Resource.Id.nextButton);
-			//TextView text =  view.FindViewById<TextView> (Resource.Id.guideFirstName);
+			if (mGuideSearch == null) {
+				mGuideSearch = ((SecondActivity)this.Activity).mGuideSearch;
+			}
 
-	//		Button button = (Button) ((SecondActivity)this.Activity).FindViewById(Resource.Id.moreButton);
+			ImageView mapIcon  = view.FindViewById<ImageView> (Resource.Id.mapicon);
 			noGuides= view.FindViewById<TextView> (Resource.Id.noguides);
+
 			mRecyclerView = view.FindViewById<RecyclerView> (Resource.Id.my_recycler_view);
-
-			mLayoutManager =  new LinearLayoutManager(view.Context);//new GridLayoutManager(view.Context, 2, GridLayoutManager.Horizontal, false);
-
+			mLayoutManager =  new LinearLayoutManager(view.Context);//new GridLayoutManager(view.Context, 2, GridLayoutManager.Horizontal, false);		
 			mRecyclerView.SetLayoutManager (mLayoutManager);
 
+			mPlace = Activity.Intent.GetStringExtra (Constants.selectedLocation) ?? "";
+			string expertise = Activity.Intent.GetStringExtra (Constants.selectedExpertise) ?? "";
 
-			//mRecyclerView.HasFixedSize = true;
-			//mRecyclerView.SetItemAnimator(new DefaultItemAnimator ());
-			CallAPI ca = new CallAPI();
-			//string searchView = this.View.FindViewById<AutoCompleteTextView> (Resource.Id.search);
-			GuideSearch search = new GuideSearch();
-			search.placesServedList.Add (((SecondActivity)this.Activity).mPlace);
-			search.expertiseList.Add(((SecondActivity)this.Activity).mExpertise);
-		//	RefineSearch (search);
-			//string url = Constants.DEBUG_BASE_URL + Constants.URL_Get_All_Guides;
-			//loadGuideProfiles (url);
+			mGuideSearch.placesServedList.Clear ();
+			mGuideSearch.placesServedList.Add (mPlace);
+			mGuideSearch.expertiseList.Add (expertise);
+
+			RefineSearch(mGuideSearch);
+
 			mAdapter = new RecyclerAdapter (mGuideList, this.Activity);
 			mRecyclerView.SetAdapter (mAdapter);
 
+			mapIcon.Click += (object sender, EventArgs e) => {
 
-			// When the user clicks the button ...
-		/*	int currentGuideIndex = 0;
-			button.Click += delegate {
-				if (currentGuideIndex>=guideList.Count)
+				if (guidesLoaded==true)
 				{
-					currentGuideIndex=0;
+					var newFragment = new Map_Fragment ();
+					//var ft = FragmentManager.BeginTransaction ();
+					FragmentTransaction transaction = FragmentManager.BeginTransaction();
+					transaction.Replace(Resource.Id.fragment_container, newFragment);
+					//transaction.AddToBackStack(null);
+					transaction.Commit();
 				}
-				string s =  guideList[currentGuideIndex].fName + " " + guideList[currentGuideIndex].lName + ", Languages spoken: ";
-				foreach (string l in guideList[currentGuideIndex].languageList)
-				{
-					s+=l+", ";
-				}
-
-
-				for (int i = 0; i < guideList[currentGuideIndex].languageList.Count; i++)
-				{
-					CheckBox cb = new CheckBox(view.Context);
-					cb.Text = (string)guideList[currentGuideIndex].languageList[i];
-					cb.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
-					//view.AddContentView(cb, cb.LayoutParameters);
-
-				}
-
-				s.Remove(s.Length-3);
-				text.Text = s;
-				currentGuideIndex++;
-			};*/
+			};
 
 			return view;
 		}
@@ -326,11 +281,9 @@ namespace TouriDroid
 			
 			CallAPI ca = new CallAPI();
 
-			//List<Guide> myGuides = new List<Guide> ();
-
-			/****** Uncomment when webservice is running *****/
 			JsonValue json = await ca.getWebApiData(url, null);
 			parseGuideProfiles(json);
+			mAdapter.NotifyDataSetChanged ();
 
 			string imageUrl;
 			foreach (Guide g in mGuideList) {
@@ -343,11 +296,8 @@ namespace TouriDroid
 					Bitmap image = (Bitmap) await ca.getScaledImage (imageUrl, Constants.GuideListingReqWidth, Constants.GuideListingReqHeight);
 					g.profileImage = image;
 				}
+				mAdapter.NotifyDataSetChanged ();
 			}
-
-			//mGuideList = myGuides;
-
-			mAdapter.NotifyDataSetChanged ();
 
 			if (mGuideList.Count == 0) {
 				noGuides.Visibility = ViewStates.Visible;
@@ -357,11 +307,6 @@ namespace TouriDroid
 
 			((SecondActivity)this.Activity).mGuideList = mGuideList;
 			return mGuideList;
-//			mAdapter = new RecyclerAdapter (mGuideList, this.Activity);
-	//		mRecyclerView.SetAdapter (mAdapter);
-			//RecyclerView.ItemDecoration itemDecoration =new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
-			//new DividerItemDecoration
-
 		}
 
 		void OnItemClick (object sender, int position)

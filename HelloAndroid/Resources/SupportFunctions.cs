@@ -28,6 +28,7 @@ namespace TouriDroid
 		public const String KeyEmail = "email";
 		public const String KeyCurrentLatitude = "latitude";
 		public const String KeyCurrentLongitude = "longitude";
+		public const String KeyCurrentLastLocation = "lastPlace";
 		public const String KeyToken = "token";
 		public const String KeyGuideId = "guideId";
 
@@ -43,6 +44,17 @@ namespace TouriDroid
 			editor.PutFloat (KeyCurrentLatitude, lati);
 			editor.PutFloat (KeyCurrentLongitude, longi);
 			editor.Commit ();
+		}
+
+		public void setCurrentLocation (string location)
+		{
+			editor.PutString (KeyCurrentLastLocation, location);
+			editor.Commit ();
+		}
+
+		public string getLastLocation()
+		{
+			return pref.GetString (KeyCurrentLastLocation, "");
 		}
 
 		public float getCurrentLatitude()

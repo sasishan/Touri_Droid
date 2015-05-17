@@ -44,7 +44,6 @@ namespace TouriDroid
 				{
 					((SecondActivity)this.Activity).mGuideSearch.languageList.Add(l);
 				}
-
 				FragmentTransaction transaction = FragmentManager.BeginTransaction();
 
 				// Replace whatever is in the fragment_container view with this fragment,

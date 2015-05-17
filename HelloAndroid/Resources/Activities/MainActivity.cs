@@ -33,7 +33,6 @@ namespace TouriDroid
 		private DrawerLayout 	mDrawer;
 		private ListView		mDrawerList;
 		ActionBarDrawerToggle 	drawerToggle;
-		public string 			mPlace="";
 		public Expertise 		mExpertise;
 		private GuideSearch 	mGuideSearch;
 		protected int 			currentFragment = Constants.Uninitialized;
@@ -41,39 +40,18 @@ namespace TouriDroid
 		IMenu					searchMenu;
 		private SessionManager sessionManager;
 		Type					mCurrentFragment;
+		public string 			mPlace="";
 
 		private List<string> mDrawerItems = new List<string>
 		{
+			//blank initially
 		};
 
-		//Each fragment that associates with this Activity should set it's type here
-		//within the fragment code itself (in OnCreateView)
-		//This allows the activity to call actionbar functions for the right fragment
-		//type is defined in Constants class
-		public void setCurrentFragment(Type type)
-		{
-			mCurrentFragment = type;
-		}
 
-		//This allows fragment to get the search bar place value from the activity
-		public string getPlace()
-		{
-			return mPlace;
-		}
-
-		public void setMyPlace(string address)
-		{
-			mPlace = address;
-			searchPlaces.Text = address;
-			SetActivityLabel (mPlace);
-			mGuideSearch.placesServedList.Clear ();
-			mGuideSearch.placesServedList.Add (mPlace);
-		}
-
-		protected override void OnCreate (Bundle bundle)
+		protected override void OnCreate (Bundle savedInstanceState)
 		{
 			RequestWindowFeature(WindowFeatures.ActionBar);
-			base.OnCreate (bundle);
+			base.OnCreate (savedInstanceState);
 
 			_locationManager = GetSystemService (LocationService) as LocationManager;
 
@@ -120,11 +98,13 @@ namespace TouriDroid
 
 			mGuideSearch = new GuideSearch ();
 
-			var newFragment = new ExpertiseFragment ();
+			if (savedInstanceState == null) {
+				var newFragment = new ExpertiseFragment ();
+				var ft = FragmentManager.BeginTransaction ();
+				ft.Add (Resource.Id.main_fragment_container, newFragment);
+				ft.Commit ();
+			}
 			mCurrentFragment = typeof(ExpertiseFragment);
-			var ft = FragmentManager.BeginTransaction ();
-			ft.Add (Resource.Id.main_fragment_container, newFragment);
-			ft.Commit ();
 
 			Android.Support.V7.App.ActionBar.Tab tab = SupportActionBar.NewTab ();
 			tab.SetText ("Search");
@@ -154,13 +134,23 @@ namespace TouriDroid
 			searchPlaces.Adapter = pacAdapter;
 			searchPlaces.ItemClick += searchPlaces_ItemClick;
 
-			//@remove replace with get current location
-			//setMyPlace("Toronto, ON, Canada");
-			setMyPlace("");
+			// See if we can speed things up by looking for the last location held in memory
+			string lastLocation = "";
+			SessionManager sm = new SessionManager (this);
+			if (sessionManager.isLoggedIn ()) {
+				lastLocation = sm.getLastLocation ();
+
+				// only waste time if it's not blank
+				if (!lastLocation.Equals ("")) {
+					setMyPlace (lastLocation);
+				}
+			}
+
 			return base.OnCreateOptionsMenu(menu);
 
 		} 
 
+		//sets the top label to a valeu - usually place in our case
 		private void SetActivityLabel(string place)
 		{
 			char[] splits = {',' };
@@ -179,19 +169,6 @@ namespace TouriDroid
 			drawerToggle.SyncState ();
 		}
 						
-		public override bool OnKeyUp(Android.Views.Keycode keyCode, Android.Views.KeyEvent e) {			
-			if (keyCode == Android.Views.Keycode.Back && e.RepeatCount == 0) {
-				if (FragmentManager.BackStackEntryCount > 0) {
-					FragmentManager.PopBackStack ();
-					return true;
-				} else {
-					return base.OnKeyUp (keyCode, e); 
-				}
-			} else {
-				return base.OnKeyUp (keyCode, e); 
-			}
-		}
-				
 		//if the search action bar has a value added
 		private void searchPlaces_ItemClick (object sender, AdapterView.ItemClickEventArgs e)
 		{
@@ -200,10 +177,10 @@ namespace TouriDroid
 				{
 					string place = ((AutoCompleteTextView)sender).Text;
 					setMyPlace (place);
-					string url = Constants.DEBUG_BASE_URL + "/api/expertises/search?locs="+place;
+					//string url = Constants.DEBUG_BASE_URL + "/api/expertises/search?locs="+place;
 
 					ExpertiseFragment ef = FragmentManager.FindFragmentById<ExpertiseFragment> (Resource.Id.main_fragment_container);
-					ef.loadExpertises (url);	
+					ef.loadExpertises ();	
 
 					var item = searchMenu.FindItem (Resource.Id.search);
 					item.CollapseActionView ();
@@ -327,6 +304,7 @@ namespace TouriDroid
 
 		}
 
+		//Locationmanager Listener code
 		protected override void OnPause ()
 		{
 			base.OnPause ();
@@ -390,6 +368,33 @@ namespace TouriDroid
 		public void OnStatusChanged (string provider, Availability status, Bundle extras)
 		{
 		}
-			
+
+
+		/*Initializer functions */
+
+		//Each fragment that associates with this Activity should set it's type here
+		//within the fragment code itself (in OnCreateView)
+		//This allows the activity to call actionbar functions for the right fragment
+		//type is defined in Constants class
+		public void setCurrentFragment(Type type)
+		{
+			mCurrentFragment = type;
+		}
+
+		//This allows fragment to get the search bar place value from the activity
+		public string getPlace()
+		{
+			return mPlace;
+		}
+
+		public void setMyPlace(string address)
+		{
+			mPlace = address;
+			searchPlaces.Text = address;
+			SetActivityLabel (mPlace);
+			mGuideSearch.placesServedList.Clear ();
+			mGuideSearch.placesServedList.Add (mPlace);
+		}
+
 	}		
 }
