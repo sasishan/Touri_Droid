@@ -26,7 +26,16 @@ namespace TouriDroid
 		{
 			base.OnCreate (savedInstanceState);
 
+			((SecondActivity)Activity).SupportActionBar.SetDisplayHomeAsUpEnabled (false);
+			((SecondActivity)Activity).SupportActionBar.SetHomeButtonEnabled (false);
+			SetHasOptionsMenu(true);
 			// Create your fragment here
+		}
+
+		public override void OnCreateOptionsMenu(IMenu menu, MenuInflater menuInflater)
+		{
+			menu.Clear ();
+
 		}
 
 		public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -44,6 +53,7 @@ namespace TouriDroid
 				{
 					((SecondActivity)this.Activity).mGuideSearch.languageList.Add(l);
 				}
+
 				FragmentTransaction transaction = FragmentManager.BeginTransaction();
 
 				// Replace whatever is in the fragment_container view with this fragment,

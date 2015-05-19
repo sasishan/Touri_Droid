@@ -129,6 +129,7 @@
     <Compile Include="Resources\Fragments\EditDescriptionFragment.cs" />
     <Compile Include="Resources\Fragments\Map_Fragment.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
+    <Compile Include="Resources\Activities\FilterActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -206,6 +207,7 @@
     <AndroidResource Include="Resources\layout\Guide_Description.axml" />
     <AndroidResource Include="Resources\layout\MapView.axml" />
     <AndroidResource Include="Resources\layout\RowwithDeleteLayout.axml" />
+    <AndroidResource Include="Resources\drawable\map_icon_64.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

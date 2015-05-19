@@ -26,7 +26,7 @@ namespace TouriDroid
 		public override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
-
+			SetHasOptionsMenu(true);
 			// Create your fragment here
 		}
 
@@ -34,14 +34,17 @@ namespace TouriDroid
 		{
 
 			//_locationManager = Activity.GetSystemService (Context.LocationService) as LocationManager;
-			
 			var view = inflater.Inflate(Resource.Layout.MapView, container, false);
-
-
 			MapFragment mapFrag = (MapFragment) FragmentManager.FindFragmentById(Resource.Id.map);
 			mapFrag.GetMapAsync (this);
 
 			return view;
+		}
+
+		public override void OnCreateOptionsMenu(IMenu menu, MenuInflater menuInflater)
+		{
+			menu.Clear ();
+
 		}
 
 		private void markGuides()

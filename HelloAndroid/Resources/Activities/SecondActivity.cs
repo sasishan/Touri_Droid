@@ -82,7 +82,7 @@ namespace TouriDroid
 				//load the Guide Fragment
 				var newFragment = new GuideFragment ();
 				var ft = FragmentManager.BeginTransaction ();
-				ft.Add (Resource.Id.fragment_container, newFragment);
+				ft.Add (Resource.Id.fragment_container, newFragment, "GuideFragment");
 				ft.Commit ();				
 			}
 
@@ -98,6 +98,13 @@ namespace TouriDroid
 
 			mPlace = Intent.GetStringExtra (Constants.selectedLocation) ?? "";
 			mExpertise = Intent.GetStringExtra (Constants.selectedExpertise) ?? "";
+		}
+
+		protected override void OnResume ()
+		{
+
+
+			base.OnResume ();
 		}
 
 		protected override void OnPostCreate (Bundle savedInstanceState)
@@ -118,7 +125,11 @@ namespace TouriDroid
 					//Intent intent = new Intent(this, HomeActivity.class);
 					//intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					//startActivity(intent);
-				Finish ();
+				if (FragmentManager.BackStackEntryCount > 0) {
+					FragmentManager.PopBackStack ();
+				} else {
+					Finish ();
+				}
 				return true;
 				//base.OnBackPressed();
 				//return base.OnOptionsItemSelected (item);

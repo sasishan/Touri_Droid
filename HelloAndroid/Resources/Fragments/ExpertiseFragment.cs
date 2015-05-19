@@ -28,6 +28,7 @@ namespace TouriDroid
 		private ProgressBar progress;
 		private View myView=null;
 
+
 		public override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
@@ -127,19 +128,19 @@ namespace TouriDroid
 			// load the images for each expertise now
 			string imageUrl;
 			List<Expertise> filteredE = new List<Expertise> ();
-			foreach (Expertise e in mExpertiseList)
-			{
+		//	foreach (Expertise e in mExpertiseList)
+		//	{
 				//@remove this if you want to always show all expertises
 			//	if (e.numberOfGuides >0) {
 			//		filteredE.Add (e);
 					//mExpertiseList.Remove (e);
 			//	}
 
-				imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ e.expertiseImageId;
-				Bitmap image = (Bitmap) await ca.getImage (imageUrl);
-				e.expertiseImage = image;
-				mAdapter.NotifyDataSetChanged ();
-			}
+		//		imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ e.expertiseImageId;
+		//		Bitmap image = (Bitmap) await ca.getImage (imageUrl);
+		//		e.expertiseImage = image;
+		//		mAdapter.NotifyDataSetChanged ();
+		//	}
 		//	mExpertiseList.RemoveAll(item => item.numberOfGuides ==0);
 			progress.Visibility = ViewStates.Gone;
 
@@ -185,11 +186,13 @@ namespace TouriDroid
 		private List<Expertise> mExpertise;
 		private Activity thisActivity;
 		public event EventHandler<int> ItemClick;
+		private CallAPI mCa;
 
 		public RecyclerAdapterExpertise(List<Expertise> expertiseList, Activity thisAct)
 		{
 			mExpertise = expertiseList;
 			thisActivity = thisAct;
+			mCa = new CallAPI ();
 		}
 
 		public class MyView:RecyclerView.ViewHolder
@@ -222,13 +225,18 @@ namespace TouriDroid
 			return view;
 		}
 
-		public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
+		public async override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
 		{
 			MyView myHolder = holder as MyView;
 
 			// Set name
 			myHolder.mExpertise.Text = mExpertise[position].expertise;
 			myHolder.mGuideCount.Text = mExpertise[position].numberOfGuides.ToString();
+
+			string imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ mExpertise[position].expertiseImageId;
+			Bitmap image = (Bitmap) await mCa.getImage (imageUrl);
+			mExpertise[position].expertiseImage = image;
+
 			myHolder.mExpertiseImage.SetImageBitmap(mExpertise[position].expertiseImage);
 		}
 

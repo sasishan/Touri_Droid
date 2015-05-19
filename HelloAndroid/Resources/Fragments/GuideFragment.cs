@@ -31,18 +31,23 @@ namespace TouriDroid
 		public GuideSearch 					mGuideSearch;
 		private TextView 					noGuides = null;
 		private bool 						guidesLoaded = true;
+		protected CallAPI mCa;
 
 		public override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
+			((SecondActivity)Activity).SupportActionBar.SetDisplayHomeAsUpEnabled (true);
+			((SecondActivity)Activity).SupportActionBar.SetHomeButtonEnabled (true);
+			mCa	= new CallAPI ();
 		}			
 
 		public override void OnCreateOptionsMenu(IMenu menu, MenuInflater menuInflater)
 		{
-			//menu.Clear ();
+			menu.Clear ();
 			menuInflater.Inflate(Resource.Menu.menu_filters, menu);
+			var item = menu.FindItem (Resource.Id.map);
 
-			var item = menu.FindItem (Resource.Id.search);
+			/*var item = menu.FindItem (Resource.Id.search);
 
 			if (item != null) {
 				View v = (View) MenuItemCompat.GetActionView (item);
@@ -52,7 +57,7 @@ namespace TouriDroid
 				searchPlaces.Adapter = pacAdapter;
 				searchPlaces.ItemClick += searchPlaces_ItemClick;
 				searchPlaces.Text = mPlace;
-			}
+			}*/
 
 			base.OnCreateOptionsMenu(menu, menuInflater);				
 		}
@@ -72,22 +77,35 @@ namespace TouriDroid
 				//@todo
 			}
 		}
-			
+
 		public override bool OnOptionsItemSelected (IMenuItem item)
 		{
 			//load filter fragment
 			if (item.ItemId == Resource.Id.filter) {
 				var newFragment = new FilterFragment ();
 				//var ft = FragmentManager.BeginTransaction ();
-				FragmentTransaction transaction = FragmentManager.BeginTransaction();
+				FragmentTransaction transaction = FragmentManager.BeginTransaction ();
 
 				// Replace whatever is in the fragment_container view with this fragment,
 				// and add the transaction to the back stack if needed
-				transaction.Replace(Resource.Id.fragment_container, newFragment);
+				transaction.Replace (Resource.Id.fragment_container, newFragment);
+			//	transaction.AddToBackStack("GuideFragment");
 				//transaction.AddToBackStack(null);
 
 				// Commit the transaction
-				transaction.Commit();
+				transaction.Commit ();
+			} else if (item.ItemId == Resource.Id.map) {
+				
+				if (guidesLoaded==true)
+				{
+					var newFragment = new Map_Fragment ();
+					//var ft = FragmentManager.BeginTransaction ();
+					FragmentTransaction transaction = FragmentManager.BeginTransaction();
+					transaction.Replace(Resource.Id.fragment_container, newFragment);
+					transaction.AddToBackStack(null);
+					//transaction.AddToBackStack(null);
+					transaction.Commit();
+				}
 			}
 			
 			return base.OnOptionsItemSelected (item);
@@ -174,7 +192,9 @@ namespace TouriDroid
 					var newFragment = new Map_Fragment ();
 					//var ft = FragmentManager.BeginTransaction ();
 					FragmentTransaction transaction = FragmentManager.BeginTransaction();
+
 					transaction.Replace(Resource.Id.fragment_container, newFragment);
+					transaction.AddToBackStack(null);
 					//transaction.AddToBackStack(null);
 					transaction.Commit();
 				}
@@ -278,7 +298,6 @@ namespace TouriDroid
 
 		public async Task<List<Guide>> loadGuideProfiles(string url)
 		{
-			
 			CallAPI ca = new CallAPI();
 
 			JsonValue json = await ca.getWebApiData(url, null);
@@ -286,8 +305,7 @@ namespace TouriDroid
 			mAdapter.NotifyDataSetChanged ();
 
 			string imageUrl;
-			foreach (Guide g in mGuideList) {
-
+/*			foreach (Guide g in mGuideList) {
 				if (g.profileImageId == Constants.Uninitialized) {
 					g.profileImage = null;
 				} else {
@@ -296,9 +314,9 @@ namespace TouriDroid
 					Bitmap image = (Bitmap) await ca.getScaledImage (imageUrl, Constants.GuideListingReqWidth, Constants.GuideListingReqHeight);
 					g.profileImage = image;
 				}
-				mAdapter.NotifyDataSetChanged ();
+			//	mAdapter.NotifyDataSetChanged ();
 			}
-
+*/
 			if (mGuideList.Count == 0) {
 				noGuides.Visibility = ViewStates.Visible;
 			} else {
@@ -321,11 +339,13 @@ namespace TouriDroid
 	{
 		private List<Guide> mGuides;
 		private Activity thisActivity;
+		private CallAPI mCa;
 
 		public RecyclerAdapter(List<Guide> guideList, Activity thisAct)
 		{
 			mGuides = guideList;
 			thisActivity = thisAct;
+			mCa = new CallAPI ();
 		}
 
 		public class MyView:RecyclerView.ViewHolder
@@ -401,7 +421,7 @@ namespace TouriDroid
 			return view;
 		}
 
-		public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
+		public async override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
 		{
 			MyView myHolder = holder as MyView;
 
@@ -440,11 +460,12 @@ namespace TouriDroid
 			myHolder.mLocations.Text = placesServed;
 
 			//myHolder.mPhoto.SetImageResource (Resource.Drawable.placeholder_photo);
-			if (mGuides [position].profileImage == null) {
-				myHolder.mPhoto.SetImageResource (Resource.Drawable.placeholder_photo);
-			} else {
-				myHolder.mPhoto.SetImageBitmap (mGuides [position].profileImage);
-			}				
+
+			string imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ mGuides [position].profileImageId;
+
+			Bitmap image = (Bitmap) await mCa.getScaledImage (imageUrl, Constants.GuideListingReqWidth, Constants.GuideListingReqHeight);
+			mGuides [position].profileImage = image;
+			myHolder.mPhoto.SetImageBitmap (mGuides [position].profileImage);		
 				
 			//myHolder.ItemView.Click += (sender, e) => {
 			LinearLayout content = myHolder.ItemView.FindViewById<LinearLayout> (Resource.Id.guideContentLayout);

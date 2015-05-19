@@ -315,15 +315,15 @@ namespace TouriDroid
 		{
 			base.OnResume ();
 			//string Provider = LocationManager.GpsProvider;
-			string Provider = LocationManager.NetworkProvider;
 
-			if(_locationManager.IsProviderEnabled(Provider))
-			{
-				_locationManager.RequestLocationUpdates (Provider, 0, 0, this);
-			} 
-			else 
-			{
-				Log.Info( "loc", Provider + " is not available. Does the device have location services enabled?");
+			if (mPlace.Equals ("")) {
+				string Provider = LocationManager.NetworkProvider;
+
+				if (_locationManager.IsProviderEnabled (Provider)) {
+					_locationManager.RequestLocationUpdates (Provider, 0, 0, this);
+				} else {
+					Log.Info ("loc", Provider + " is not available. Does the device have location services enabled?");
+				}
 			}
 		}
 
