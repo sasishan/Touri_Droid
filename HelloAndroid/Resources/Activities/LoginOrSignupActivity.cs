@@ -13,7 +13,7 @@ using Android.Widget;
 
 namespace TouriDroid
 {
-	[Activity (Label = "Sign In or Sign Up")]			
+	[Activity (Label = "Sign In or Sign Up", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]	
 	public class LoginOrSignupActivity : Activity
 	{
 		public Guide newGuide;

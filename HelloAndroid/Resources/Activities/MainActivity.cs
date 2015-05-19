@@ -24,7 +24,7 @@ namespace TouriDroid
 {
 	//[Activity (Label = "HelloAndroid", MainLauncher = true, Icon = "@drawable/icon")]
 	/* This is the Activity that displays all the expertises and is the Main Activity */
-	[Activity (Label="Touri", MainLauncher = true, Theme = "@style/Theme.AppCompat")]			
+	[Activity (Label="Touri", MainLauncher = true, Theme = "@style/Theme.AppCompat", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]			
 	public class MainActivity : ActionBarActivity,  ILocationListener, Android.Support.V7.App.ActionBar.ITabListener
 	{
 		private LocationManager _locationManager = null;

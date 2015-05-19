@@ -20,7 +20,7 @@ using Org.Json;
 
 namespace TouriDroid
 {
-	[Activity (Label = "Nativus", Theme = "@style/Theme.AppCompat")]			
+	[Activity (Label = "Nativus", Theme = "@style/Theme.AppCompat", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]			
 	public class SecondActivity : ActionBarActivity
 	{
 		private DrawerLayout 	mDrawer;

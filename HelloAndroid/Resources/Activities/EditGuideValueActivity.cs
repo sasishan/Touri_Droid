@@ -13,7 +13,7 @@ using Android.Widget;
 
 namespace TouriDroid
 {
-	[Activity (Label = "Edit Guide")]			
+	[Activity (Label = "Edit Guide", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]	
 	public class EditGuideValueActivity : Activity
 	{
 		public Guide currentGuide;

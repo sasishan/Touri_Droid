@@ -14,7 +14,7 @@ using Android.Database;
 
 namespace TouriDroid
 {
-	[Activity (Label = "Image Select")]			
+	[Activity (Label = "Image Select", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]	
 	public class ImageSelectActivity : Activity
 	{
 		protected override void OnCreate (Bundle bundle)

@@ -15,7 +15,7 @@ using Android.Views.InputMethods;
 
 namespace TouriDroid
 {
-	[Activity (Label = "Chat")]			
+	[Activity (Label = "Chat", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
 	public class ActiveChat : Activity
 	{
 		

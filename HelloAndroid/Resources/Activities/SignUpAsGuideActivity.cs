@@ -13,7 +13,7 @@ using Android.Widget;
 
 namespace TouriDroid
 {
-	[Activity (Label = Constants.DrawerOptionBeAGuide)]			
+	[Activity (Label = Constants.DrawerOptionBeAGuide, ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]	
 	public class SignUpAsGuideActivity : Activity
 	{
 		public Guide newGuide;

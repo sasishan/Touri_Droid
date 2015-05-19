@@ -16,7 +16,7 @@ using Android.Graphics;
 
 namespace TouriDroid
 {
-	[Activity (Label = "Guide")]			
+	[Activity (Label = "Guide", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
 	public class GuideProfileActivity : Activity
 	{
 		Guide thisGuide;

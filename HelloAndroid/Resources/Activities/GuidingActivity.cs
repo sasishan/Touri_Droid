@@ -15,7 +15,7 @@ using Android.Support.V4.Widget;
 
 namespace TouriDroid
 {
-	[Activity (Label = "Guiding", MainLauncher = true, Theme = "@style/Theme.AppCompat")]		
+	[Activity (Label = "Guiding", MainLauncher = true, Theme = "@style/Theme.AppCompat", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]	
 	public class GuidingActivity : ActionBarActivity, Android.Support.V7.App.ActionBar.ITabListener
 	{
 		private DrawerLayout 	mDrawer;

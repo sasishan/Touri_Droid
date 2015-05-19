@@ -13,7 +13,7 @@ using Android.Widget;
 
 namespace TouriDroid
 {
-	[Activity (Label = "FilterActivity")]			
+	[Activity (Label = "FilterActivity", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]	
 	public class FilterActivity : Activity
 	{
 		protected override void OnCreate (Bundle savedInstanceState)
