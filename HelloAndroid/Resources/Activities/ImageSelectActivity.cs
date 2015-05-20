@@ -55,7 +55,7 @@ namespace TouriDroid
 					string token = sm.getAuthorizedToken ();
 					int guideId = sm.getGuideId ();
 					string url = String.Format (Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile + Constants.URL_PutProfileImage, guideId);
-					CallAPI ca = new CallAPI ();
+					Comms ca = new Comms ();
 
 					ca.PostFile (url, filePath, token);
 					Finish ();

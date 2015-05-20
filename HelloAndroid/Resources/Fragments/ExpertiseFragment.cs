@@ -110,7 +110,7 @@ namespace TouriDroid
 			string place = ((MainActivity)Activity).mPlace;
 			string url = Constants.DEBUG_BASE_URL + "/api/expertises/search?locs="+place;
 
-			CallAPI ca = new CallAPI();
+			Comms ca = new Comms();
 
 			progress.Visibility = ViewStates.Visible;
 
@@ -186,13 +186,13 @@ namespace TouriDroid
 		private List<Expertise> mExpertise;
 		private Activity thisActivity;
 		public event EventHandler<int> ItemClick;
-		private CallAPI mCa;
+		private Comms mCa;
 
 		public RecyclerAdapterExpertise(List<Expertise> expertiseList, Activity thisAct)
 		{
 			mExpertise = expertiseList;
 			thisActivity = thisAct;
-			mCa = new CallAPI ();
+			mCa = new Comms ();
 		}
 
 		public class MyView:RecyclerView.ViewHolder

@@ -35,7 +35,7 @@ namespace TouriDroid
 			progress.Visibility = ViewStates.Gone;
 
 			if (token!=null) {
-				CallAPI ca = new CallAPI ();
+				Comms ca = new Comms ();
 
 				//check if there is a guide record for this username
 				String url = Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile;// "/api/guides?username=" + username;

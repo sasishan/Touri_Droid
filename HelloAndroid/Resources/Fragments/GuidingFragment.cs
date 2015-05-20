@@ -42,7 +42,7 @@ namespace TouriDroid
 			SessionManager sm = new SessionManager (view.Context);
 			string token = sm.getAuthorizedToken ();
 
-			CallAPI ca = new CallAPI ();
+			Comms ca = new Comms ();
 			string url = Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile;
 			var json = await ca.getWebApiData (url, token);
 			Guide myProfile = parseGuideProfiles (json);

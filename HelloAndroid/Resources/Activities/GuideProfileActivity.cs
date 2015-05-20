@@ -108,7 +108,7 @@ namespace TouriDroid
 
 			//photo.SetImageResource(Resource.Drawable.placeholder_photo);
 
-			CallAPI ca = new CallAPI ();
+			Comms ca = new Comms ();
 			String url = Constants.DEBUG_BASE_URL + "/api/guides/" + guideId;
 			Converter converter = new Converter ();
 

@@ -28,6 +28,7 @@ namespace TouriDroid
 			string action = Intent.GetStringExtra (Constants.Action) ?? "Data not available";
 			this.Title = action;
 			Fragment newFragment=null;
+
 			if (action.Equals (Constants.Action_EditName)) {
 				string fName = Intent.GetStringExtra (Constants.guideFirstName) ?? "Data not available";
 				string lName = Intent.GetStringExtra (Constants.guideLastName) ?? "Data not available";

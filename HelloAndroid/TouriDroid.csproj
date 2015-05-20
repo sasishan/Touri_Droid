@@ -95,7 +95,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Constants.cs" />
-    <Compile Include="Resources\Support.cs" />
     <Compile Include="Resources\GuideSearch.cs" />
     <Compile Include="Resources\Activities\MainActivity.cs" />
     <Compile Include="Resources\Activities\GuideProfileActivity.cs" />
@@ -130,6 +129,9 @@
     <Compile Include="Resources\Fragments\Map_Fragment.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Resources\Activities\FilterActivity.cs" />
+    <Compile Include="Resources\PlacesAutoComplete.cs" />
+    <Compile Include="Resources\RecyclerAdapter.cs" />
+    <Compile Include="Resources\Comms.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

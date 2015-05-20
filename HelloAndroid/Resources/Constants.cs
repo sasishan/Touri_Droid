@@ -17,16 +17,13 @@ namespace TouriDroid
 
 			case Constants.AvailableLaterValue:
 				return AvailableLaterColor;
-				break;
 
 			case Constants.AvailableNowValue:
 				return AvailableNowColor;
-				break;
 
 			case Constants.NotAvailableForChatValue:
 			default:
 				return NotAvailableForChatColor;
-				break;
 			}
 		}
 
@@ -54,6 +51,8 @@ namespace TouriDroid
 			}
 			return status;
 		}
+
+
 
 		public Guide parseOneGuideProfile(JsonValue json)
 		{
@@ -146,6 +145,10 @@ namespace TouriDroid
 	}
 	public static class Constants
 	{
+		//Success, Fail values for function calls
+		public const int SUCCESS=1;
+		public const int FAIL=-1;
+
 		//Main Tab positions
 		public const int Main_Expertise_Tab=0;
 		public const int Main_Chat_Tab=1;
@@ -253,7 +256,14 @@ namespace TouriDroid
 
 		public const string Action = "Action";
 		public const string Action_EditName = "Edit Name";
-		public const string Action_EditDescription = "Edit Description";		
+		public const string Action_EditDescription = "Edit Description";	
+
+
+		//Google API Constants
+		public static string PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
+		public static string TYPE_AUTOCOMPLETE = "/autocomplete";
+		public static string OUT_JSON = "/json";
+
 
 		public static bool isValidEmail(String target) {
 			if (target == null) 

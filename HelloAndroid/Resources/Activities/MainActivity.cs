@@ -22,13 +22,15 @@ using Android.Gms.Maps.Model;
 
 namespace TouriDroid
 {
-	//[Activity (Label = "HelloAndroid", MainLauncher = true, Icon = "@drawable/icon")]
 	/* This is the Activity that displays all the expertises and is the Main Activity */
 	[Activity (Label="Touri", MainLauncher = true, Theme = "@style/Theme.AppCompat", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]			
 	public class MainActivity : ActionBarActivity,  ILocationListener, Android.Support.V7.App.ActionBar.ITabListener
 	{
-		private LocationManager _locationManager = null;
-		public Location 		_currentLocation;
+		private const string TAG = "MainActivity";
+
+		private LocationManager mLocationManager = null;
+		public Location 		mCurrentLocation;
+		private SessionManager  mSessionManager;
 
 		private DrawerLayout 	mDrawer;
 		private ListView		mDrawerList;
@@ -36,9 +38,8 @@ namespace TouriDroid
 		public Expertise 		mExpertise;
 		private GuideSearch 	mGuideSearch;
 		protected int 			currentFragment = Constants.Uninitialized;
-		private	AutoCompleteTextView searchPlaces;
-		IMenu					searchMenu;
-		private SessionManager sessionManager;
+		private	AutoCompleteTextView mSearchPlaces;
+		IMenu					mSearchMenu;
 		Type					mCurrentFragment;
 		public string 			mPlace="";
 
@@ -47,98 +48,74 @@ namespace TouriDroid
 			//blank initially
 		};
 
+		//Initialize all the globals for this activity
+		private void initializeGlobals()
+		{
+			mSessionManager = new SessionManager (this);
+			mLocationManager = GetSystemService (LocationService) as LocationManager;
+			mGuideSearch = new GuideSearch ();
+		}
 
 		protected override void OnCreate (Bundle savedInstanceState)
 		{
 			RequestWindowFeature(WindowFeatures.ActionBar);
 			base.OnCreate (savedInstanceState);
-
-			_locationManager = GetSystemService (LocationService) as LocationManager;
-
-			sessionManager = new SessionManager (this);
-
 			SupportActionBar.NavigationMode = (int) ActionBarNavigationMode.Tabs;
 
 			// Set our view from the "main" layout resource
 			//SetContentView (Resource.Layout.Second);
 			SetContentView (Resource.Layout.Main);
 
-			TextView drawerFooter = this.FindViewById<TextView> (Resource.Id.drawer_bottom_text1);
+			initializeGlobals ();
 
-			if (sessionManager.isLoggedIn ()) {
-				//mDrawerItems.Add ("Logout");
-				if (sessionManager.isGuide ()) {
-					mDrawerItems.Add (Constants.DrawerOptionSwitchGuide);
-				} else {
-					mDrawerItems.Add ("Favourite Guides");
-				}
-				mDrawerItems.Add (Constants.MyPreferences);
-				drawerFooter.Text = "Signed in as " + sessionManager.getEmail ();
-				mDrawerItems.Add (Constants.DrawerOptionLogout);
-
-			} else {
-				mDrawerItems.Add(Constants.DrawerOptionBeAGuide);
-				//drawerFooter.Text = Constants.DrawerOptionLoginOrSignUp;
-				mDrawerItems.Add (Constants.DrawerOptionLoginOrSignUp);
+			int returnVal = configureDrawer ();
+			if (returnVal == Constants.FAIL) {
+				Log.Debug (TAG, "Failed to configure the left drawer");
+				return;
 			}
 
-			mDrawer = this.FindViewById<DrawerLayout> (Resource.Id.main_drawer_layout);
-			mDrawerList = this.FindViewById<ListView> (Resource.Id.main_left_drawer);
-
-			mDrawerList.Adapter = new ArrayAdapter<string> (this, Android.Resource.Layout.SimpleListItem1, mDrawerItems.ToArray());
-			//loadDrawerItems (Constants.DrawerMainMenuId);
-			//mDrawerList.Id = Constants.DrawerMainMenuId;
-			drawerToggle = new ActionBarDrawerToggle (this, mDrawer,Resource.String.drawer_open, Resource.String.drawer_close);
-
-			mDrawer.SetDrawerListener (drawerToggle);
-			mDrawerList.ItemClick += DrawerListOnItemClick;
+			returnVal = configureTabs ();
+			if (returnVal == Constants.FAIL) {
+				Log.Debug (TAG, "Failed to configure the tabs");
+			}
 
 			SupportActionBar.SetDisplayHomeAsUpEnabled (true);
 			SupportActionBar.SetHomeButtonEnabled (true);
 
-			mGuideSearch = new GuideSearch ();
-
+			//fire up the fragment
 			if (savedInstanceState == null) {
 				var newFragment = new ExpertiseFragment ();
 				var ft = FragmentManager.BeginTransaction ();
 				ft.Add (Resource.Id.main_fragment_container, newFragment);
+				mCurrentFragment = typeof(ExpertiseFragment);
 				ft.Commit ();
 			}
-			mCurrentFragment = typeof(ExpertiseFragment);
-
-			Android.Support.V7.App.ActionBar.Tab tab = SupportActionBar.NewTab ();
-			tab.SetText ("Search");
-			tab.SetTabListener(this);
-			SupportActionBar.AddTab (tab);
-
-			tab =  SupportActionBar.NewTab ();
-			tab.SetTabListener(this);
-			tab.SetText ("Chat");
-
-			SupportActionBar.AddTab (tab);
 		}	
 
+		//Set up the menu, including the search bar in the menu
 		public override bool OnCreateOptionsMenu(IMenu menu)
 		{
 			MenuInflater.Inflate(Resource.Menu.menu_guide, menu);
 
 			//set up the action bar menu's search 
 			var item = menu.FindItem (Resource.Id.search);
-			searchMenu = menu;
+			mSearchMenu = menu;
 			View v = (View) MenuItemCompat.GetActionView (item);
 
-			searchPlaces = (AutoCompleteTextView) v.FindViewById (Resource.Id.search_places);
-			//AutoCompleteTextView searchPlaces = (AutoCompleteTextView)FindViewById (Resource.Id.search_places);
+			mSearchPlaces = (AutoCompleteTextView) v.FindViewById (Resource.Id.search_places);
 
 			PlacesAutoCompleteAdapter pacAdapter = new PlacesAutoCompleteAdapter (this, Android.Resource.Layout.SimpleListItem1);
-			searchPlaces.Adapter = pacAdapter;
-			searchPlaces.ItemClick += searchPlaces_ItemClick;
+			mSearchPlaces.Adapter = pacAdapter;
+			mSearchPlaces.ItemClick += searchPlaces_ItemClick;
 
-			// See if we can speed things up by looking for the last location held in memory
+			//See if we can speed things up by looking for the last location held in memory
+			//if the person was logged in, the location would be saved in the session manager
+			if (mSessionManager == null) {
+				mSessionManager = new SessionManager (this);
+			}
 			string lastLocation = "";
-			SessionManager sm = new SessionManager (this);
-			if (sessionManager.isLoggedIn ()) {
-				lastLocation = sm.getLastLocation ();
+			if (mSessionManager.isLoggedIn ()) {
+				lastLocation = mSessionManager.getLastLocation ();
 
 				// only waste time if it's not blank
 				if (!lastLocation.Equals ("")) {
@@ -147,14 +124,13 @@ namespace TouriDroid
 			}
 
 			return base.OnCreateOptionsMenu(menu);
-
 		} 
 
-		//sets the top label to a valeu - usually place in our case
+		//sets the top label to a value - usually place in our case
 		private void SetActivityLabel(string place)
 		{
 			char[] splits = {',' };
-			string[] placeArray= searchPlaces.Text.Split (splits, 3);
+			string[] placeArray= mSearchPlaces.Text.Split (splits, 3);
 
 			if (placeArray.Length > 1) {
 				this.Title = placeArray [0] + ", " + placeArray [1];
@@ -177,12 +153,16 @@ namespace TouriDroid
 				{
 					string place = ((AutoCompleteTextView)sender).Text;
 					setMyPlace (place);
-					//string url = Constants.DEBUG_BASE_URL + "/api/expertises/search?locs="+place;
 
 					ExpertiseFragment ef = FragmentManager.FindFragmentById<ExpertiseFragment> (Resource.Id.main_fragment_container);
-					ef.loadExpertises ();	
 
-					var item = searchMenu.FindItem (Resource.Id.search);
+					if (ef==null || mSearchMenu == null) {
+						Log.Debug (TAG, "search menu is null");
+						return;
+					}
+					ef.loadExpertises ();
+
+					var item = mSearchMenu.FindItem (Resource.Id.search);
 					item.CollapseActionView ();
 					//ef.View.RequestFocus ();
 					InputMethodManager imm = (InputMethodManager) GetSystemService(Activity.InputMethodService);
@@ -195,14 +175,23 @@ namespace TouriDroid
 
 					setMyPlace (place);
 					GuideFragment gf = FragmentManager.FindFragmentById<GuideFragment> (Resource.Id.main_fragment_container);
+
+					if (gf==null) {
+						Log.Debug (TAG, "search menu is null");
+						return;
+					}
+
 					gf.RefineSearch(mGuideSearch);
 				}					
 
 			} else {
 				//@todo
+				Log.Debug(TAG, "search click's sender was null");
+				Finish();
 			}
 		}
 
+		//handle selections on the drawer list
 		private void DrawerListOnItemClick(object sender, AdapterView.ItemClickEventArgs itemClickEventArgs)
 		{
 			//Be a guide - the user is going to register as a guide
@@ -241,15 +230,18 @@ namespace TouriDroid
 				return (true);
 			}
 
-			switch (item.ItemId) {
-			case Resource.Id.search:
-				searchPlaces.Text = "";
-				return base.OnOptionsItemSelected (item);
-			case Android.Resource.Id.Home:
-				Finish ();
-				return true;
-			default:
-				return base.OnOptionsItemSelected (item);
+			switch (item.ItemId) 
+			{
+				case Resource.Id.search:
+					mSearchPlaces.Text = "";
+					return base.OnOptionsItemSelected (item);
+
+				case Android.Resource.Id.Home:
+					Finish ();
+					return true;
+
+				default:
+					return base.OnOptionsItemSelected (item);
 			}			
 		}
 
@@ -308,7 +300,8 @@ namespace TouriDroid
 		protected override void OnPause ()
 		{
 			base.OnPause ();
-			_locationManager.RemoveUpdates (this);
+			//turn off the location manager since we only need it at startup
+			mLocationManager.RemoveUpdates (this);
 		}
 
 		protected override void OnResume ()
@@ -319,8 +312,8 @@ namespace TouriDroid
 			if (mPlace.Equals ("")) {
 				string Provider = LocationManager.NetworkProvider;
 
-				if (_locationManager.IsProviderEnabled (Provider)) {
-					_locationManager.RequestLocationUpdates (Provider, 0, 0, this);
+				if (mLocationManager.IsProviderEnabled (Provider)) {
+					mLocationManager.RequestLocationUpdates (Provider, 0, 0, this);
 				} else {
 					Log.Info ("loc", Provider + " is not available. Does the device have location services enabled?");
 				}
@@ -341,19 +334,12 @@ namespace TouriDroid
 
 		public void OnLocationChanged (Location location)
 		{
-			_currentLocation = location;
-			sessionManager.setCurrentLatitudeLongitude ((float) location.Latitude, (float) location.Longitude);
-			//LatLng loc = new LatLng (_currentLocation.Latitude, _currentLocation.Longitude);
-			//setMapLocation (loc, "Your Location", "", BitmapDescriptorFactory.DefaultMarker (BitmapDescriptorFactory.HueCyan));
-			//setCameraLocation(loc);
-			//markGuides ();
-			_locationManager.RemoveUpdates (this);
+			mCurrentLocation = location;
+			mSessionManager.setCurrentLatitudeLongitude ((float) location.Latitude, (float) location.Longitude);
+
+			mLocationManager.RemoveUpdates (this);
 			string mPlace = reverseFindLocation (location.Latitude, location.Longitude);
 			setMyPlace (mPlace);
-			//GuideFragment gf = Activity.F<GuideFragment> (Resource.Id.main_fragment_container);
-		//	gf.RefineSearch(mGuideSearch);
-
-		//	address[0].
 
 		}
 
@@ -390,11 +376,76 @@ namespace TouriDroid
 		public void setMyPlace(string address)
 		{
 			mPlace = address;
-			searchPlaces.Text = address;
+			mSearchPlaces.Text = address;
 			SetActivityLabel (mPlace);
 			mGuideSearch.placesServedList.Clear ();
 			mGuideSearch.placesServedList.Add (mPlace);
 		}
 
+		//Set up the left drawer for this activity 
+		//Return SUCCESS or FAIL
+		private int configureDrawer ()
+		{
+			if (mSessionManager == null) {
+				return Constants.FAIL;
+			}
+
+			if (mSessionManager.isLoggedIn ()) {
+				//mDrawerItems.Add ("Logout");
+				if (mSessionManager.isGuide ()) {
+					mDrawerItems.Add (Constants.DrawerOptionSwitchGuide);
+				} else {
+					mDrawerItems.Add ("Favourite Guides");
+				}
+				mDrawerItems.Add (Constants.MyPreferences);
+
+				//this is the last line in the drawer
+				TextView drawerFooter = this.FindViewById<TextView> (Resource.Id.drawer_bottom_text1);
+				drawerFooter.Text = "Signed in as " + mSessionManager.getEmail ();
+
+				mDrawerItems.Add (Constants.DrawerOptionLogout);
+
+			} else {
+				mDrawerItems.Add(Constants.DrawerOptionBeAGuide);
+				//drawerFooter.Text = Constants.DrawerOptionLoginOrSignUp;
+				mDrawerItems.Add (Constants.DrawerOptionLoginOrSignUp);
+			}
+
+			mDrawer = this.FindViewById<DrawerLayout> (Resource.Id.main_drawer_layout);
+			mDrawerList = this.FindViewById<ListView> (Resource.Id.main_left_drawer);	
+
+			mDrawerList.Adapter = new ArrayAdapter<string> (this, Android.Resource.Layout.SimpleListItem1, mDrawerItems.ToArray());
+			drawerToggle = new ActionBarDrawerToggle (this, mDrawer,Resource.String.drawer_open, Resource.String.drawer_close);
+
+			mDrawer.SetDrawerListener (drawerToggle);
+			mDrawerList.ItemClick += DrawerListOnItemClick;
+
+			return Constants.SUCCESS;
+		}
+
+		//Set up the left drawer for this activity 
+		private int configureTabs ()
+		{
+			try
+			{
+				Android.Support.V7.App.ActionBar.Tab tab = SupportActionBar.NewTab ();
+				tab.SetText ("Search");
+				tab.SetTabListener(this);
+				SupportActionBar.AddTab (tab);
+
+				tab =  SupportActionBar.NewTab ();
+				tab.SetTabListener(this);
+				tab.SetText ("Chat");
+
+				SupportActionBar.AddTab (tab);
+
+			}
+			catch (Exception e) {
+				Log.Debug (TAG, e.InnerException.ToString ());
+				return Constants.FAIL;
+			}
+
+			return Constants.SUCCESS;
+		}
 	}		
 }

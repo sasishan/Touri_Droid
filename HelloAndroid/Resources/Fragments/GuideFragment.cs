@@ -18,11 +18,13 @@ using Android.Animation;
 using Android.Support.V4.View;
 using System.Collections.Specialized;
 using System.Text;
+using Android.Util;
 
 namespace TouriDroid
 {
 	public class GuideFragment : Fragment
 	{		
+		private	const string TAG = "GuideFragment";
 		private RecyclerView 				mRecyclerView;
 		private RecyclerView.LayoutManager 	mLayoutManager;
 		private RecyclerView.Adapter 		mAdapter;
@@ -31,33 +33,70 @@ namespace TouriDroid
 		public GuideSearch 					mGuideSearch;
 		private TextView 					noGuides = null;
 		private bool 						guidesLoaded = true;
-		protected CallAPI mCa;
+		protected Comms						mComms;
+		private Converter 					mConverter;
 
 		public override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
 			((SecondActivity)Activity).SupportActionBar.SetDisplayHomeAsUpEnabled (true);
 			((SecondActivity)Activity).SupportActionBar.SetHomeButtonEnabled (true);
-			mCa	= new CallAPI ();
-		}			
+			mComms	= new Comms ();
+			mConverter = new Converter ();
+
+		}	
+
+		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+		{
+			var view = inflater.Inflate(Resource.Layout.fragment_guide, container, false);
+			SetHasOptionsMenu(true);
+
+			if (mGuideSearch == null) {
+				mGuideSearch = ((SecondActivity)this.Activity).mGuideSearch;
+			}
+
+			ImageView mapIcon  = view.FindViewById<ImageView> (Resource.Id.mapicon);
+			noGuides= view.FindViewById<TextView> (Resource.Id.noguides);
+
+			mRecyclerView = view.FindViewById<RecyclerView> (Resource.Id.my_recycler_view);
+			mLayoutManager =  new LinearLayoutManager(view.Context);//new GridLayoutManager(view.Context, 2, GridLayoutManager.Horizontal, false);		
+			mRecyclerView.SetLayoutManager (mLayoutManager);
+
+			mPlace = Activity.Intent.GetStringExtra (Constants.selectedLocation) ?? "";
+			string expertise = Activity.Intent.GetStringExtra (Constants.selectedExpertise) ?? "";
+
+			mGuideSearch.placesServedList.Clear ();
+			mGuideSearch.placesServedList.Add (mPlace);
+			mGuideSearch.expertiseList.Add (expertise);
+
+			RefineSearch(mGuideSearch);
+
+			mAdapter = new RecyclerAdapter (mGuideList, this.Activity);
+			mRecyclerView.SetAdapter (mAdapter);
+
+			mapIcon.Click += (object sender, EventArgs e) => {
+
+				if (guidesLoaded==true)
+				{
+					var newFragment = new Map_Fragment ();
+					//var ft = FragmentManager.BeginTransaction ();
+					FragmentTransaction transaction = FragmentManager.BeginTransaction();
+
+					transaction.Replace(Resource.Id.fragment_container, newFragment);
+					transaction.AddToBackStack(null);
+					//transaction.AddToBackStack(null);
+					transaction.Commit();
+				}
+			};
+
+			return view;
+		}
 
 		public override void OnCreateOptionsMenu(IMenu menu, MenuInflater menuInflater)
 		{
 			menu.Clear ();
 			menuInflater.Inflate(Resource.Menu.menu_filters, menu);
 			var item = menu.FindItem (Resource.Id.map);
-
-			/*var item = menu.FindItem (Resource.Id.search);
-
-			if (item != null) {
-				View v = (View) MenuItemCompat.GetActionView (item);
-				AutoCompleteTextView searchPlaces = (AutoCompleteTextView) v.FindViewById (Resource.Id.search_places);
-
-				PlacesAutoCompleteAdapter pacAdapter = new PlacesAutoCompleteAdapter (v.Context, Android.Resource.Layout.SimpleListItem1);
-				searchPlaces.Adapter = pacAdapter;
-				searchPlaces.ItemClick += searchPlaces_ItemClick;
-				searchPlaces.Text = mPlace;
-			}*/
 
 			base.OnCreateOptionsMenu(menu, menuInflater);				
 		}
@@ -157,567 +196,48 @@ namespace TouriDroid
 			guidesLoaded = true;
 		}
 
-		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-		{
-			var view = inflater.Inflate(Resource.Layout.fragment_guide, container, false);
-			SetHasOptionsMenu(true);
-
-			if (mGuideSearch == null) {
-				mGuideSearch = ((SecondActivity)this.Activity).mGuideSearch;
-			}
-
-			ImageView mapIcon  = view.FindViewById<ImageView> (Resource.Id.mapicon);
-			noGuides= view.FindViewById<TextView> (Resource.Id.noguides);
-
-			mRecyclerView = view.FindViewById<RecyclerView> (Resource.Id.my_recycler_view);
-			mLayoutManager =  new LinearLayoutManager(view.Context);//new GridLayoutManager(view.Context, 2, GridLayoutManager.Horizontal, false);		
-			mRecyclerView.SetLayoutManager (mLayoutManager);
-
-			mPlace = Activity.Intent.GetStringExtra (Constants.selectedLocation) ?? "";
-			string expertise = Activity.Intent.GetStringExtra (Constants.selectedExpertise) ?? "";
-
-			mGuideSearch.placesServedList.Clear ();
-			mGuideSearch.placesServedList.Add (mPlace);
-			mGuideSearch.expertiseList.Add (expertise);
-
-			RefineSearch(mGuideSearch);
-
-			mAdapter = new RecyclerAdapter (mGuideList, this.Activity);
-			mRecyclerView.SetAdapter (mAdapter);
-
-			mapIcon.Click += (object sender, EventArgs e) => {
-
-				if (guidesLoaded==true)
-				{
-					var newFragment = new Map_Fragment ();
-					//var ft = FragmentManager.BeginTransaction ();
-					FragmentTransaction transaction = FragmentManager.BeginTransaction();
-
-					transaction.Replace(Resource.Id.fragment_container, newFragment);
-					transaction.AddToBackStack(null);
-					//transaction.AddToBackStack(null);
-					transaction.Commit();
-				}
-			};
-
-			return view;
-		}
-
-		public void parseGuideProfiles(JsonValue json)
-		{
-			if (json == null) {
-				return;
-			}
-			mGuideList.Clear ();
-			((SecondActivity)this.Activity).availableLanguages.Clear ();
-
-			for (int i = 0; i < json.Count; i++) {
-				Guide g = new Guide ();
-				g.jsonText = json;
-
-				JsonValue values = json [i];
-
-				if (values.ContainsKey (Constants.Guide_WebAPI_Key_Username)) {
-					string username = values [Constants.Guide_WebAPI_Key_Username];
-					g.userName= username;
-				}
-
-				if (values.ContainsKey (Constants.Guide_WebAPI_Key_FirstName)) {
-					string fName = values [Constants.Guide_WebAPI_Key_FirstName];
-
-					g.fName = fName;
-					g.guideId = values [Constants.Guide_WebAPI_Key_GuideId];
-
-				}
-
-				if (values.ContainsKey (Constants.Guide_WebAPI_Key_LastName)) {
-					string lName = values [Constants.Guide_WebAPI_Key_LastName];
-					g.lName= lName;
-				}
-
-				if (values.ContainsKey (Constants.Guide_WebAPI_Key_Address1)) {
-					g.address1 = values [Constants.Guide_WebAPI_Key_Address1];
-				}
-
-				if (values.ContainsKey (Constants.Guide_WebAPI_Key_Address2)) {
-					g.address2 = values [Constants.Guide_WebAPI_Key_Address2];
-				}
-
-				if (values.ContainsKey (Constants.Guide_WebAPI_Key_Description)) {
-					g.description = values [Constants.Guide_WebAPI_Key_Description];
-				}
-
-				if (values.ContainsKey (Constants.Guide_WebAPI_Key_Availability)) {
-					g.availability = values [Constants.Guide_WebAPI_Key_Availability];
-				}
-
-				if (values.ContainsKey (Constants.Guide_WebAPI_Key_ProfileImageId)) {
-					g.profileImageId = values [Constants.Guide_WebAPI_Key_ProfileImageId];
-				} else {
-					g.profileImageId = Constants.Uninitialized;
-				}
-
-				if (values.ContainsKey (Constants.Guide_WebAPI_Key_LanguageList)) {
-					JsonValue temp = values [Constants.Guide_WebAPI_Key_LanguageList];
-					for (int j=0; j<temp.Count;j++)
-					{
-						JsonValue l = temp[j];
-						g.languageList.Add (l [Constants.Guide_WebAPI_Key_Language]);
-						((SecondActivity)this.Activity).availableLanguages.Add (l [Constants.Guide_WebAPI_Key_Language]);
-						//@todo get languageId too
-					}
-				}
-
-				if (values.ContainsKey (Constants.Guide_WebAPI_Key_LocationList)) {
-					JsonValue temp = values [Constants.Guide_WebAPI_Key_LocationList];
-					for (int j=0; j<temp.Count;j++)
-					{
-						JsonValue l = temp[j];
-						LocationWrapper lw = new LocationWrapper ();
-						lw.location = l [Constants.Guide_WebAPI_Key_Location];
-						lw.longitude = l [Constants.Guide_WebAPI_Key_Location_long];
-						lw.latitude = l [Constants.Guide_WebAPI_Key_Location_Lat];
-						lw.locationId = l [Constants.Guide_WebAPI_Key_Location_Id];
-						g.placesServedList.Add (lw);
-						//@todo 
-					}
-				}
-
-				if (values.ContainsKey (Constants.Guide_WebAPI_Key_ExpertiseList)) {
-					JsonValue temp = values [Constants.Guide_WebAPI_Key_ExpertiseList];
-					for (int j=0; j<temp.Count;j++)
-					{
-						JsonValue l = temp[j];
-						g.expertise.Add (new Expertise() {expertise=l [Constants.Guide_WebAPI_Key_Expertise], expertiseId=l [Constants.Guide_WebAPI_Key_ExpertiseId]});
-						//@todo 
-					}
-				}
-				mGuideList.Add (g);
-			}
-		}
 
 		public async Task<List<Guide>> loadGuideProfiles(string url)
 		{
-			CallAPI ca = new CallAPI();
+			mGuideList.Clear ();
+			((SecondActivity)this.Activity).availableLanguages.Clear ();
 
-			JsonValue json = await ca.getWebApiData(url, null);
-			parseGuideProfiles(json);
-			mAdapter.NotifyDataSetChanged ();
+			if (mConverter == null || mComms==null) {
+				Log.Debug(TAG, "mConverter or mCA was null");
+				return mGuideList;
+			}
 
-			string imageUrl;
-/*			foreach (Guide g in mGuideList) {
-				if (g.profileImageId == Constants.Uninitialized) {
-					g.profileImage = null;
-				} else {
-					imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ g.profileImageId;
+			JsonValue json = await mComms.getWebApiData(url, null);
 
-					Bitmap image = (Bitmap) await ca.getScaledImage (imageUrl, Constants.GuideListingReqWidth, Constants.GuideListingReqHeight);
-					g.profileImage = image;
+			if (json != null) 
+			{
+				for (int i = 0; i < json.Count; i++) {
+					Guide g = mConverter.parseOneGuideProfile (json[i]);
+
+					if (g == null) {
+						continue;
+					}
+					mGuideList.Add (g);
+					mAdapter.NotifyItemInserted (i);
+
+					//add the languages to filterable languages list for all guides
+					foreach (string l in g.languageList) {
+						((SecondActivity)this.Activity).availableLanguages.Add (l);
+					}
 				}
+
+				((SecondActivity)this.Activity).mGuideList = mGuideList;
 			//	mAdapter.NotifyDataSetChanged ();
-			}
-*/
-			if (mGuideList.Count == 0) {
-				noGuides.Visibility = ViewStates.Visible;
-			} else {
-				noGuides.Visibility = ViewStates.Gone;
-			}
 
-			((SecondActivity)this.Activity).mGuideList = mGuideList;
-			return mGuideList;
-		}
-
-		void OnItemClick (object sender, int position)
-		{
-			int photoNum = position + 1;
-			//Toast.MakeText(this, "This is photo number " + photoNum, ToastLength.Short).Show();
-		}			
-	}
-
-
-	public class RecyclerAdapter: RecyclerView.Adapter
-	{
-		private List<Guide> mGuides;
-		private Activity thisActivity;
-		private CallAPI mCa;
-
-		public RecyclerAdapter(List<Guide> guideList, Activity thisAct)
-		{
-			mGuides = guideList;
-			thisActivity = thisAct;
-			mCa = new CallAPI ();
-		}
-
-		public class MyView:RecyclerView.ViewHolder
-		{
-			public View mMainView { get; set; }
-			public TextView mFName { get; set;} 
-			public TextView mDescription { get; set;} 
-			public TextView mAvailability { get; set;} 
-			public TextView mLanguages { get; set;}
-			public TextView mLocations { get; set;}
-			public ImageView mPhoto { get; set; }
-
-			public MyView(View view): base(view)
-			{
-				mMainView = view;
-			}
-		}
-
-		public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
-		{
-			//this is the row_guide layout
-			//View row = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.row_guide, parent, false);
-
-			View row = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.cardview_guide, parent, false);
-			TextView FName = row.FindViewById<TextView> (Resource.Id.guide_name);
-			TextView locations = row.FindViewById<TextView> (Resource.Id.locationsServed);
-			TextView languages = row.FindViewById<TextView> (Resource.Id.languages);
-			TextView description = row.FindViewById<TextView> (Resource.Id.description);
-			TextView availability = row.FindViewById<TextView> (Resource.Id.availability);
-			ImageView photo = row.FindViewById<ImageView> (Resource.Id.guide_photo);
-
-			//set click listener for more button
-			Button moreButton = row.FindViewById<Button>(Resource.Id.moreButton);
-			moreButton.Click += (sender, e) => {
-				LinearLayout more = (LinearLayout) row.FindViewById(Resource.Id.moreLayout);
-
-				View card = row.FindViewById(Resource.Id.guideCardViewLayout);
-
-				float newHeight = 0;
-				if (more.Visibility==ViewStates.Visible)
-				{ 
-					// make it invisible
-					newHeight =card.Height-more.Height;	
-					more.Visibility=ViewStates.Gone;
-					moreButton.SetBackgroundResource(Resource.Drawable.expander_ic_minimized);
-					//moreButton.Background=DRawabl(Resource.Drawable.expander_ic_minimized);
-				}
-				else //make it visible
-				{
-					newHeight =card.Height+more.Height;
-					more.Visibility=ViewStates.Visible;
-					moreButton.SetBackgroundResource(Resource.Drawable.expander_ic_maximized);
-				}
-					
-				//more.Alpha=0.0f;
-
-				//TranslateAnimation animateSlideUp = new TranslateAnimation(0,0,0,h);
-				//animateSlideUp.FillAfter=true;
-				//card.StartAnimation(animateSlideUp);
-				//row.LayoutParameters.Height=-2;//row.Height-(int)h;
-			//	row.RequestLayout();
-				//card.LayoutParameters.Height=card.Height-(int)h;
-				card.RequestLayout();
-				more.Animate().Alpha(1.0f);
-				//page.=page.Height-(int)h;
-
-				//card.Animate().TranslationYBy(h);
-
-			};
-
-
-			MyView view = new MyView (row) { mFName = FName, mLocations=locations, mLanguages = languages, mPhoto=photo, mDescription=description, mAvailability=availability};
-			return view;
-		}
-
-		public async override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
-		{
-			MyView myHolder = holder as MyView;
-
-			string languages = "";
-			string placesServed = "";
-			// Set name
-			myHolder.mFName.Text = mGuides[position].fName + " " + mGuides[position].lName;
-
-			//Set description.. for summary only partial description is shown
-			//@todo should their be a summary line for guides like Twitter?
-			if ( (mGuides [position].description!=null) && (mGuides [position].description.Length > Constants.MaxDescriptionLengthInCard) )
-			{
-				myHolder.mDescription.Text = mGuides [position].description.Substring (0, Constants.MaxDescriptionLengthInCard-1) + "...";
-			} else 
-			{
-				myHolder.mDescription.Text = mGuides [position].description;
-			}	
-
-			Converter converter = new Converter ();
-			myHolder.mAvailability.Text = converter.getOnlineStatusString (mGuides [position].availability);
-			myHolder.mAvailability.SetTextColor( converter.getOnlineStatusColor (mGuides [position].availability));
-
-			foreach (string l in mGuides[position].languageList) {
-				languages += "• "+l+"\r\n" ;
-			}				
-			if (languages.Length > 0) {
-				languages = languages.Remove (languages.Length - 2);
-			}
-
-			myHolder.mLanguages.Text = languages;
-
-			foreach (LocationWrapper l in mGuides[position].placesServedList) {
-				placesServed += "• "+l.location+"\r\n" ;
-			}				
-			//placesServed = placesServed.Remove (placesServed.Length - 2);
-			myHolder.mLocations.Text = placesServed;
-
-			//myHolder.mPhoto.SetImageResource (Resource.Drawable.placeholder_photo);
-
-			string imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ mGuides [position].profileImageId;
-
-			Bitmap image = (Bitmap) await mCa.getScaledImage (imageUrl, Constants.GuideListingReqWidth, Constants.GuideListingReqHeight);
-			mGuides [position].profileImage = image;
-			myHolder.mPhoto.SetImageBitmap (mGuides [position].profileImage);		
-				
-			//myHolder.ItemView.Click += (sender, e) => {
-			LinearLayout content = myHolder.ItemView.FindViewById<LinearLayout> (Resource.Id.guideContentLayout);
-
-			content.Click += (sender, e) => {
-				int itemPosition = myHolder.Position;
-
-				var gprofileActivity = new Intent (thisActivity, typeof(GuideProfileActivity));
-				gprofileActivity.PutExtra ("GuideId", mGuides[itemPosition].guideId.ToString());
-				gprofileActivity.PutExtra ("UName", mGuides[itemPosition].userName);
-				gprofileActivity.PutExtra ("FName", mGuides[itemPosition].fName);
-				gprofileActivity.PutExtra ("LName", mGuides[itemPosition].lName);
-
-				string langs="";
-				foreach(string l in mGuides[itemPosition].languageList)
-				{
-					langs+=l+"; ";
-				}
-					
-				string expertises="";
-				foreach(Expertise exp in mGuides[itemPosition].expertise)
-				{
-					expertises+=exp.expertise+"; ";
-				}
-				if (mGuides[itemPosition].expertise.Count>0)
-				{
-					langs = langs.Remove (langs.Length - 2);
-					expertises = expertises.Remove (expertises.Length - 2);
-				}
-					
-				gprofileActivity.PutExtra ("Languages", langs);
-				gprofileActivity.PutExtra ("Description", mGuides[itemPosition].description);
-				gprofileActivity.PutExtra ("Expertise", expertises);
-		//		gprofileActivity.PutExtra ("JSON", mGuides[itemPosition].jsonText.ToString());
-
-				thisActivity.StartActivity(gprofileActivity);
-
-//				StartActivity (typeof(GuideProfileActivity));
-
-			};
-		}
-
-		public override int ItemCount{
-			get { return mGuides.Count; }
-		}
-	}
-		
-
-	public class CallAPI
-	{
-		public CallAPI()
-		{
-		}
-
-		public JsonValue PostFile (string p_url, string filename, string accessToken)
-		{
-			// Create an HTTP web request using the URL:
-			WebClient client = new WebClient();
-
-			Uri url = new Uri(p_url);
-
-			if (accessToken != null) {
-				client.Headers.Add("Authorization", String.Format("Bearer {0}", accessToken));
-			}
-
-			client.UploadValuesCompleted += Client_UploadValuesCompleted;
-			//@todo use UploadValuesAsync?
-			//byte[] result = 
-			client.UploadFileAsync (url, filename);
-		
-
-			return null;
-		}
-
-		public JsonValue PostDataSync (string p_url, NameValueCollection parameters, string accessToken)
-		{
-			// Create an HTTP web request using the URL:
-			WebClient client = new WebClient();
-
-			Uri url = new Uri(p_url);
-
-			if (accessToken != null) {
-				client.Headers.Add("Authorization", String.Format("Bearer {0}", accessToken));
-			}
-
-			client.UploadValuesCompleted += Client_UploadValuesCompleted;
-			//@todo use UploadValuesAsync?
-			byte[] result = client.UploadValues (url, parameters);
-
-			string s;
-			JsonValue json = "";
-			if (result != null) {
-				s = Encoding.UTF8.GetString (result);
-				json = JsonObject.Parse (s);
-			}
-
-			return json;
-			//			JsonValue json = JsonObject.Parse (s);
-
-			//		return json;
-		}
-
-		private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-			// Raw height and width of image
-			int height = options.OutHeight;
-			int width = options.OutWidth;
-			int inSampleSize = 1;
-
-			if (height > reqHeight || width > reqWidth) {
-
-				int halfHeight = height / 2;
-				int halfWidth = width / 2;
-
-				// Calculate the largest inSampleSize value that is a power of 2 and keeps both
-				// height and width larger than the requested height and width.
-				while ((halfHeight / inSampleSize) > reqHeight
-					&& (halfWidth / inSampleSize) > reqWidth) {
-					inSampleSize *= 2;
-				}
-			}
-
-			return inSampleSize;
-		}
-			
-		public async Task<Bitmap> getScaledImage (string imageUrl, int scaledWidth, int scaledHeight)
-		{
-			HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(new Uri (imageUrl));
-			request.ContentType = "image/png";
-			request.Method = "GET";
-			BitmapFactory.Options options = new BitmapFactory.Options();
-
-			// Send the request to the server and wait for the response:
-			Bitmap bitMap=null;
-			using (WebResponse response = await request.GetResponseAsync ()) {
-				// Get a stream representation of the HTTP web response:
-				using (System.IO.Stream stream = response.GetResponseStream ()) {
-					// Use this stream to build a JSON document object:
-					Rect outpadding = new Rect ();
-					options.InJustDecodeBounds = true;
-					bitMap = await Task.Run (() => BitmapFactory.DecodeStream (stream, null, options));
-					//Bitmap bitMap =  await Task.Run (() => BitmapFactory.DecodeStream(stream));
-
-					options.InSampleSize = calculateInSampleSize (options, scaledWidth, scaledHeight);
-				}
-			}
-			//@todo - reuse the stream!!
-			request = (HttpWebRequest)HttpWebRequest.Create (new Uri (imageUrl));
-			using (WebResponse response2= await request.GetResponseAsync ()) {
-				using (System.IO.Stream stream = response2.GetResponseStream ()) {
-					options.InJustDecodeBounds = false;
-
-					bitMap =  await Task.Run (() => BitmapFactory.DecodeStream(stream, null, options));
-					//BitmapFactory.decodeResource(getResources(), R.id.myimage, options);
-					int imageHeight = options.OutHeight;
-					int imageWidth = options.OutWidth;
-					String imageType = options.OutMimeType;
-
-					// Return the bitmap:
-					return bitMap;
-				}
-			}
-		}
-		public async Task<Bitmap> getImage (string imageUrl)
-		{
-			HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create (new Uri (imageUrl));
-			request.ContentType = "image/png";
-			request.Method = "GET";
-			BitmapFactory.Options options = new BitmapFactory.Options();
-
-			// Send the request to the server and wait for the response:
-			using (WebResponse response = await request.GetResponseAsync ())
-			{
-				// Get a stream representation of the HTTP web response:
-				using (System.IO.Stream stream = response.GetResponseStream ())
-				{
-					// Use this stream to build a JSON document object:
-					Rect outpadding = new Rect();
-					//options.InJustDecodeBounds = true;
-					//Bitmap bitMap =  await Task.Run (() => BitmapFactory.DecodeStream(stream, null, options));
-					Bitmap bitMap =  await Task.Run (() => BitmapFactory.DecodeStream(stream));
-
-					options.InSampleSize = calculateInSampleSize(options, Constants.ProfileReqWidth, Constants.ProfileReqHeight);
-					//options.InJustDecodeBounds = false;
-			//		bitMap =  await Task.Run (() => BitmapFactory.DecodeStream(stream, null, options));
-					//BitmapFactory.decodeResource(getResources(), R.id.myimage, options);
-					int imageHeight = options.OutHeight;
-					int imageWidth = options.OutWidth;
-					String imageType = options.OutMimeType;
-
-					//Console.Out.WriteLine("Response: {0}", jsonDoc.ToString ());
-
-					// Return the bitmap:
-					return bitMap;
-				}
-			}
-		}
-
-		public void PostWebApiData (string p_url, NameValueCollection parameters)
-		{
-			// Create an HTTP web request using the URL:
-			WebClient client = new WebClient();
-			Uri url = new Uri(p_url);	
-
-			client.UploadValuesCompleted += Client_UploadValuesCompleted;
-			client.UploadValuesAsync (url, parameters);
-		}
-
-		void Client_UploadValuesCompleted (object sender, UploadValuesCompletedEventArgs e)
-		{
-			
-		}	
-
-		public async Task<JsonValue> getWebApiData (string url, string accessToken)
-		{
-			// Create an HTTP web request using the URL:
-			HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create (new Uri (url));
-			if (accessToken != null) {
-				request.Headers.Add("Authorization", String.Format("Bearer {0}", accessToken));
-			}
-
-			request.ContentType = "application/json";
-			request.Method = "GET";
-
-			try
-			{
-				// Send the request to the server and wait for the response:
-				using (WebResponse response = await request.GetResponseAsync ())
-				{
-					try 
-					{
-						// Get a stream representation of the HTTP web response:
-						using (System.IO.Stream stream = response.GetResponseStream ())
-						{
-							// Use this stream to build a JSON document object:
-							JsonValue jsonDoc = await Task.Run (() => JsonObject.Load (stream));
-							//Console.Out.WriteLine("Response: {0}", jsonDoc.ToString ());
-
-							// Return the JSON document:
-							return jsonDoc;
-						}						
-					}
-					catch (Exception e)
-					{						
-						return null;
-					}
+				// If there are no guides, set the message
+				if (mGuideList.Count == 0) {
+					noGuides.Visibility = ViewStates.Visible;
+				} else {
+					noGuides.Visibility = ViewStates.Gone;
 				}				
 			}
-			catch (Exception e) {				
-				return null;
-			}
-
-		}			
+			return mGuideList;
+		}
 	}
 }
 

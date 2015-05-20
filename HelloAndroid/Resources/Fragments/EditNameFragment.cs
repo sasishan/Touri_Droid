@@ -45,7 +45,7 @@ namespace TouriDroid
 					string token = sm.getAuthorizedToken();
 					int guideId = sm.getGuideId();
 					//post data
-					CallAPI ca = new CallAPI();
+					Comms ca = new Comms();
 
 					NameValueCollection parameters = new NameValueCollection ();
 					parameters.Add (Constants.Guide_WebAPI_Key_FirstName, fname.Text);
