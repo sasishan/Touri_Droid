@@ -132,6 +132,7 @@
     <Compile Include="Resources\PlacesAutoComplete.cs" />
     <Compile Include="Resources\RecyclerAdapter.cs" />
     <Compile Include="Resources\Comms.cs" />
+    <Compile Include="Resources\ChatMessageAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -210,6 +211,8 @@
     <AndroidResource Include="Resources\layout\MapView.axml" />
     <AndroidResource Include="Resources\layout\RowwithDeleteLayout.axml" />
     <AndroidResource Include="Resources\drawable\map_icon_64.png" />
+    <AndroidResource Include="Resources\layout\chat_message_otherperson.axml" />
+    <AndroidResource Include="Resources\layout\chat_message.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

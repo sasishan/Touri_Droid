@@ -1,21 +1,10 @@
 ﻿<Properties StartupItem="HelloAndroid\TouriDroid.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.08f7f593031f50f3" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Comms.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\ChatMessageAdapter.cs">
     <Files>
-      <File FileName="HelloAndroid\Resources\Activities\MainActivity.cs" Line="73" Column="8" />
-      <File FileName="HelloAndroid\Resources\Activities\SecondActivity.cs" Line="116" Column="39" />
-      <File FileName="HelloAndroid\Resources\PlacesAutoComplete.cs" Line="83" Column="1" />
-      <File FileName="HelloAndroid\Resources\Constants.cs" Line="117" Column="67" />
-      <File FileName="HelloAndroid\Resources\Fragments\GuideFragment.cs" Line="210" Column="33" />
-      <File FileName="HelloAndroid\Resources\Comms.cs" Line="175" Column="5" />
-      <File FileName="HelloAndroid\Resources\Activities\GuideProfileActivity.cs" Line="111" Column="9" />
-      <File FileName="HelloAndroid\Resources\Fragments\ExpertiseFragment.cs" Line="195" Column="14" />
-      <File FileName="HelloAndroid\Resources\Fragments\SignInFragment.cs" Line="38" Column="22" />
-      <File FileName="HelloAndroid\Resources\Fragments\GuidingFragment.cs" Line="45" Column="21" />
-      <File FileName="HelloAndroid\Resources\Activities\ImageSelectActivity.cs" Line="58" Column="23" />
-      <File FileName="HelloAndroid\Resources\Fragments\EditNameFragment.cs" Line="48" Column="23" />
-      <File FileName="HelloAndroid\Resources\Fragments\EditDescriptionFragment.cs" Line="46" Column="23" />
-      <File FileName="HelloAndroid\Resources\RecyclerAdapter.cs" Line="140" Column="37" />
+      <File FileName="HelloAndroid\Resources\Activities\ActiveChat.cs" Line="60" Column="35" />
+      <File FileName="HelloAndroid\Resources\Constants.cs" Line="57" Column="12" />
+      <File FileName="HelloAndroid\Resources\ChatMessageAdapter.cs" Line="65" Column="49" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
@@ -25,4 +14,5 @@
     <Watch file="HelloAndroid\GuideFragment.cs" line="157" offsetX="844" offsetY="2496" expression="this.Activity.mPlace" liveUpdate="False" />
     <Watch file="HelloAndroid\Resources\SupportFunctions.cs" line="132" offsetX="501" offsetY="2096" expression="c.Tag" liveUpdate="False" />
   </MonoDevelop.Ide.DebuggingService.PinnedWatches>
+  <MonoDevelop.Ide.ItemProperties.TouriDroid AndroidDesignerPreferredDevice="Nexus 4" />
 </Properties>

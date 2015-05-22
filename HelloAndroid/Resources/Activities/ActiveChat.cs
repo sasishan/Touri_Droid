@@ -42,20 +42,29 @@ namespace TouriDroid
 
 			ChatClient client = new ChatClient (myUsername, targetUserName);
 
-			var input = FindViewById<EditText> (Resource.Id.Input);
+			var input = FindViewById<EditText> (Resource.Id.inputChat);
 			var messages = FindViewById<ListView> (Resource.Id.Messages);
+			messages.TranscriptMode = TranscriptMode.AlwaysScroll;
 
 			var inputManager = (InputMethodManager)GetSystemService (InputMethodService);
 
 			DataManager dm = new DataManager ();
 			dm.SetContext (this);
 			List<ChatMessage> myChatMessages = dm.GetMessagesFromUser(myUsername, targetUserName);
-			List<string> myMessages = new List<string>();
+			List<ChatItem> myMessages = new List<ChatItem>();
 			foreach (ChatMessage m in myChatMessages) {
-				myMessages.Add (targetUserName + " ["+m.Msgtimestamp+"]: "+ m.Message);
+				ChatItem oneChatItem = new ChatItem ();
+				oneChatItem.message = m.Message;
+				oneChatItem.messageTimestamp = m.Msgtimestamp;
+				oneChatItem.user = m.FromUser;
+				oneChatItem.myMessage = false;
+				myMessages.Add (oneChatItem);
+				//myMessages.Add (targetUserName + " ["+m.Msgtimestamp+"]: "+ m.Message);
 			}
 
-			var adapter = new ArrayAdapter<string> (this, Android.Resource.Layout.SimpleListItem1, myMessages);
+			//var adapter = new ArrayAdapter<string> (this, Android.Resource.Layout.SimpleListItem1, myMessages);
+
+			var adapter = new ChatMessageAdapter(this, myMessages);
 			messages.Adapter = adapter;
 
 			await client.Connect();
@@ -76,8 +85,14 @@ namespace TouriDroid
 				//client.Send(input.Text);
 				//Send the message and reflect it back on the screen
 				client.SendPrivateMessage(input.Text);
-
-				adapter.Add(myUsername + " ["+ DateTime.Now+"]: "+ input.Text);
+			
+				ChatItem oneNewChatItem = new ChatItem();
+				oneNewChatItem.message = input.Text;
+				oneNewChatItem.user = "Me";
+				oneNewChatItem.messageTimestamp=DateTime.Now.ToString();
+				oneNewChatItem.myMessage= true;
+				myMessages.Add(oneNewChatItem);
+				adapter.NotifyDataSetChanged();
 				input.Text ="";
 			};
 
@@ -97,7 +112,16 @@ namespace TouriDroid
 			);
 			//client._myUsername=message
 			client.OnMessageReceived+=(sender, message) => RunOnUiThread( () =>
-				adapter.Add(message.message)
+				{	ChatItem oneNewChatItem = new ChatItem();
+					oneNewChatItem.message = message.message;
+					oneNewChatItem.user = message.fromUser;
+					oneNewChatItem.messageTimestamp=DateTime.Now.ToString();
+					myMessages.Add(oneNewChatItem);
+					//@todo check if my message
+					oneNewChatItem.myMessage= false;
+					adapter.NotifyDataSetChanged();
+				}
+				//adapter.Add(message.message)
 			);
 		}
 
