@@ -28,7 +28,6 @@ namespace TouriDroid
 			var view = inflater.Inflate(Resource.Layout.SignupCities, container, false);
 			List<string> locations = new List<string> ();
 			Toast toast = new Toast(view.Context);
-			ToastLength duration = ToastLength.Short;
 
 			AutoCompleteTextView searchPlaces = (AutoCompleteTextView) view.FindViewById (Resource.Id.search_places);
 

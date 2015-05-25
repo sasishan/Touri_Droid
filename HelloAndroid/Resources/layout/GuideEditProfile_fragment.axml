@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@color/light_blue"
+        android:background="@android:color/darker_gray"
         android:layout_gravity="top">
         <ImageView
             android:layout_width="fill_parent"
@@ -25,107 +25,235 @@
             android:textOff="Offline for Chat"
             android:textColor="@color/black"
             android:layout_gravity="center" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="5dp"
+            android:weightSum="100">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:gravity="left|center_vertical"
+                android:textColor="@color/black"
+                android:text="Username"
+                android:layout_weight="100" />
+        </LinearLayout>
         <TextView
             android:id="@+id/guideUsername"
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:textSize="18dp"
-            android:gravity="center"
+            android:layout_height="40dp"
+            android:minHeight="20dp"
+            android:textSize="16dp"
+            android:gravity="left|center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:padding="10dp"
             android:textColor="@color/black"
             android:background="@color/white" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:weightSum="100">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:gravity="left|center_vertical"
+                android:textColor="@color/black"
+                android:text="Name"
+                android:layout_weight="10" />
+            <TextView
+                android:id="@+id/editGuideName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:textSize="12dp"
+                android:gravity="left|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="@android:color/holo_red_dark"
+                android:layout_weight="90" />
+        </LinearLayout>
         <TextView
             android:id="@+id/guideName"
             android:layout_width="fill_parent"
             android:layout_height="100dp"
-            android:textSize="18dp"
-            android:gravity="center"
+            android:textSize="16dp"
+            android:gravity="left|center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:padding="10dp"
             android:textColor="@color/black"
             android:background="@color/white" />
-        <TextView
-            android:id="@+id/editGuideName"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Edit name"
-            android:textSize="15dp"
-            android:gravity="center"
-            android:paddingBottom="20dp"
-            android:textColor="@android:color/holo_red_dark"
-            android:background="@color/white" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:weightSum="100">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:gravity="left|center_vertical"
+                android:textColor="@color/black"
+                android:text="144 Word Summary"
+                android:layout_weight="10" />
+            <TextView
+                android:id="@+id/editShortAboutme"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:textSize="12dp"
+                android:gravity="left|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="@android:color/holo_red_dark"
+                android:layout_weight="90" />
+        </LinearLayout>
         <TextView
             android:id="@+id/shortAboutme"
             android:layout_width="fill_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
             android:layout_marginTop="1dp"
-            android:textSize="18dp"
-            android:gravity="center"
+            android:textSize="16dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:padding="10dp"
+            android:gravity="left|center"
             android:textColor="@color/black"
             android:background="@color/white" />
-        <TextView
-            android:id="@+id/editShortAboutme"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Edit short about me"
-            android:textSize="15dp"
-            android:gravity="center"
-            android:paddingBottom="20dp"
-            android:textColor="@android:color/holo_red_dark"
-            android:background="@color/white" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:weightSum="100">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:gravity="left|center_vertical"
+                android:textColor="@color/black"
+                android:text="About Me"
+                android:layout_weight="10" />
+            <TextView
+                android:id="@+id/editAboutme"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:textSize="12dp"
+                android:gravity="left|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="@android:color/holo_red_dark"
+                android:layout_weight="90" />
+        </LinearLayout>
         <TextView
             android:id="@+id/aboutme"
             android:layout_width="fill_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="1dp"
-            android:textSize="18dp"
-            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:padding="10dp"
+            android:textSize="16dp"
+            android:gravity="left|center"
             android:textColor="@color/black"
             android:background="@color/white" />
-        <TextView
-            android:id="@+id/editAboutme"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Edit about me"
-            android:textSize="15dp"
-            android:gravity="center"
-            android:paddingBottom="20dp"
-            android:textColor="@android:color/holo_red_dark"
-            android:background="@color/white" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:weightSum="100">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:gravity="left|center_vertical"
+                android:textColor="@color/black"
+                android:text="Locations You Serve"
+                android:layout_weight="10" />
+            <TextView
+                android:id="@+id/editLocations"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:textSize="12dp"
+                android:gravity="left|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="@android:color/holo_red_dark"
+                android:layout_weight="90" />
+        </LinearLayout>
         <TextView
             android:id="@+id/locations"
             android:layout_width="fill_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="1dp"
-            android:textSize="18dp"
-            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textSize="16dp"
+            android:padding="10dp"
+            android:gravity="left|center"
             android:textColor="@color/black"
             android:background="@color/white" />
-        <TextView
-            android:id="@+id/editLocations"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Edit locations I serve"
-            android:textSize="15dp"
-            android:gravity="center"
-            android:paddingBottom="20dp"
-            android:textColor="@android:color/holo_red_dark"
-            android:background="@color/white" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:weightSum="100">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:gravity="left|center_vertical"
+                android:textColor="@color/black"
+                android:text="Languages You Speak"
+                android:layout_weight="10" />
+            <TextView
+                android:id="@+id/editLanguages"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:textSize="12dp"
+                android:gravity="left|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="@android:color/holo_red_dark"
+                android:layout_weight="90" />
+        </LinearLayout>
         <TextView
             android:id="@+id/languages"
             android:layout_width="fill_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="1dp"
-            android:textSize="18dp"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:background="@color/white" />
-        <TextView
-            android:id="@+id/editLanguages"
-            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Edit languages I speak"
-            android:textSize="15dp"
-            android:gravity="center"
-            android:paddingBottom="20dp"
-            android:textColor="@android:color/holo_red_dark"
+            android:minHeight="100dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:padding="10dp"
+            android:textSize="16dp"
+            android:gravity="left|center"
+            android:textColor="@color/black"
             android:background="@color/white" />
         <ListView
             android:layout_width="fill_parent"

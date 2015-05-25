@@ -213,6 +213,8 @@
     <AndroidResource Include="Resources\drawable\map_icon_64.png" />
     <AndroidResource Include="Resources\layout\chat_message_otherperson.axml" />
     <AndroidResource Include="Resources\layout\chat_message.axml" />
+    <AndroidResource Include="Resources\drawable\user_bubble_bl.9.png" />
+    <AndroidResource Include="Resources\drawable\my_bubble_bl.9.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

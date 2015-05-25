@@ -1,14 +1,15 @@
 ﻿<Properties StartupItem="HelloAndroid\TouriDroid.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.08f7f593031f50f3" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\ChatMessageAdapter.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Constants.cs">
     <Files>
-      <File FileName="HelloAndroid\Resources\Activities\ActiveChat.cs" Line="60" Column="35" />
-      <File FileName="HelloAndroid\Resources\Constants.cs" Line="57" Column="12" />
-      <File FileName="HelloAndroid\Resources\ChatMessageAdapter.cs" Line="65" Column="49" />
+      <File FileName="HelloAndroid\Resources\Constants.cs" Line="310" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Comms.cs" line="214" column="30" />
+      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Comms.cs" line="227" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="HelloAndroid\GuideFragment.cs" line="157" offsetX="844" offsetY="2496" expression="this.Activity.mPlace" liveUpdate="False" />

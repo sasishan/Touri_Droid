@@ -218,12 +218,12 @@ namespace TouriDroid
 				}				
 			}
 			catch (Exception e) {
-				if (e.InnerException!=null)
-				{
-					Log.Debug(TAG, e.InnerException.ToString());
+				if (e.InnerException != null) {
+					Log.Debug (TAG, e.InnerException.ToString ());
+				} else if (e.Message != null) {
+					Log.Debug (TAG, e.Message);
 				}
-				else
-				{
+				else {
 					Log.Debug(TAG, "Error in comms");
 				}				
 				return null;

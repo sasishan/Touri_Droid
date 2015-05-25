@@ -1872,16 +1872,22 @@ namespace TouriDroid
 			public const int museum37 = 2130837648;
 			
 			// aapt resource value: 0x7f020091
-			public const int placeholder_photo = 2130837649;
+			public const int my_bubble_bl = 2130837649;
 			
 			// aapt resource value: 0x7f020092
-			public const int powered_by_google_dark = 2130837650;
+			public const int placeholder_photo = 2130837650;
 			
 			// aapt resource value: 0x7f020093
-			public const int powered_by_google_light = 2130837651;
+			public const int powered_by_google_dark = 2130837651;
 			
 			// aapt resource value: 0x7f020094
-			public const int touri_logo = 2130837652;
+			public const int powered_by_google_light = 2130837652;
+			
+			// aapt resource value: 0x7f020095
+			public const int touri_logo = 2130837653;
+			
+			// aapt resource value: 0x7f020096
+			public const int user_bubble_bl = 2130837654;
 			
 			static Drawable()
 			{
@@ -1917,8 +1923,8 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c00a1
 			public const int about_text = 2131493025;
 			
-			// aapt resource value: 0x7f0c0099
-			public const int aboutme = 2131493017;
+			// aapt resource value: 0x7f0c009a
+			public const int aboutme = 2131493018;
 			
 			// aapt resource value: 0x7f0c00a7
 			public const int acceptButton = 2131493031;
@@ -2109,20 +2115,20 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c00d1
 			public const int dynamicSelections = 2131493073;
 			
-			// aapt resource value: 0x7f0c009a
-			public const int editAboutme = 2131493018;
+			// aapt resource value: 0x7f0c0099
+			public const int editAboutme = 2131493017;
 			
-			// aapt resource value: 0x7f0c0096
-			public const int editGuideName = 2131493014;
+			// aapt resource value: 0x7f0c0095
+			public const int editGuideName = 2131493013;
 			
 			// aapt resource value: 0x7f0c009d
 			public const int editLanguages = 2131493021;
 			
-			// aapt resource value: 0x7f0c009c
-			public const int editLocations = 2131493020;
+			// aapt resource value: 0x7f0c009b
+			public const int editLocations = 2131493019;
 			
-			// aapt resource value: 0x7f0c0098
-			public const int editShortAboutme = 2131493016;
+			// aapt resource value: 0x7f0c0097
+			public const int editShortAboutme = 2131493015;
 			
 			// aapt resource value: 0x7f0c0056
 			public const int edit_query = 2131492950;
@@ -2190,8 +2196,8 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c0070
 			public const int guideContentLayout = 2131492976;
 			
-			// aapt resource value: 0x7f0c0095
-			public const int guideName = 2131493013;
+			// aapt resource value: 0x7f0c0096
+			public const int guideName = 2131493014;
 			
 			// aapt resource value: 0x7f0c0094
 			public const int guideUsername = 2131493012;
@@ -2265,8 +2271,8 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c00d4
 			public const int lname = 2131493076;
 			
-			// aapt resource value: 0x7f0c009b
-			public const int locations = 2131493019;
+			// aapt resource value: 0x7f0c009c
+			public const int locations = 2131493020;
 			
 			// aapt resource value: 0x7f0c0079
 			public const int locationsServed = 2131492985;
@@ -2439,8 +2445,8 @@ namespace TouriDroid
 			// aapt resource value: 0x7f0c00b6
 			public const int settings = 2131493046;
 			
-			// aapt resource value: 0x7f0c0097
-			public const int shortAboutme = 2131493015;
+			// aapt resource value: 0x7f0c0098
+			public const int shortAboutme = 2131493016;
 			
 			// aapt resource value: 0x7f0c004d
 			public const int shortcut = 2131492941;

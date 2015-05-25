@@ -24,8 +24,6 @@ namespace TouriDroid
 		public override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
-
-			// Create your fragment here
 		}
 
 		public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -45,6 +43,12 @@ namespace TouriDroid
 			Comms ca = new Comms ();
 			string url = Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile;
 			var json = await ca.getWebApiData (url, token);
+
+			if (json == null) {
+				Toast.MakeText(view.Context, "Not authorized", ToastLength.Short).Show ();
+				Activity.Finish ();
+				return;
+			}
 			Guide myProfile = parseGuideProfiles (json);
 			((GuidingActivity)Activity).currentGuide = myProfile;
 

@@ -16,9 +16,9 @@
         android:id="@+id/singleMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dip"
+        android:layout_margin="10dip"
         android:paddingLeft="10dip"
         android:paddingRight="10dip"
         android:textSize="18dp"
-        android:textColor="@android:color/primary_text_dark" />
+        android:textColor="@color/black" />
 </LinearLayout>

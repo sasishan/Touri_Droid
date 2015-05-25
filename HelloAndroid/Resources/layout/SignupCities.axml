@@ -1,53 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_centerInParent="true"
-    android:background="@drawable/linearlayout_bg"
-    android:layout_marginTop="20dp"
-    android:padding="20dp"
-    android:layout_gravity="top">
-    <TextView
-        android:id="@+id/locationsText"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Location you specialise in"
-        android:layout_marginBottom="20dp" />
-    <AutoCompleteTextView
-        android:id="@+id/search_places"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:hint="Locations you can guide in"
-        android:minWidth="150dp"
-        android:imeOptions="actionNext">
-        <requestFocus />
-    </AutoCompleteTextView>
-    <Button
-        android:id="@+id/addCity"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:text="Add Location"
-        style="@style/DefaultButtonText"
-        android:background="@drawable/button_default_bg" />
-    <LinearLayout
-        android:id="@+id/dynamicSelections"
+    android:fillViewport="true">
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <Button
-        android:id="@+id/buttonNext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_margin="10dp"
-        android:text="@string/Next"
-        style="@style/DefaultButtonText"
-        android:background="@drawable/button_default_bg" />
-</LinearLayout>
+        android:layout_centerInParent="true"
+        android:background="@drawable/linearlayout_bg"
+        android:layout_marginTop="20dp"
+        android:padding="20dp"
+        android:layout_gravity="top">
+        <TextView
+            android:id="@+id/locationsText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Location you specialise in"
+            android:layout_marginBottom="20dp" />
+        <AutoCompleteTextView
+            android:id="@+id/search_places"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:hint="Locations you can guide in"
+            android:minWidth="150dp"
+            android:imeOptions="actionNext">
+            <requestFocus />
+        </AutoCompleteTextView>
+        <Button
+            android:id="@+id/addCity"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:text="Add Location"
+            style="@style/DefaultButtonText"
+            android:background="@drawable/button_default_bg" />
+        <LinearLayout
+            android:id="@+id/dynamicSelections"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/buttonNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:text="@string/Next"
+            style="@style/DefaultButtonText"
+            android:background="@drawable/button_default_bg" />
+    </LinearLayout>
+</ScrollView>
