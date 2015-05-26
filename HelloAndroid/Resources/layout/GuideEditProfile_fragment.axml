@@ -10,12 +10,25 @@
         android:layout_centerInParent="true"
         android:background="@android:color/darker_gray"
         android:layout_gravity="top">
-        <ImageView
+        <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="250dp"
-            android:id="@+id/guide_photo"
-            android:scaleType="centerCrop"
-            android:layout_alignParentTop="true" />
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="250dp"
+                android:id="@+id/guide_photo"
+                android:scaleType="centerCrop"
+                android:layout_alignParentTop="true" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/camera"
+                android:src="@drawable/camera"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="30dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
         <Switch
             android:id="@+id/toggleChatOn"
             android:layout_width="wrap_content"
@@ -250,6 +263,7 @@
             android:minHeight="100dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
             android:padding="10dp"
             android:textSize="16dp"
             android:gravity="left|center"

@@ -1,15 +1,17 @@
 ﻿<Properties StartupItem="HelloAndroid\TouriDroid.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.08f7f593031f50f3" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Constants.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Activities\ActiveChat.cs">
     <Files>
-      <File FileName="HelloAndroid\Resources\Constants.cs" Line="310" Column="2" />
+      <File FileName="HelloAndroid\Resources\Constants.cs" Line="362" Column="36" />
+      <File FileName="HelloAndroid\Resources\SupportFunctions.cs" Line="216" Column="32" />
+      <File FileName="HelloAndroid\Resources\Activities\ActiveChat.cs" Line="152" Column="6" />
+      <File FileName="HelloAndroid\Resources\Fragments\ExpertiseFragment.cs" Line="104" Column="40" />
+      <File FileName="c:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Activities\MainActivity.cs" Line="444" Column="31" />
+      <File FileName="c:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Fragments\ChatListFragment.cs" Line="79" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Comms.cs" line="214" column="30" />
-      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Comms.cs" line="227" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="HelloAndroid\GuideFragment.cs" line="157" offsetX="844" offsetY="2496" expression="this.Activity.mPlace" liveUpdate="False" />

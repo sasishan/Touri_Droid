@@ -95,6 +95,7 @@ namespace TouriDroid
 			TextView locations = view.FindViewById<TextView> (Resource.Id.locations);
 			TextView languages = view.FindViewById<TextView> (Resource.Id.languages);
 			ImageView photo = view.FindViewById<ImageView> (Resource.Id.guide_photo);
+			ImageView changePhoto = view.FindViewById<ImageView> (Resource.Id.camera);
 
 			TextView editName = view.FindViewById<TextView> (Resource.Id.editGuideName);
 			TextView editAboutMe = view.FindViewById<TextView> (Resource.Id.editAboutme);
@@ -134,14 +135,12 @@ namespace TouriDroid
 				}
 			};
 
-			photo.Click += (sender, e) => 
+			changePhoto.Click += (sender, e) => 
 			{
 				var selectImage = new Intent (Activity, typeof(ImageSelectActivity));
 				selectImage.PutExtra (Constants.guideId, myProfile.guideId);
 
 				this.StartActivity(selectImage);
-
-
 			};
 
 			editName.Click += (sender, e) => 
@@ -175,8 +174,6 @@ namespace TouriDroid
 			{
 			};
 		}
-
-
 
 		public void onToggleClicked(View view) {
 			// Is the toggle on?

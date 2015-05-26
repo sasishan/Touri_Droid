@@ -73,12 +73,7 @@ namespace TouriDroid
 				Log.Debug (TAG, "Failed to configure the left drawer");
 				return;
 			}
-
-			returnVal = configureTabs ();
-			if (returnVal == Constants.FAIL) {
-				Log.Debug (TAG, "Failed to configure the tabs");
-			}
-
+				
 			SupportActionBar.SetDisplayHomeAsUpEnabled (true);
 			SupportActionBar.SetHomeButtonEnabled (true);
 
@@ -89,6 +84,11 @@ namespace TouriDroid
 				ft.Add (Resource.Id.main_fragment_container, newFragment);
 				mCurrentFragment = typeof(ExpertiseFragment);
 				ft.Commit ();
+			}
+
+			returnVal = configureTabs ();
+			if (returnVal == Constants.FAIL) {
+				Log.Debug (TAG, "Failed to configure the tabs");
 			}
 		}	
 
@@ -203,7 +203,13 @@ namespace TouriDroid
 			else if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.DrawerOptionLogout)) 
 			{
 				SessionManager sm = new SessionManager (this);
-				sm.logoutUser ();
+
+				sm.logoutUser();
+				StopService (new Intent (this, typeof(ChatService)));
+
+				//Logger logger = new Logger ();
+
+				//logger.LogOut (sm, this);
 				mDrawer.CloseDrawers ();
 
 				Intent i = new Intent (this, typeof(MainActivity));
@@ -325,7 +331,7 @@ namespace TouriDroid
 			string mPlace = "Toronto, ON, Canada";
 			var g = new Geocoder (this);
 
-			IList<Address> address = g.GetFromLocation (lati, longi,1);
+			IList<Address> address = g.GetFromLocation (lati, longi, 1);
 			if (address.Count > 0) {
 				mPlace = (address [0].SubLocality ?? (address [0].Locality ?? "")) + ", " + (address [0].AdminArea ?? "") + ", " + (address [0].CountryName ?? "");
 			}
@@ -435,7 +441,7 @@ namespace TouriDroid
 
 				tab =  SupportActionBar.NewTab ();
 				tab.SetTabListener(this);
-				tab.SetText ("Chat");
+				tab.SetText ("Chat History");
 
 				SupportActionBar.AddTab (tab);
 

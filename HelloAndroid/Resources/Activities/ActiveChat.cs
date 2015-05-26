@@ -18,7 +18,7 @@ namespace TouriDroid
 	[Activity (Label = "Chat", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
 	public class ActiveChat : Activity
 	{
-		
+		ChatClient mClient = null;	
 		protected override async void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
@@ -40,7 +40,7 @@ namespace TouriDroid
 				myUsername = sm.getEmail ();
 			}
 
-			ChatClient client = new ChatClient (myUsername, targetUserName);
+			mClient = new ChatClient (myUsername, targetUserName);
 
 			var input = FindViewById<EditText> (Resource.Id.inputChat);
 			var messages = FindViewById<ListView> (Resource.Id.Messages);
@@ -50,14 +50,20 @@ namespace TouriDroid
 
 			DataManager dm = new DataManager ();
 			dm.SetContext (this);
+
 			List<ChatMessage> myChatMessages = dm.GetMessagesFromUser(myUsername, targetUserName);
 			List<ChatItem> myMessages = new List<ChatItem>();
+
 			foreach (ChatMessage m in myChatMessages) {
 				ChatItem oneChatItem = new ChatItem ();
 				oneChatItem.message = m.Message;
 				oneChatItem.messageTimestamp = m.Msgtimestamp;
 				oneChatItem.user = m.FromUser;
 				oneChatItem.myMessage = false;
+				if (m.MyResponse == Constants.MyResponseYes) {
+					oneChatItem.myMessage = true;
+					oneChatItem.user = "Me";
+				}
 				myMessages.Add (oneChatItem);
 				//myMessages.Add (targetUserName + " ["+m.Msgtimestamp+"]: "+ m.Message);
 			}
@@ -67,11 +73,12 @@ namespace TouriDroid
 			var adapter = new ChatMessageAdapter(this, myMessages);
 			messages.Adapter = adapter;
 
-			await client.Connect();
+			await mClient.Connect();
+
 
 			// if i'm not logged in, get a username from the chat hub
 			if (sm.isLoggedIn () == false) {
-				await client.SendMyUsername();
+				await mClient.SendMyUsername();
 			}
 				
 			Button button = FindViewById<Button>(Resource.Id.sendMessageButton);
@@ -84,14 +91,26 @@ namespace TouriDroid
 
 				//client.Send(input.Text);
 				//Send the message and reflect it back on the screen
-				client.SendPrivateMessage(input.Text);
+				mClient.SendPrivateMessage(input.Text);
 			
 				ChatItem oneNewChatItem = new ChatItem();
 				oneNewChatItem.message = input.Text;
 				oneNewChatItem.user = "Me";
 				oneNewChatItem.messageTimestamp=DateTime.Now.ToString();
 				oneNewChatItem.myMessage= true;
+
+				//add this to the listview to show it on screen
 				myMessages.Add(oneNewChatItem);
+
+				//add it to the Database as well
+				ChatMessage cm = new ChatMessage();
+				cm.Message = input.Text;
+				cm.FromUser=targetUserName;
+				cm.ToUser=myUsername;
+				cm.Msgtimestamp = oneNewChatItem.messageTimestamp;
+				cm.MyResponse=Constants.MyResponseYes; // this is my response
+				dm.AddMessage(cm);
+
 				adapter.NotifyDataSetChanged();
 				input.Text ="";
 			};
@@ -107,11 +126,11 @@ namespace TouriDroid
 		//		client.Send(input.Text);
 		//		input.Text ="";
 		//	};*/	
-			client.ReceiveMyUserName+=(sender, message) => RunOnUiThread( () =>
-				{client._myUsername=message;}
+			mClient.ReceiveMyUserName+=(sender, message) => RunOnUiThread( () =>
+				{mClient._myUsername=message;}
 			);
 			//client._myUsername=message
-			client.OnMessageReceived+=(sender, message) => RunOnUiThread( () =>
+			mClient.OnMessageReceived+=(sender, message) => RunOnUiThread( () =>
 				{	ChatItem oneNewChatItem = new ChatItem();
 					oneNewChatItem.message = message.message;
 					oneNewChatItem.user = message.fromUser;
@@ -129,6 +148,9 @@ namespace TouriDroid
 		{
 			switch (item.ItemId) {
 			case Android.Resource.Id.Home:
+				if (mClient != null) {
+					mClient.disconnect ();
+				}
 				Finish ();
 				return true;
 			default:

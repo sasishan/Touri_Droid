@@ -5,13 +5,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_centerInParent="true"
-    android:paddingBottom="10dp"
     android:paddingTop="1dp"
     android:layout_gravity="top">
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp">
+        android:layout_marginTop="45dp"
+        android:layout_marginBottom="40dp">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
@@ -98,29 +98,13 @@
         </LinearLayout>
     </ScrollView>
     <Button
-        android:layout_width="100dp"
+        android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:id="@+id/ChatButton"
-        android:textSize="15sp"
-        android:text="Chat"
-        android:layout_marginRight="5dp"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/EmailButton" />
-    <Button
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:id="@+id/EmailButton"
-        android:textSize="15sp"
-        android:text="Message"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true" />
-    <Button
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:id="@+id/CallButton"
-        android:textSize="15sp"
-        android:text="Call"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/EmailButton" />
+        android:textSize="16sp"
+        android:text="Chat Now"
+        android:textStyle="bold"
+        android:background="@android:color/holo_blue_dark"
+        android:layout_margin="1dp"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

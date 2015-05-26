@@ -2,9 +2,30 @@
 using Android.Graphics;
 using System.Collections.Generic;
 using System.Json;
+using Android.App;
+using Android.Content;
 
 namespace TouriDroid
 {
+	public class Logger 
+	{
+		public int LogOut(SessionManager sm, Activity a)
+		{
+			sm.logoutUser();
+			a.StopService (new Intent (a, typeof(ChatService)));
+
+			return Constants.SUCCESS;
+		}
+
+		public int LogIn(SessionManager sm, Activity a)
+		{
+			return Constants.SUCCESS;
+		//	sm.createLoginSession();
+		//	a.StopService (new Intent (this, typeof(ChatService)));
+		}
+
+	}
+
 	public class Converter
 	{
 		public Color getOnlineStatusColor (int availability)
@@ -52,6 +73,38 @@ namespace TouriDroid
 			return status;
 		}
 
+		public ChatMessage parseOneChatMessage(JsonValue json)
+		{
+			if (json == null) {
+				return null;
+			}
+
+			ChatMessage cm = new ChatMessage ();
+
+			JsonValue values = json;
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_FromUser)) {
+				string fromUser = values [Constants.Guide_WebAPI_Key_FromUser];
+				cm.FromUser = fromUser;
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_ToUser)) {
+				string toUser = values [Constants.Guide_WebAPI_Key_ToUser];
+				cm.ToUser = toUser;
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Message)) {
+				string message = values [Constants.Guide_WebAPI_Key_Message];
+				cm.Message = message;
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Msg_TimeStampe)) {
+				string timestamp = values [Constants.Guide_WebAPI_Key_Msg_TimeStampe];
+				cm.Msgtimestamp = timestamp;
+			}
+
+			return cm;
+		}
 
 
 		public Guide parseOneGuideProfile(JsonValue json)
@@ -153,6 +206,8 @@ namespace TouriDroid
 		public const int Main_Expertise_Tab=0;
 		public const int Main_Chat_Tab=1;
 
+		public const int MyResponseYes = 1;
+		public const int MyResponseNo = 0;
 
 		//URL values for WebApi calls
 		public const string DEBUG_BASE_IP = "http://192.168.0.28";
@@ -169,6 +224,7 @@ namespace TouriDroid
 		public const string URL_PutProfileImage = "/{0}/profileImage";
 		public const string URL_PutGuideDescription = "/{0}/description";
 		public const string URL_PutGuideSummary= "/{0}/summary";
+		public const string URL_MyMessages= "/api/messages";
 
 		// WebApi Keys
 		public const string Guide_WebAPI_Key_Username="username";
@@ -194,6 +250,12 @@ namespace TouriDroid
 		public const string Guide_WebAPI_Key_ExpertiseId ="expertiseId";
 		public const string Guide_WebAPI_Key_ProfileImageId ="profileImage";
 
+		//Chat messages json
+		public const string Guide_WebAPI_Key_Msg_Id="id";
+		public const string Guide_WebAPI_Key_FromUser="fromUser";
+		public const string Guide_WebAPI_Key_ToUser="toUser";
+		public const string Guide_WebAPI_Key_Message="message";
+		public const string Guide_WebAPI_Key_Msg_TimeStampe="timeStamp";
 
 		// Availability Values - this is stored in the Database for each guide to indicate availability
 		public const int AvailableNowValue = 1;
@@ -296,14 +358,15 @@ namespace TouriDroid
 
 		//Expertise images
 		//This must match the Expertises table
-		//@todo pull dynamically
-		public static List<Tuple<int,int, string, int>> ExpertiseImages = new List<Tuple<int,int, string, int>> {
-					Tuple.Create(Resource.Drawable.bar48, Resource.Drawable.bar48_pressed, "Hot Spots", 1),
-					Tuple.Create(Resource.Drawable.cup54, Resource.Drawable.cup54, "Local life", 6),
-					Tuple.Create(Resource.Drawable.camera, Resource.Drawable.camera, "Landmarks", 5),
-					Tuple.Create(Resource.Drawable.lunch4, Resource.Drawable.lunch4, "Restaurants", 4),
-					Tuple.Create(Resource.Drawable.hiking48, Resource.Drawable.hiking48_pressed, "Outdoors", 7),
-					Tuple.Create(Resource.Drawable.museum37, Resource.Drawable.museum37, "Museums", 2)
+		//Up image, down image, expertise name, expertise ID (matches Expertise table in DB)
+		//don't use the '&' sign in names
+		public static List<Tuple<int,int, string, int>> ExpertiseImages = new List<Tuple<int,int, string, int>> {					
+					Tuple.Create(Resource.Drawable.cup54, Resource.Drawable.cup54, "Cool and Unique", 1),
+					Tuple.Create(Resource.Drawable.cup54, Resource.Drawable.cup54, "Food, Drinks and Fun", 2),
+					Tuple.Create(Resource.Drawable.museum37, Resource.Drawable.museum37, "Art and Museums", 4),
+					Tuple.Create(Resource.Drawable.museum37, Resource.Drawable.museum37, "History", 5),
+					Tuple.Create(Resource.Drawable.hiking48, Resource.Drawable.hiking48_pressed, "Outdoors", 6),
+					Tuple.Create(Resource.Drawable.bar48, Resource.Drawable.bar48_pressed, "Special Events", 7)
 		};
 
 	}

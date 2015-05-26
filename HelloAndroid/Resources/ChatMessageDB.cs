@@ -15,6 +15,9 @@ namespace TouriDroid
 		public String ToUser { get; set; }
 		public String Message { get; set; }
 		public String Msgtimestamp { get; set; }
+		public int MyResponse { get; set; }  //set this to 1 (TRUE) if its a response from the current user
+		//public char downloaded { get; set; }
+		//public string lastDownloaded { get; set; }
 
 		public override string ToString()
 		{
@@ -30,12 +33,14 @@ namespace TouriDroid
 		//public const String COLUMN_NAME_ENTRY_ID = "entryid";
 		public const String COLUMN_FROMUSER_TITLE = "FromUser";
 		public const String COLUMN_TOUSER_SUBTITLE = "ToUser";
+		public const String COLUMN_MYRESPONSE_SUBTITLE = "MyResponse";
 		public const String COLUMN_MESSAGE = "Message";
 		public const String COLUMN_TIMESTAMP = "Msgtimestamp";
 	}
 
 	public static class ChatMessageContract {
 		public const String TEXT_TYPE = " TEXT";
+		public const String INT_TYPE = " INTEGER";
 		private const String COMMA_SEP = ",";
 
 		public const String SQL_CREATE_ENTRIES =
@@ -43,6 +48,7 @@ namespace TouriDroid
 			ChatMessageEntry._ID + " INTEGER PRIMARY KEY," +
 			ChatMessageEntry.COLUMN_FROMUSER_TITLE + TEXT_TYPE + COMMA_SEP +
 			ChatMessageEntry.COLUMN_TOUSER_SUBTITLE + TEXT_TYPE + COMMA_SEP +
+			ChatMessageEntry.COLUMN_MYRESPONSE_SUBTITLE + INT_TYPE + COMMA_SEP +
 			ChatMessageEntry.COLUMN_MESSAGE + TEXT_TYPE + COMMA_SEP +
 			ChatMessageEntry.COLUMN_TIMESTAMP +	TEXT_TYPE +
 				" )";

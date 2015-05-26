@@ -76,6 +76,7 @@ namespace TouriDroid
 				cm.FromUser = message.fromUser;
 				cm.ToUser = myUsername;
 				cm.Message = message.message;
+				cm.MyResponse=Constants.MyResponseNo;
 				cm.Msgtimestamp = DateTime.Now.ToString ();
 
 				// dont record messages from myself back (eg. could not deliver a message is returned)

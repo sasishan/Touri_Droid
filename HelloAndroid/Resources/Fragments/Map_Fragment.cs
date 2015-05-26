@@ -32,7 +32,6 @@ namespace TouriDroid
 
 		public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
-
 			//_locationManager = Activity.GetSystemService (Context.LocationService) as LocationManager;
 			var view = inflater.Inflate(Resource.Layout.MapView, container, false);
 			MapFragment mapFrag = (MapFragment) FragmentManager.FindFragmentById(Resource.Id.map);
@@ -44,7 +43,6 @@ namespace TouriDroid
 		public override void OnCreateOptionsMenu(IMenu menu, MenuInflater menuInflater)
 		{
 			menu.Clear ();
-
 		}
 
 		private void markGuides()
@@ -164,8 +162,6 @@ namespace TouriDroid
 					markerOpt1.InvokeIcon(icon);
 					markerOpt1.SetSnippet (snippet);
 					map.AddMarker(markerOpt1);
-
-
 				}
 			}
 		}
@@ -187,7 +183,6 @@ namespace TouriDroid
 				markGuides ();
 			}
 		}
-
 	}
 }
 

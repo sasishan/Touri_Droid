@@ -44,7 +44,7 @@ namespace TouriDroid
 
 			tab =  SupportActionBar.NewTab ();
 			tab.SetTabListener(this);
-			tab.SetText ("Chat");
+			tab.SetText ("Chat History");
 			SupportActionBar.AddTab (tab);
 
 			SessionManager sessionManager = new SessionManager (this);
@@ -85,7 +85,12 @@ namespace TouriDroid
 			if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.DrawerOptionLogout)) 
 			{
 				SessionManager sm = new SessionManager (this);
-				sm.logoutUser ();
+				//Logger logger = new Logger ();
+				sm.logoutUser();
+				StopService (new Intent (this, typeof(ChatService)));
+
+				//logger.LogOut (sm, this);
+
 				mDrawer.CloseDrawers ();
 
 				Intent i = new Intent (this, typeof(MainActivity));

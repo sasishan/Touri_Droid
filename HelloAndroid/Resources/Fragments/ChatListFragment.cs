@@ -16,9 +16,13 @@ namespace TouriDroid
 {
 	public class ChatListFragment : Fragment
 	{
+		DataManager mDm;
+		Converter mConverter;
 		public override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
+
+			mConverter = new Converter ();
 
 			// Create your fragment here
 		}
@@ -34,11 +38,14 @@ namespace TouriDroid
 			string myUsername = "";
 			if (sm.isLoggedIn ()) {
 				myUsername = sm.getEmail ();
+				string token = sm.getAuthorizedToken ();
+				GetMyMessages(token);
 			} 
 
-			DataManager dm = new DataManager ();
-			dm.SetContext (view.Context);
-			List<string> users = dm.GetUsersWhoSentMeMessages (myUsername);
+			mDm = new DataManager ();
+			mDm.SetContext (view.Context);
+
+			List<string> users = mDm.GetUsersWhoSentMeMessages (myUsername);
 
 			var messages = view.FindViewById<ListView> (Resource.Id.Messages);
 
@@ -60,6 +67,34 @@ namespace TouriDroid
 				this.StartActivity(chatActivity);
 			};
 			return view;
+		}
+
+
+		public async void GetMyMessages(string accessToken)
+		{
+			string url = Constants.DEBUG_BASE_URL + Constants.URL_MyMessages;
+			Comms comms = new Comms();
+
+			var json = await comms.getWebApiData(url, accessToken);
+			if (json==null)
+			{
+				//no need to do anything more
+				return;
+			}
+
+			for (int i = 0; i < json.Count; i++) {
+				ChatMessage cm = mConverter.parseOneChatMessage (json[i]);
+
+				if (cm == null) {
+					continue;
+				}
+
+				//this is not a response from the current user
+				cm.MyResponse=Constants.MyResponseNo;
+				//add it straight to the DB
+				mDm.AddMessage(cm);
+			}
+
 		}
 	}
 }
