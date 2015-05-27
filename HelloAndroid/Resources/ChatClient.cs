@@ -65,9 +65,9 @@ namespace TouriDroid
 			return _proxy.Invoke("SendMyUserName");
 		}
 
-		public Task SendPrivateMessage(string message)
+		public Task SendPrivateMessage(string message, string targetUsername)
 		{
-			return _proxy.Invoke("SendPrivateMessage", message, _myUsername, _targetUserName);
+			return _proxy.Invoke("SendPrivateMessage", message, _myUsername, targetUsername);
 		}
 
 		public Task Send(string message)

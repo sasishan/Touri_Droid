@@ -12,6 +12,7 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using System.Json;
+using System.Threading.Tasks;
 
 namespace TouriDroid
 {
@@ -43,7 +44,9 @@ namespace TouriDroid
 				Boolean isGuide = false;
 				int guideId = Constants.Uninitialized;
 				progress.Visibility = ViewStates.Visible;
+
 				JsonValue response = await ca.getWebApiData (url, token);
+
 				progress.Visibility = ViewStates.Gone;
 				if (response != null) {
 					//not a guide
@@ -55,8 +58,11 @@ namespace TouriDroid
 					}
 				}
 
+				Logger logger = new Logger ();
 				SessionManager sessionManager = new SessionManager (view.Context);
 				sessionManager.createLoginSession (username, token, isGuide, guideId );
+
+				await startChatListener ();
 
 				Toast.MakeText (view.Context, "Successfully logged in", ToastLength.Long).Show ();
 
@@ -74,6 +80,14 @@ namespace TouriDroid
 			} else {
 				Toast.MakeText (view.Context, "Username or password was incorrect", ToastLength.Long).Show ();
 			}
+		}
+
+		private async Task startChatListener()
+		{
+			//start the chat service
+			var chatIntent = new Intent (Activity, typeof(ChatService));
+			Activity.StartService (chatIntent);
+
 		}
 
 		public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)

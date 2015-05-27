@@ -103,10 +103,12 @@ namespace TouriDroid
 				//make sure this fragment is active. if another tab is selected during this async
 				//operation it can be made inactive
 				if ((MainActivity)this.Activity == null) {
+					progress.Visibility = ViewStates.Visible;
 					return;
 				}
 				else if (((MainActivity)Activity).mPlace.Equals ("")) {
-					if (timeOut++ > 10) {
+					if (timeOut++ > 100) {
+						progress.Visibility = ViewStates.Visible;
 						return;
 					} else {
 						await Task.Delay (1000);
