@@ -44,13 +44,14 @@ namespace TouriDroid
 		public string 			mPlace="";
 
 		private List<string> mDrawerItems = new List<string>
-		{
+			{
 			//blank initially
 		};
 
 		//Initialize all the globals for this activity
 		private void initializeGlobals()
 		{
+			Log.Debug (TAG, "initializeGlobals");
 			mSessionManager = new SessionManager (this);
 			mLocationManager = GetSystemService (LocationService) as LocationManager;
 			mGuideSearch = new GuideSearch ();
@@ -68,6 +69,15 @@ namespace TouriDroid
 
 			initializeGlobals ();
 
+			if (mSessionManager.isLoggedIn () == true) {
+				//bind to the chat service
+				//this way we don't have to invoke multiple connections
+			//	var chatServiceIntent = new Intent (this, typeof(ChatService));
+			//	MainChatServiceConnection chatServiceConnection = new MainChatServiceConnection (this);
+
+			//	bool connected = BindService (chatServiceIntent, chatServiceConnection, Bind.AutoCreate);
+			}
+
 			int returnVal = configureDrawer ();
 			if (returnVal == Constants.FAIL) {
 				Log.Debug (TAG, "Failed to configure the left drawer");
@@ -78,15 +88,33 @@ namespace TouriDroid
 			SupportActionBar.SetHomeButtonEnabled (true);
 
 			//fire up the fragment
+			string selectedTab = Constants.Search_Tab;
 			if (savedInstanceState == null) {
-				var newFragment = new ExpertiseFragment ();
-				var ft = FragmentManager.BeginTransaction ();
-				ft.Add (Resource.Id.main_fragment_container, newFragment);
-				mCurrentFragment = typeof(ExpertiseFragment);
-				ft.Commit ();
+				Bundle extras = Intent.Extras;
+				Boolean callChat = false;
+
+				if(extras != null) {
+					callChat= extras.GetBoolean("CallChat");
+				}
+
+				if (callChat) {
+					var newFragment = new ChatListFragment ();
+					var ft = FragmentManager.BeginTransaction ();
+					ft.Add (Resource.Id.main_fragment_container, newFragment);
+					mCurrentFragment = typeof(ChatListFragment);
+					ft.Commit ();
+					selectedTab = Constants.Chat_Tab;
+				} else {
+					var newFragment = new ExpertiseFragment ();
+					var ft = FragmentManager.BeginTransaction ();
+					ft.Add (Resource.Id.main_fragment_container, newFragment);
+					mCurrentFragment = typeof(ExpertiseFragment);
+					ft.Commit ();					
+				}
+
 			}
 
-			returnVal = configureTabs ();
+			returnVal = configureTabs (selectedTab);
 			if (returnVal == Constants.FAIL) {
 				Log.Debug (TAG, "Failed to configure the tabs");
 			}
@@ -113,6 +141,7 @@ namespace TouriDroid
 			if (mSessionManager == null) {
 				mSessionManager = new SessionManager (this);
 			}
+
 			string lastLocation = "";
 			if (mSessionManager.isLoggedIn ()) {
 				lastLocation = mSessionManager.getLastLocation ();
@@ -316,9 +345,11 @@ namespace TouriDroid
 			//string Provider = LocationManager.GpsProvider;
 
 			if (mPlace.Equals ("")) {
+				Log.Debug (TAG, "OnResume - mPlace is empty");
 				string Provider = LocationManager.NetworkProvider;
 
 				if (mLocationManager.IsProviderEnabled (Provider)) {
+					Log.Debug (TAG, "OnResume - Requesting Location updates");
 					mLocationManager.RequestLocationUpdates (Provider, 0, 0, this);
 				} else {
 					Log.Info ("loc", Provider + " is not available. Does the device have location services enabled?");
@@ -331,22 +362,33 @@ namespace TouriDroid
 			string mPlace = "Toronto, ON, Canada";
 			var g = new Geocoder (this);
 
-			IList<Address> address = g.GetFromLocation (lati, longi, 1);
-			if (address.Count > 0) {
-				mPlace = (address [0].SubLocality ?? (address [0].Locality ?? "")) + ", " + (address [0].AdminArea ?? "") + ", " + (address [0].CountryName ?? "");
+			Log.Debug (TAG, "reverseFindLocation - lat="+lati.ToString() + ", long="+longi.ToString());
+			try
+			{
+				IList<Address> address =  g.GetFromLocation (lati, longi, 1);
+				if (address.Count > 0) {
+					mPlace = (address [0].SubLocality ?? (address [0].Locality ?? "")) + ", " + (address [0].AdminArea ?? "") + ", " + (address [0].CountryName ?? "");
+				}
+			}
+			catch (Exception e) {
+				Log.Debug (TAG, "reverseFindLocation - Exception: "+e.Message);
 			}
 			return mPlace;
 		}
 
 		public void OnLocationChanged (Location location)
 		{
+			Log.Debug (TAG, "OnLocationChanged");
 			mCurrentLocation = location;
-			mSessionManager.setCurrentLatitudeLongitude ((float) location.Latitude, (float) location.Longitude);
 
 			mLocationManager.RemoveUpdates (this);
-			string mPlace = reverseFindLocation (location.Latitude, location.Longitude);
-			setMyPlace (mPlace);
+			string currentPlace = reverseFindLocation (location.Latitude, location.Longitude);
+			setMyPlace (currentPlace);
 
+			if (mSessionManager != null) {
+				mSessionManager.setCurrentLatitudeLongitude ((float)location.Latitude, (float)location.Longitude);
+				mSessionManager.setCurrentLocation (currentPlace);
+			}
 		}
 
 		public void OnProviderEnabled (string provider)
@@ -430,20 +472,30 @@ namespace TouriDroid
 		}
 
 		//Set up the left drawer for this activity 
-		private int configureTabs ()
+		private int configureTabs (string selectedTab)
 		{
+			Boolean selected = false;
 			try
 			{
 				Android.Support.V7.App.ActionBar.Tab tab = SupportActionBar.NewTab ();
-				tab.SetText ("Search");
+				tab.SetText (Constants.Search_Tab);
 				tab.SetTabListener(this);
-				SupportActionBar.AddTab (tab);
+				if (selectedTab.Equals(tab.Text))
+				{
+					selected = true;
+				}
+				SupportActionBar.AddTab(tab, selected);
+				selected = false;
 
 				tab =  SupportActionBar.NewTab ();
 				tab.SetTabListener(this);
-				tab.SetText ("Chat History");
+				tab.SetText (Constants.Chat_Tab);
+				if (selectedTab.Equals(tab.Text))
+				{
+					selected = true;
+				}
 
-				SupportActionBar.AddTab (tab);
+				SupportActionBar.AddTab (tab, selected);
 
 			}
 			catch (Exception e) {

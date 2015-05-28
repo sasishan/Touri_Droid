@@ -83,8 +83,10 @@ namespace TouriDroid
 					//intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					//startActivity(intent);
 				if (FragmentManager.BackStackEntryCount > 0) {
+					Log.Debug (TAG, "popping backstack which has " + FragmentManager.BackStackEntryCount + " entries");
 					FragmentManager.PopBackStack ();
 				} else {
+					Log.Debug (TAG, "Finishing second activity");
 					Finish ();
 				}
 				return true;

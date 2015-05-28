@@ -4,14 +4,16 @@ using Android.App;
 using Android.Content;
 using Android.Widget;
 using System.Threading.Tasks;
-using Android.Support.V4.App;	
+using Android.Support.V4.App;
+using Android.Util;	
 
 namespace TouriDroid
 {
 	[Service]public class ChatService : Service
 	{
+		private const string TAG = "ChatService";
 		private static readonly int MessageReceivedId = 1000;
-		private bool mShowNotifications=false;
+		private bool mShowNotifications=true;
 
 		int mStartMode=0;
 
@@ -37,12 +39,14 @@ namespace TouriDroid
 		{
 			mBinder = new ChatServiceBinder (this);
 			mShowNotifications = false;
+			Log.Debug (TAG, "In OnBind");
 			return mBinder;
 		}
 
 		/** Called when all clients have unbound with unbindService() */
 		public override Boolean OnUnbind(Intent intent) {
 			mShowNotifications = true;
+			Log.Debug (TAG, "In Unbind");
 			return mAllowRebind;
 		}
 
@@ -54,6 +58,7 @@ namespace TouriDroid
 		/** Called when The service is no longer used and is being destroyed */
 		public override async void OnDestroy() {
 			Toast.MakeText(this, "Chat server disconnect", ToastLength.Long).Show();
+			Log.Debug (TAG, "OnDestroy");
 			await mClient.disconnect ();
 		}
 
@@ -61,6 +66,7 @@ namespace TouriDroid
 		{
 			// Let it continue running until it is stopped.
 			Toast.MakeText(this, "Service Started", ToastLength.Long).Show();
+			Log.Debug (TAG, "OnStartCommand");
 			StartChatConnection ();
 
 			//A Sticky Service will get restarted with a null intent if the OS ever shuts it down due to memory pressure:
@@ -69,6 +75,7 @@ namespace TouriDroid
 
 		protected async Task initalizeClient(string userName)
 		{
+			Log.Debug (TAG, "initalizeClient");
 			mClient = new ChatClient (userName, "0");
 
 			await mClient.Connect ();
@@ -79,8 +86,8 @@ namespace TouriDroid
 
 			SessionManager sm = new SessionManager (this);
 			string myUsername = sm.getEmail ();
-			int _count = 0;
 
+			Log.Debug (TAG, "StartChatConnection");
 			await initalizeClient (myUsername);
 
 			dm = new DataManager ();
@@ -89,6 +96,7 @@ namespace TouriDroid
 			// Create the PendingIntent with the back stack
 			// When the user clicks the notification, SecondActivity will start up.
 			Intent resultIntent = new Intent(this, typeof(MainActivity));
+			resultIntent.PutExtra("CallChat", true);  //tell mainactivity to start chat fragment
 
 			Android.Support.V4.App.TaskStackBuilder stackBuilder = Android.Support.V4.App.TaskStackBuilder.Create(this);
 		//	stackBuilder.AddParentStack(Class.FromType(typeof(MainActivity)));
@@ -98,6 +106,8 @@ namespace TouriDroid
 
 			//assume only guides get messages for now so there will be a ToUser name
 			mClient.OnMessageReceived += (sender, message) => { 
+				Log.Debug (TAG, "OnMessageReceived");
+				Log.Debug (TAG, "mShowNotifications "+ mShowNotifications);
 				ChatMessage cm = new ChatMessage ();
 				cm.FromUser = message.fromUser;
 				cm.ToUser = myUsername;
@@ -112,13 +122,14 @@ namespace TouriDroid
 				}
 
 				// Build the notification
+				//mShowNotifications is set to false if we are in the chat window itself
 				if (mShowNotifications)
 				{
 					NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
 						.SetAutoCancel(true) // dismiss the notification from the notification area when the user clicks on it
 						.SetContentIntent(resultPendingIntent) // start up this activity when the user clicks the intent.
 						.SetContentTitle("Touri Message Received") // Set the title
-						.SetSmallIcon(Resource.Drawable.touri_logo) // This is the icon to display
+						.SetSmallIcon(Resource.Drawable.ic_stat_touri_t_logo_trans) // This is the icon to display
 						.SetContentText(String.Format("Message received from {0}", message.fromUser)); // the message to display.
 
 					// Finally publish the notification
@@ -130,9 +141,11 @@ namespace TouriDroid
 
 		public async Task<ChatClient> GetChatClient()
 		{
+			Log.Debug (TAG, "GetChatClient");
 			if (mClient == null) {
 				SessionManager sm = new SessionManager (this);
 				string myUsername = sm.getEmail ();
+				Log.Debug (TAG, "GetChatClient - mClient is null");
 				await initalizeClient (myUsername);
 			}
 
@@ -161,6 +174,33 @@ namespace TouriDroid
 
 	}
 
+	class MainChatServiceConnection : Java.Lang.Object, IServiceConnection
+	{
+		MainActivity activity;
+		ChatServiceBinder binder;
+
+		public MainChatServiceConnection (MainActivity activity)
+		{
+			this.activity = activity;
+		}
+
+		public void OnServiceConnected (ComponentName name, IBinder service)
+		{
+			var chatServiceBinder = service as ChatServiceBinder;
+			if (chatServiceBinder != null) {
+				binder = (ChatServiceBinder)chatServiceBinder;
+				binder.IsBound = true;
+
+				Log.Debug ("ChatServiceConnection", "OnServiceConnected");
+			}
+		}
+
+		public void OnServiceDisconnected (ComponentName name)
+		{
+			binder.IsBound = false;
+		}
+	}
+
 	class ChatServiceConnection : Java.Lang.Object, IServiceConnection
 	{
 		ActiveChat activity;
@@ -184,6 +224,7 @@ namespace TouriDroid
 				activity.binder = chatServiceBinder;
 				activity.binder.IsBound = true;
 
+				Log.Debug ("ChatServiceConnection", "OnServiceConnected");
 				// keep instance for preservation across configuration changes
 				this.binder = (ChatServiceBinder) service;
 			}

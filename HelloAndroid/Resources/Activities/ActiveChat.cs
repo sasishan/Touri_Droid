@@ -31,6 +31,7 @@ namespace TouriDroid
 		ChatMessageAdapter			    mAdapter;
 
 
+		//Messages need to be cleared cos OnStart is recalled each time, while onCreate is only called on startup
 		protected override void OnStart ()
 		{
 			base.OnStart ();
@@ -66,6 +67,7 @@ namespace TouriDroid
 					return;
 				}
 
+				Log.Debug ("ActiveChat", "button.Click - Sending private message");
 				mClient.SendPrivateMessage(input.Text, mTargetUsername);
 
 				ChatItem oneNewChatItem = new ChatItem();
@@ -75,6 +77,7 @@ namespace TouriDroid
 				oneNewChatItem.myMessage= true;
 
 				//add this to the listview to show it on screen
+				Log.Debug ("ActiveChat", "button.Click- Add item to message list");
 				mMyMessages.Add(oneNewChatItem);
 
 				//add it to the Database as well
@@ -84,8 +87,11 @@ namespace TouriDroid
 				cm.ToUser=mMyUsername;
 				cm.Msgtimestamp = oneNewChatItem.messageTimestamp;
 				cm.MyResponse=Constants.MyResponseYes; // this is my response
+
+				Log.Debug ("ActiveChat", "button.Click - Add item to DB");
 				dm.AddMessage(cm);
 
+				Log.Debug ("ActiveChat", "button.Click - Notifydatasetchanged");
 				mAdapter.NotifyDataSetChanged();
 				input.Text ="";
 			};
@@ -96,9 +102,11 @@ namespace TouriDroid
 					oneNewChatItem.message = message.message;
 					oneNewChatItem.user = message.fromUser;
 					oneNewChatItem.messageTimestamp=DateTime.Now.ToString();
+					Log.Debug ("ActiveChat", "OnMessageReceived - add item to message list");
 					mMyMessages.Add(oneNewChatItem);
 					//@todo check if my message
 					oneNewChatItem.myMessage= false;
+					Log.Debug ("ActiveChat", "OnMessageReceived - Notifydatasetchanged");
 					mAdapter.NotifyDataSetChanged();
 				}
 			);
@@ -178,6 +186,8 @@ namespace TouriDroid
 		{
 			switch (item.ItemId) {
 			case Android.Resource.Id.Home:
+					mClient.OnMessageReceived -= (sender, message) => RunOnUiThread (() => {
+					});
 				Finish ();
 				return true;
 			default:

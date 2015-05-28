@@ -78,6 +78,7 @@ namespace TouriDroid
 
 				if (guidesLoaded==true)
 				{
+					guidesLoaded=false;
 					var newFragment = new Map_Fragment ();
 					//var ft = FragmentManager.BeginTransaction ();
 					FragmentTransaction transaction = FragmentManager.BeginTransaction();

@@ -46,6 +46,10 @@ namespace TouriDroid
 			mDm.SetContext (view.Context);
 
 			List<string> users = mDm.GetUsersWhoSentMeMessages (myUsername);
+			if (users == null) {
+				Log.Debug ("ChatListFragment", "Unable to use DB");
+				Activity.Finish ();
+			}
 
 			var messages = view.FindViewById<ListView> (Resource.Id.Messages);
 

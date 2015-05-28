@@ -30,6 +30,14 @@ namespace TouriDroid
 			// Create your fragment here
 		}
 
+		public override void OnDestroyView() {
+			base.OnDestroyView();
+			MapFragment f = (MapFragment) FragmentManager.FindFragmentById(Resource.Id.map);
+			if (f != null) {
+				FragmentManager.BeginTransaction().Remove(f).Commit ();
+			}
+		}
+
 		public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
 			//_locationManager = Activity.GetSystemService (Context.LocationService) as LocationManager;
