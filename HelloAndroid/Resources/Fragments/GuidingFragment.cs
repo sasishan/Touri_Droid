@@ -15,6 +15,7 @@ using System.Json;
 using Android.Graphics;
 using Android.Database;
 using Android.Net;
+using System.Threading.Tasks;
 
 namespace TouriDroid
 {
@@ -24,17 +25,59 @@ namespace TouriDroid
 		public override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
+
 		}
 
 		public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
 			var view = inflater.Inflate(Resource.Layout.GuideEditProfile_fragment, container, false);
 			myView = view;
-			loadMyProfile (view);
+			((GuidingActivity)Activity).currentGuide=null;
+
+			//do the image and details separately for better responsiveness
+			loadMyProfileDetails (view);
+			loadMyProfileImage (view);
 			return view;
 		}
 
-		public async void loadMyProfile(View view)
+		public async void loadMyProfileImage(View view)
+		{
+			while ( ((GuidingActivity)Activity).currentGuide==null )
+			{
+				await Task.Delay (1000);
+			}
+
+			string imageUrl;
+			Guide myProfile = ((GuidingActivity)Activity).currentGuide;
+			Comms ca = new Comms ();
+
+			if (myProfile.profileImageId == Constants.Uninitialized) {
+				myProfile.profileImage = null;
+			} else {
+				imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ myProfile.profileImageId;
+
+				Bitmap image = (Bitmap) await ca.getScaledImage (imageUrl,  Constants.ProfileReqWidth, Constants.ProfileReqHeight);
+				myProfile.profileImage = image;
+			}
+
+			ImageView photo = view.FindViewById<ImageView> (Resource.Id.guide_photo);
+			if (myProfile.profileImage == null) {
+				photo.SetImageResource (Resource.Drawable.placeholder_photo);
+			} else {
+				photo.SetImageBitmap (myProfile.profileImage);
+			}
+
+			ImageView changePhoto = view.FindViewById<ImageView> (Resource.Id.camera);
+			changePhoto.Click += (sender, e) => 
+			{
+				var selectImage = new Intent (Activity, typeof(ImageSelectActivity));
+				selectImage.PutExtra (Constants.guideId, myProfile.guideId);
+
+				this.StartActivity(selectImage);
+			};
+		}
+
+		public async void loadMyProfileDetails(View view)
 		{
 			List<string> profileRows = new List<string> ();
 			SessionManager sm = new SessionManager (view.Context);
@@ -42,18 +85,18 @@ namespace TouriDroid
 
 			Comms ca = new Comms ();
 			string url = Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile;
+
 			var json = await ca.getWebApiData (url, token);
 
 			if (json == null) {
-				Toast.MakeText(view.Context, "Not authorized", ToastLength.Short).Show ();
+				Toast.MakeText(view.Context, "Not authorized, try signing in again", ToastLength.Short).Show ();
 				Activity.Finish ();
 				return;
 			}
-			Guide myProfile = parseGuideProfiles (json);
-			((GuidingActivity)Activity).currentGuide = myProfile;
+			Converter converter = new Converter ();
+			Guide myProfile = converter.parseOneGuideProfile (json);//parseGuideProfiles (json);
 
 			Switch online = view.FindViewById<Switch> (Resource.Id.toggleChatOn);
-
 			if (myProfile.availability == Constants.AvailableNowValue) {
 				online.Checked = true;
 			}
@@ -62,14 +105,14 @@ namespace TouriDroid
 				return;
 			}
 
-			string imageUrl;
+		//	string imageUrl;
 			if (myProfile.profileImageId == Constants.Uninitialized) {
 				myProfile.profileImage = null;
 			} else {
-				imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ myProfile.profileImageId;
+		//		imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ myProfile.profileImageId;
 
-				Bitmap image = (Bitmap) await ca.getScaledImage (imageUrl,  Constants.ProfileReqWidth, Constants.ProfileReqHeight);
-				myProfile.profileImage = image;
+		//		Bitmap image = (Bitmap) await ca.getScaledImage (imageUrl,  Constants.ProfileReqWidth, Constants.ProfileReqHeight);
+		//		myProfile.profileImage = image;
 			}
 			
 		/*	profileRows.Add ("Photo TBD");
@@ -103,6 +146,11 @@ namespace TouriDroid
 			TextView editLocations = view.FindViewById<TextView> (Resource.Id.locations);
 			TextView editLanguages = view.FindViewById<TextView> (Resource.Id.languages);
 
+			LinearLayout expertiseLinearLayout = view.FindViewById<LinearLayout> (Resource.Id.expertiseLayout);
+			SupportFunctions sf = new SupportFunctions ();
+
+			sf.BuildSelectedExpertiseTable (view, expertiseLinearLayout, Resource.Layout.selectedExpertise_layout, myProfile.expertise);
+
 			userName.Text = myProfile.userName;
 			guideName.Text = myProfile.fName + " " + myProfile.lName;
 			aboutMe.Text = myProfile.description;
@@ -115,11 +163,12 @@ namespace TouriDroid
 				languages.Text += "• "+l+"\r\n" ;
 			}
 
-			if (myProfile.profileImage == null) {
+			photo.SetImageResource (Resource.Drawable.placeholder_photo);
+			/*if (myProfile.profileImage == null) {
 				photo.SetImageResource (Resource.Drawable.placeholder_photo);
 			} else {
 				photo.SetImageBitmap (myProfile.profileImage);
-			}	
+			}*/	
 
 			online.Click += (o, e) => {
 				// Perform action on clicks
@@ -133,14 +182,6 @@ namespace TouriDroid
 					Activity.StopService (new Intent (Activity, typeof(ChatService)));
 					Toast.MakeText(view.Context, "Offline", ToastLength.Short).Show ();
 				}
-			};
-
-			changePhoto.Click += (sender, e) => 
-			{
-				var selectImage = new Intent (Activity, typeof(ImageSelectActivity));
-				selectImage.PutExtra (Constants.guideId, myProfile.guideId);
-
-				this.StartActivity(selectImage);
 			};
 
 			editName.Click += (sender, e) => 
@@ -173,6 +214,9 @@ namespace TouriDroid
 			editLocations.Click += (sender, e) => 
 			{
 			};
+
+			//we've loaded all the details so set the current profile - this is used to load the image async
+			((GuidingActivity)Activity).currentGuide = myProfile;
 		}
 
 		public void onToggleClicked(View view) {
@@ -187,95 +231,6 @@ namespace TouriDroid
 				Activity.StopService (new Intent (Activity, typeof(ChatService)));
 			}
 		}
-
-		public Guide parseGuideProfiles(JsonValue json)
-		{
-			if (json == null) {
-				return null;
-			}
-
-			Guide g = new Guide ();
-			g.jsonText = json;
-
-			JsonValue values = json;
-			if (values.ContainsKey (Constants.Guide_WebAPI_Key_FirstName)) {
-				string fName = values [Constants.Guide_WebAPI_Key_FirstName];
-
-				g.fName = fName;
-				g.guideId = values [Constants.Guide_WebAPI_Key_GuideId];
-
-			}
-
-			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Username)) {
-				string userName = values [Constants.Guide_WebAPI_Key_Username];
-				g.userName= userName;
-			}
-
-			if (values.ContainsKey (Constants.Guide_WebAPI_Key_LastName)) {
-				string lName = values [Constants.Guide_WebAPI_Key_LastName];
-				g.lName= lName;
-			}
-
-			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Address1)) {
-				g.address1 = values [Constants.Guide_WebAPI_Key_Address1];
-			}
-
-			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Address2)) {
-				g.address2 = values [Constants.Guide_WebAPI_Key_Address2];
-			}
-
-			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Description)) {
-				g.description = values [Constants.Guide_WebAPI_Key_Description];
-			}
-
-			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Availability)) {
-				g.availability = values [Constants.Guide_WebAPI_Key_Availability];
-			}
-
-			if (values.ContainsKey (Constants.Guide_WebAPI_Key_ProfileImageId)) {
-				g.profileImageId = values [Constants.Guide_WebAPI_Key_ProfileImageId];
-			} else {
-				g.profileImageId = Constants.Uninitialized;
-			}
-
-			if (values.ContainsKey (Constants.Guide_WebAPI_Key_LanguageList)) {
-				JsonValue temp = values [Constants.Guide_WebAPI_Key_LanguageList];
-				for (int j=0; j<temp.Count;j++)
-				{
-					JsonValue l = temp[j];
-					g.languageList.Add (l [Constants.Guide_WebAPI_Key_Language]);
-					//@todo get languageId too
-				}
-			}
-
-			if (values.ContainsKey (Constants.Guide_WebAPI_Key_LocationList)) {
-				JsonValue temp = values [Constants.Guide_WebAPI_Key_LocationList];
-				for (int j=0; j<temp.Count;j++)
-				{
-					JsonValue l = temp[j];
-					LocationWrapper lw = new LocationWrapper ();
-					lw.location = l [Constants.Guide_WebAPI_Key_Location];
-					lw.longitude = l [Constants.Guide_WebAPI_Key_Location_long];
-					lw.latitude = l [Constants.Guide_WebAPI_Key_Location_Lat];
-					lw.locationId = l [Constants.Guide_WebAPI_Key_Location_Id];
-					g.placesServedList.Add (lw);
-					//@todo 
-				}
-			}
-
-			if (values.ContainsKey (Constants.Guide_WebAPI_Key_ExpertiseList)) {
-				JsonValue temp = values [Constants.Guide_WebAPI_Key_ExpertiseList];
-				for (int j=0; j<temp.Count;j++)
-				{
-					JsonValue l = temp[j];
-					g.expertise.Add (new Expertise() {expertise=l [Constants.Guide_WebAPI_Key_Expertise], expertiseId=l [Constants.Guide_WebAPI_Key_ExpertiseId]});
-					//@todo 
-				}
-			}
-			return g;
-		}
-
-
 	}
 }
 

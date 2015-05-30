@@ -1,23 +1,19 @@
 ﻿<Properties StartupItem="HelloAndroid\TouriDroid.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" PreferredExecutionTarget="Android.SelectDevice" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Activities\MainActivity.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.08f7f593031f50f3" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Fragments\GuidingFragment.cs">
     <Files>
-      <File FileName="HelloAndroid\Resources\ChatServiceBinder.cs" Line="200" Column="4" />
-      <File FileName="HelloAndroid\Resources\Activities\ActiveChat.cs" Line="198" Column="1" />
-      <File FileName="HelloAndroid\Resources\Activities\MainActivity.cs" Line="77" Column="5" />
-      <File FileName="HelloAndroid\Resources\Activities\GuidingActivity.cs" Line="1" Column="1" />
-      <File FileName="c:\Bitbucket\Touri_Droid\HelloAndroid\Resources\SupportFunctions.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\Constants.cs" Line="208" Column="33" />
-      <File FileName="HelloAndroid\Resources\Fragments\SignInFragment.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\Fragments\ExpertiseFragment.cs" Line="1" Column="1" />
-      <File FileName="c:\Bitbucket\Touri_Droid\HelloAndroid\Resources\ChatClient.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\Activities\SecondActivity.cs" Line="59" Column="39" />
-      <File FileName="HelloAndroid\Resources\Fragments\GuideFragment.cs" Line="77" Column="1" />
-      <File FileName="HelloAndroid\Resources\Fragments\Map_Fragment.cs" Line="37" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\GuidingFragment.cs" Line="69" Column="4" />
+      <File FileName="HelloAndroid\Resources\Constants.cs" Line="110" Column="30" />
+      <File FileName="HelloAndroid\Resources\Activities\GuideProfileActivity.cs" Line="117" Column="26" />
+      <File FileName="HelloAndroid\Resources\Fragments\GuideFragment.cs" Line="216" Column="27" />
+      <File FileName="c:\Bitbucket\Touri_Droid\HelloAndroid\Resources\SupportFunctions.cs" Line="199" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Comms.cs" line="59" column="17" />
+      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Fragments\SignupRegisterGuide.cs" line="230" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="HelloAndroid\GuideFragment.cs" line="157" offsetX="844" offsetY="2496" expression="this.Activity.mPlace" liveUpdate="False" />

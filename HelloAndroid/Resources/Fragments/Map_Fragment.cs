@@ -61,14 +61,34 @@ namespace TouriDroid
 			//The guide list is set to the activity in GuideFragment's refineSearch method
 			//mGuideSearch = ((SecondActivity)this.Activity).mGuideSearch;
 			List<Guide> mGuideList =  ((SecondActivity)Activity).mGuideList;
-
+			int icon;
+			Random r = new Random ();
+		
 			foreach (Guide g in mGuideList) {		
+				icon = GetExpertiseIcon ("Cool and Unique");
 				foreach (LocationWrapper lw in g.placesServedList) {
+					lw.latitude += (0 + (0.01 - 0) * r.NextDouble ()); //this is to avoid bunching of markers in the same spot
+
 					LatLng l = new LatLng (lw.latitude, lw.longitude);
 					string snip = g.description;
-					setMapLocation (l, g.fName+" "+g.lName, g.guideId.ToString(), BitmapDescriptorFactory.DefaultMarker (BitmapDescriptorFactory.HueAzure));
+					setMapLocation (l, 
+						g.fName+" "+g.lName, 
+						g.guideId.ToString(), 
+						BitmapDescriptorFactory.DefaultMarker (BitmapDescriptorFactory.HueRed));
 				}
 			}
+		}
+
+		public int GetExpertiseIcon(string expertise)
+		{
+			int icon = Constants.Uninitialized;
+			for (int i = 0; i < Constants.ExpertiseImages.Count; i = i + 3) {
+				if (Constants.ExpertiseImages [i].Item3.Equals (expertise)) {
+					icon= Constants.ExpertiseImages [i].Item1;
+					break;
+				}
+			}
+			return icon;
 		}
 
 		public Boolean OnMarkerClick(Marker arg0)
@@ -125,7 +145,9 @@ namespace TouriDroid
 		{
 			_currentLocation = location;
 			LatLng loc = new LatLng (_currentLocation.Latitude, _currentLocation.Longitude);
-			setMapLocation (loc, "Your Location", Constants.Uninitialized.ToString(), BitmapDescriptorFactory.DefaultMarker (BitmapDescriptorFactory.HueCyan));
+			setMapLocation (loc, "Your Location", 
+				Constants.Uninitialized.ToString(), 
+				BitmapDescriptorFactory.DefaultMarker (BitmapDescriptorFactory.HueCyan));
 			setCameraLocation(loc);
 			markGuides ();
 		//	_locationManager.RemoveUpdates (this);
@@ -186,7 +208,9 @@ namespace TouriDroid
 
 			if (latit != Constants.Uninitialized) {
 				LatLng loc = new LatLng (latit, longit);
-				setMapLocation (loc, "Your Location", "-1", BitmapDescriptorFactory.DefaultMarker (BitmapDescriptorFactory.HueCyan));
+				setMapLocation (loc, 
+					"Your Location", "-1",
+					BitmapDescriptorFactory.FromResource (Resource.Drawable.GeoFence_32));
 				setCameraLocation(loc);
 				markGuides ();
 			}

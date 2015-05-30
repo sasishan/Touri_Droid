@@ -215,6 +215,24 @@ namespace TouriDroid
 
 	public class RegisterService
 	{
+		public async Task<bool> RegisterHttp(string username, string password, string confirmPassword)
+		{
+			bool result = false;
+			string url = Constants.DEBUG_BASE_URL + "/api/Account/Register";
+			NameValueCollection parameters = new NameValueCollection ();
+			parameters.Add ("Email", username);
+			parameters.Add ("ConfirmPassword", confirmPassword);
+			parameters.Add ("Password", password);
+
+			Comms comms = new Comms ();
+			JsonValue jsonResponse = comms.PostDataSync (url, parameters, null);
+
+			if (jsonResponse != null) {
+				result = true;
+			}
+
+			return result;
+		}
 		public async Task<bool> Register(string username, string password, string confirmPassword)
 		{
 			RegisterModel model = new RegisterModel
@@ -232,18 +250,26 @@ namespace TouriDroid
 			byte[] bytes = Encoding.UTF8.GetBytes(json);
 			using(Stream stream = await request.GetRequestStreamAsync())
 			{
+				if (stream == null) {
+					Log.Debug ("SignupRegisterGuide", "Stream is null!");
+					return false;
+				}
 				stream.Write(bytes, 0, bytes.Length);
 			}
 
 			try
 			{
-				await request.GetResponseAsync();
+				WebResponse wr = await request.GetResponseAsync();
+				if (wr==null)
+				{
+					return false;
+				}
 				return true;
 			}
 			catch (Exception ex)
 			{
 				//Toast.MakeText (, "Error ", ToastLength.Long).Show();
-				Log.Debug("Network error", ex.InnerException.ToString());
+				Log.Debug("Network error", ex.Message);
 				return false;
 			}
 		}

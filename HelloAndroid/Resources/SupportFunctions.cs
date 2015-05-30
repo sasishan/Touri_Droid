@@ -185,26 +185,66 @@ namespace TouriDroid
 			return checkedLanguages;
 		}
 
+		public int BuildSelectedExpertiseTable(View view, LinearLayout linearLayout, int expertiseLayout, 
+			List<Expertise> selectedExpertises)
+		{			
+			int result = Constants.SUCCESS;
+			for (;;) {
+
+				if (linearLayout == null || view == null) {
+					result = Constants.FAIL;
+					break;
+				}
+
+				for (int i = 0; i < selectedExpertises.Count; i++) {
+					for (int j = 0; j < Constants.ExpertiseImages.Count; j++) {
+						if (selectedExpertises [i].expertise.Equals (Constants.ExpertiseImages [j].Item3)) {
+							int downImage = Constants.ExpertiseImages [j].Item2;
+							string value = Constants.ExpertiseImages[j].Item3;
+
+							LinearLayout row = (LinearLayout)LayoutInflater.From (view.Context).Inflate (expertiseLayout, null);
+
+							ImageView expImage = row.FindViewById<ImageView> (Resource.Id.exp1);
+							TextView expText = row.FindViewById<TextView> (Resource.Id.exp1_text);
+							expImage.SetImageResource (downImage);
+							expText.Text = value;
+
+							linearLayout.AddView (row);
+						}
+					}
+				}
+				break;
+			}//main FOR
+
+			return result;		
+		}
+
 		//Creates expertise images and puts them in a 3x3 table
 		//images are held in Constants
-		public List<Expertise> BuildExpertiseTable(View view, TableLayout expertiseTable, int tableRow)
+		public List<Expertise> BuildExpertiseTable(View view, TableLayout expertiseTable, int tableRowLayout)
 		{			
 			List<Expertise> selectedExpertises = new List<Expertise> ();
 			for (int i = 0; i < Constants.ExpertiseImages.Count; i = i + 3) {
-				TableRow row = (TableRow)LayoutInflater.From (view.Context).Inflate (tableRow, null);
+				TableRow row = (TableRow)LayoutInflater.From (view.Context).Inflate (tableRowLayout, null);
 
 				ImageButton []buttonArray = new ImageButton[3];
+				TextView 	[]textArray = new TextView[3];
 
 				buttonArray[0] = row.FindViewById<ImageButton> (Resource.Id.exp1);
+				textArray[0] = row.FindViewById<TextView> (Resource.Id.exp1_text);
 				buttonArray[1] = row.FindViewById<ImageButton> (Resource.Id.exp2);
+				textArray[1] = row.FindViewById<TextView> (Resource.Id.exp2_text);
 				buttonArray[2] = row.FindViewById<ImageButton> (Resource.Id.exp3);
+				textArray[2] = row.FindViewById<TextView> (Resource.Id.exp3_text);
 
 				for (int j = 0; j < buttonArray.Length; j++) {
 					ImageButton b = buttonArray[j];
+
 					int downImage = Constants.ExpertiseImages [i + j].Item2;
 					int upImage = Constants.ExpertiseImages [i + j].Item1;
 					string value = Constants.ExpertiseImages[i+j].Item3;
 					int expId = Constants.ExpertiseImages[i+j].Item4;
+					textArray [j].Text = value;
 					b.SetImageResource (upImage);
 
 					b.Click += (object sender, EventArgs e) => {

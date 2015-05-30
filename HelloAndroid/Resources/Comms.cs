@@ -48,8 +48,16 @@ namespace TouriDroid
 			}
 
 			client.UploadValuesCompleted += Client_UploadValuesCompleted;
+			byte[] result;
 			//@todo use UploadValuesAsync?
-			byte[] result = client.UploadValues (url, parameters);
+			try 
+			{
+				result = client.UploadValues (url, parameters);
+			}
+			catch (Exception e) {
+				Log.Debug (TAG, e.Message);
+				return null;
+			}
 
 			string s;
 			JsonValue json = "";

@@ -143,14 +143,14 @@ namespace TouriDroid
 			}
 
 			string lastLocation = "";
-			if (mSessionManager.isLoggedIn ()) {
-				lastLocation = mSessionManager.getLastLocation ();
+		//	if (mSessionManager.isLoggedIn ()) {
+			lastLocation = mSessionManager.getLastLocation ();
 
-				// only waste time if it's not blank
-				if (!lastLocation.Equals ("")) {
-					setMyPlace (lastLocation);
-				}
+			// only waste time if it's not blank
+			if (!lastLocation.Equals ("")) {
+				setMyPlace (lastLocation);
 			}
+		//	}
 
 			return base.OnCreateOptionsMenu(menu);
 		} 

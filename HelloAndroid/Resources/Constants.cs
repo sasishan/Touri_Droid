@@ -363,12 +363,12 @@ namespace TouriDroid
 		//Up image, down image, expertise name, expertise ID (matches Expertise table in DB)
 		//don't use the '&' sign in names
 		public static List<Tuple<int,int, string, int>> ExpertiseImages = new List<Tuple<int,int, string, int>> {					
-					Tuple.Create(Resource.Drawable.cup54, Resource.Drawable.cup54, "Cool and Unique", 1),
-					Tuple.Create(Resource.Drawable.cup54, Resource.Drawable.cup54, "Food, Drinks and Fun", 2),
-					Tuple.Create(Resource.Drawable.museum37, Resource.Drawable.museum37, "Art and Museums", 4),
-					Tuple.Create(Resource.Drawable.museum37, Resource.Drawable.museum37, "History", 5),
-					Tuple.Create(Resource.Drawable.hiking48, Resource.Drawable.hiking48_pressed, "Outdoors", 6),
-					Tuple.Create(Resource.Drawable.bar48, Resource.Drawable.bar48_pressed, "Special Events", 7)
+			Tuple.Create(Resource.Drawable.expCool_64, Resource.Drawable.expCool_64_pressed, "Cool and Unique", 1),
+			Tuple.Create(Resource.Drawable.expRestaurant_64, Resource.Drawable.expRestaurant_64_pressed, "Food, Drinks and Fun", 2),
+			Tuple.Create(Resource.Drawable.expMuseum_64, Resource.Drawable.expMuseum_64_pressed, "Art and Museums", 4),
+			Tuple.Create(Resource.Drawable.expColiseum_64, Resource.Drawable.expColiseum_64_pressed, "History", 5),
+			Tuple.Create(Resource.Drawable.expTrekking_64, Resource.Drawable.expTrekking_64_pressed, "Outdoors", 6),
+			Tuple.Create(Resource.Drawable.expDancing_64, Resource.Drawable.expDancing_64_pressed, "Special Events", 7)
 		};
 
 	}
