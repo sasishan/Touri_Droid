@@ -133,6 +133,9 @@
     <Compile Include="Resources\RecyclerAdapter.cs" />
     <Compile Include="Resources\Comms.cs" />
     <Compile Include="Resources\ChatMessageAdapter.cs" />
+    <Compile Include="Resources\Fragments\EditCitiesFragment.cs" />
+    <Compile Include="Resources\Fragments\EditLanguagesFragment.cs" />
+    <Compile Include="Resources\Fragments\EditExpertiseFragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

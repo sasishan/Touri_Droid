@@ -42,6 +42,7 @@ namespace TouriDroid
 
 		public async void loadMyProfileImage(View view)
 		{
+			//once the profile is loaded (including the image url) this variable is set
 			while ( ((GuidingActivity)Activity).currentGuide==null )
 			{
 				await Task.Delay (1000);
@@ -67,6 +68,7 @@ namespace TouriDroid
 				photo.SetImageBitmap (myProfile.profileImage);
 			}
 
+			//add a listener for the change photo icon
 			ImageView changePhoto = view.FindViewById<ImageView> (Resource.Id.camera);
 			changePhoto.Click += (sender, e) => 
 			{
@@ -143,13 +145,14 @@ namespace TouriDroid
 			TextView editName = view.FindViewById<TextView> (Resource.Id.editGuideName);
 			TextView editAboutMe = view.FindViewById<TextView> (Resource.Id.editAboutme);
 			TextView editShortAboutMe = view.FindViewById<TextView> (Resource.Id.editShortAboutme);
-			TextView editLocations = view.FindViewById<TextView> (Resource.Id.locations);
-			TextView editLanguages = view.FindViewById<TextView> (Resource.Id.languages);
+			TextView editLocations = view.FindViewById<TextView> (Resource.Id.editLocations);
+			TextView editExpertise = view.FindViewById<TextView> (Resource.Id.editExpertise);
+			TextView editLanguages = view.FindViewById<TextView> (Resource.Id.editLanguages);
 
-			LinearLayout expertiseLinearLayout = view.FindViewById<LinearLayout> (Resource.Id.expertiseLayout);
+			TableLayout expertiseTableLayout = view.FindViewById<TableLayout> (Resource.Id.table_Expertise);
 			SupportFunctions sf = new SupportFunctions ();
 
-			sf.BuildSelectedExpertiseTable (view, expertiseLinearLayout, Resource.Layout.selectedExpertise_layout, myProfile.expertise);
+			sf.BuildSelectedExpertiseTable (view, expertiseTableLayout, Resource.Layout.selectedExpertise_layout, myProfile.expertise);
 
 			userName.Text = myProfile.userName;
 			guideName.Text = myProfile.fName + " " + myProfile.lName;
@@ -207,16 +210,77 @@ namespace TouriDroid
 			{
 			};
 
+			editExpertise.Click += (sender, e) => 
+			{
+				var editGuide = new Intent (Activity, typeof(EditGuideValueActivity));
+				string stringExpertiseIds = GetStringExpertiseIds(myProfile.expertise);
+				editGuide.PutExtra (Constants.Action, Constants.Action_EditExpertise);	
+				editGuide.PutExtra (Constants.selectedExpertise, stringExpertiseIds);	
+				this.StartActivity (editGuide);
+			};
+
 			editLanguages.Click += (sender, e) => 
 			{
+				string stringLanguageIds = GetStringLanguageIds(myProfile.languages);
+				var editGuide = new Intent (Activity, typeof(EditGuideValueActivity));
+				editGuide.PutExtra (Constants.selectedLanguages, stringLanguageIds);	
+				editGuide.PutExtra (Constants.Action, Constants.Action_EditLanguages);	
+
+				this.StartActivity (editGuide);	
 			};
 
 			editLocations.Click += (sender, e) => 
 			{
+				string stringLocation = GetStringLocationsList(myProfile.placesServedList);
+				var editGuide = new Intent (Activity, typeof(EditGuideValueActivity));
+				editGuide.PutExtra (Constants.selectedLocation, stringLocation);	
+				editGuide.PutExtra (Constants.Action, Constants.Action_EditLocations);	
+
+				this.StartActivity (editGuide);				
 			};
 
 			//we've loaded all the details so set the current profile - this is used to load the image async
 			((GuidingActivity)Activity).currentGuide = myProfile;
+		}
+
+		private string GetStringExpertiseIds(List<Expertise> expList)
+		{
+			string expIdString = "";
+			foreach (Expertise exp in expList) {
+				expIdString += exp.expertiseId.ToString() + Constants.separator;
+			}
+
+			if (expIdString.Length > 1) {
+				expIdString = expIdString.Remove (expIdString.Length - 1);
+			}
+
+			return expIdString;
+		}
+
+		private string GetStringLanguageIds(List<GuideLanguage> langList)
+		{
+			string langIdString = "";
+			foreach (GuideLanguage gl in langList) {
+				langIdString += gl.languageId.ToString() + Constants.separator;
+			}
+			if (langIdString.Length > 1) {
+				langIdString = langIdString.Remove (langIdString.Length - 1);
+			}
+
+			return langIdString;
+		}
+
+		private string GetStringLocationsList(List<LocationWrapper> lwList)
+		{
+			string locationString = "";
+			foreach (LocationWrapper lw in lwList) {
+				locationString += lw.location + Constants.separator;
+			}
+			if (locationString.Length > 1) {
+				locationString = locationString.Remove (locationString.Length - 1);
+			}
+
+			return locationString;
 		}
 
 		public void onToggleClicked(View view) {

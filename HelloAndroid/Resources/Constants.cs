@@ -48,6 +48,7 @@ namespace TouriDroid
 			}
 		}
 
+
 		public string getOnlineStatusString (int availability)
 		{
 			string status;
@@ -162,7 +163,14 @@ namespace TouriDroid
 				for (int j=0; j<temp.Count;j++)
 				{
 					JsonValue l = temp[j];
+
+					//@todo use languages instead
 					g.languageList.Add (l [Constants.Guide_WebAPI_Key_Language]);
+
+					GuideLanguage gl = new GuideLanguage ();
+					gl.language = l [Constants.Guide_WebAPI_Key_Language];
+					gl.languageId = l [Constants.Guide_WebAPI_Key_LanguageId];
+					g.languages.Add (gl);
 					//@todo get languageId too
 				}
 			}
@@ -220,6 +228,9 @@ namespace TouriDroid
 		public const string URL_Get_All_Expertises = "/api/expertises";
 		public const string URL_MyGuideProfile = "/api/MyGuideProfile";
 		public const string URL_AddGuideLocation = "/{0}/location";
+		public const string URL_PostAllGuideLocations = "/{0}/alllocations";
+		public const string URL_PostAllGuideLanguages = "/{0}/alllanguages";
+		public const string URL_PostAllGuideExpertises = "/{0}/allexpertises";
 		public const string URL_AddGuideExpertise = "/{0}/expertise";
 		public const string URL_AddGuideLanguage = "/{0}/language";
 		public const string URL_PutGuideNames = "/{0}/name";
@@ -317,11 +328,17 @@ namespace TouriDroid
 		public const string guideId= "guideId";
 		public const string guideDescription = "description";
 		public const string guideSummary = "summary";
+		public const string selectedLanguages = "languages";
 
 		public const string Action = "Action";
 		public const string Action_EditName = "Edit Name";
-		public const string Action_EditDescription = "Edit Description";	
+		public const string Action_EditDescription = "Edit About Me";	
+		public const string Action_EditLocations= "Edit Locations";	
+		public const string Action_EditLanguages = "Edit Languages";	
+		public const string Action_EditSummary = "Edit Summary";	
+		public const string Action_EditExpertise = "Edit Expertise";	
 
+		public const char separator = '|';
 
 		//Google API Constants
 		public static string PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";

@@ -6,6 +6,15 @@ using System.Text;
 using Android.Graphics;
 using System.Threading.Tasks;
 using Android.Util;
+using Org.Apache.Http.Impl.Client;
+using Org.Apache.Http.Client.Methods;
+using Org.Apache.Http.Entity;
+using Org.Apache.Http;
+using Org.Apache.Http.Util;
+using Org.Json;
+using Org.Apache.Http.Message;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace TouriDroid
 {
@@ -70,6 +79,45 @@ namespace TouriDroid
 			//			JsonValue json = JsonObject.Parse (s);
 
 			//		return json;
+		}
+
+		public async Task<JsonValue> PostDataSyncUsingUri (string p_url, string data, string accessToken)
+		{
+			// Create an HTTP web request using the URL:
+			DefaultHttpClient httpclient = new DefaultHttpClient();
+
+			//p_url
+			HttpPost httppostreq = new HttpPost(p_url);
+			if (accessToken != null) {
+				httppostreq.SetHeader("Authorization", String.Format("Bearer {0}", accessToken));
+			}
+			StringEntity se = new StringEntity(data);
+			se.ContentType = new BasicHeader("Content-Type", "application/x-www-form-urlencoded");
+			se.ContentEncoding  = new BasicHeader ("Content-Encoding", "application/x-www-form-urlencoded");
+			httppostreq.Entity=se;
+
+			//@todo use UploadValuesAsync?\
+			IHttpResponse httpresponse;
+			try 
+			{
+				httpresponse = await Task.Run(() => httpclient.Execute(httppostreq));
+			}
+			catch (Exception e) {
+				Log.Debug (TAG, e.Message);
+				return null;
+			}
+
+			String responseText = null; 
+			try 
+			{ 
+				responseText = EntityUtils.ToString(httpresponse.Entity); 
+			} 
+			catch (ParseException e) 
+			{ 
+				Log.Debug(TAG,e.Message);
+			}
+
+			return responseText;
 		}
 
 		private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {

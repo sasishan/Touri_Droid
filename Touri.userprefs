@@ -1,18 +1,18 @@
 ﻿<Properties StartupItem="HelloAndroid\TouriDroid.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.08f7f593031f50f3" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Fragments\GuidingFragment.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\SupportFunctions.cs">
     <Files>
-      <File FileName="HelloAndroid\Resources\Fragments\GuidingFragment.cs" Line="69" Column="4" />
-      <File FileName="HelloAndroid\Resources\Constants.cs" Line="110" Column="30" />
-      <File FileName="HelloAndroid\Resources\Activities\GuideProfileActivity.cs" Line="117" Column="26" />
-      <File FileName="HelloAndroid\Resources\Fragments\GuideFragment.cs" Line="216" Column="27" />
-      <File FileName="c:\Bitbucket\Touri_Droid\HelloAndroid\Resources\SupportFunctions.cs" Line="199" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\GuidingFragment.cs" Line="152" Column="1" />
+      <File FileName="HelloAndroid\Resources\SupportFunctions.cs" Line="342" Column="14" />
+      <File FileName="HelloAndroid\Resources\Fragments\SignupExpertiseFragment.cs" Line="35" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Comms.cs" line="59" column="17" />
-      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Fragments\SignupRegisterGuide.cs" line="230" column="1" />
+      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Fragments\EditCitiesFragment.cs" line="23" column="39" />
+      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Comms.cs" line="35" column="1" />
+      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Fragments\GuideFragment.cs" line="171" column="1" />
+      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Fragments\GuideFragment.cs" line="188" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>

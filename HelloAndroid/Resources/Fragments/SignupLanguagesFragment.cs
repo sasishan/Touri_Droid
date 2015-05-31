@@ -31,7 +31,8 @@ namespace TouriDroid
 
 			// build out the expertises table
 			TableLayout languagesTable = (TableLayout)view.FindViewById (Resource.Id.table_Languages);
-			List<GuideLanguage> languages = sf.BuildLanguagesTable (view, languagesTable, Resource.Layout.language_tablerow);
+			List<GuideLanguage> emptyList = new List<GuideLanguage> ();
+			List<GuideLanguage> languages = sf.BuildLanguagesTable (view, languagesTable, Resource.Layout.language_tablerow, emptyList);
 
 			languagesTable.RequestLayout();
 

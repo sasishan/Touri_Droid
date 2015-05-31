@@ -4,6 +4,12 @@ using Android.Views;
 
 using System.Collections.Generic;
 using Android.Content;
+using System.Collections.Specialized;
+using System.Json;
+using Android.Util;
+using Org.Json;
+using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace TouriDroid
 {
@@ -139,14 +145,110 @@ namespace TouriDroid
 
 	public class SupportFunctions
 	{
+		private const string TAG = "SupportFunctions";
 		public SupportFunctions ()
 		{
+			
+		}
+
+
+		public async Task<int> UpdateAllGuidesLanguages( string token, Guide guide)
+		{
+			int result = Constants.SUCCESS;
+
+			Comms ca = new Comms ();
+			if (guide == null) {
+				Log.Debug (TAG, "Guide is null!");
+				return Constants.FAIL;
+			}
+
+			string url = Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile +	String.Format (Constants.URL_PostAllGuideLanguages, guide.guideId);
+
+			string data = "";
+			foreach (GuideLanguage l in guide.languages) {
+				data += "langIds=" + l.languageId.ToString() + "&";
+			}
+			data = data.Remove (data.Length - 1);
+
+			//@todo make this async later
+			JsonValue jsonResponse = await ca.PostDataSyncUsingUri (url, data, token);
+			if (jsonResponse == null) {
+				result = Constants.FAIL;
+			}
+
+			return result;
+		}
+
+		public async Task<int> UpdateAllGuidesExpertises( string token, Guide guide)
+		{
+			int result = Constants.SUCCESS;
+
+			Comms ca = new Comms ();
+			if (guide == null) {
+				Log.Debug (TAG, "Guide is null!");
+				return Constants.FAIL;
+			}
+
+			string url = Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile +	String.Format (Constants.URL_PostAllGuideExpertises, guide.guideId);
+
+			string data = "";
+			foreach (Expertise e in guide.expertise) {
+				data += "expIds=" + e.expertiseId.ToString() + "&";
+			}
+			data = data.Remove (data.Length - 1);
+
+			//@todo make this async later
+			JsonValue jsonResponse = await ca.PostDataSyncUsingUri (url, data, token);
+			if (jsonResponse == null) {
+				result = Constants.FAIL;
+			}
+
+			return result;
+		}
+
+
+		public async Task<int> UpdateAllGuidesLocations( string token, Guide guide)
+		{
+			int result = Constants.SUCCESS;
+
+			NameValueCollection parameters = new NameValueCollection ();
+			Comms ca = new Comms ();
+
+			if (guide == null) {
+				Log.Debug (TAG, "Guide is null!");
+				return Constants.FAIL;
+			}
+
+			string url = Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile +	String.Format (Constants.URL_PostAllGuideLocations, guide.guideId);
+
+			string data = "";
+			foreach (LocationWrapper l in guide.placesServedList) {
+				data += "locs=" + l.location + "&";
+			}
+			data = data.Remove (data.Length - 1);
+
+			//@todo make this async later
+			JsonValue jsonResponse = await ca.PostDataSyncUsingUri (url, data, token);
+			if (jsonResponse == null) {
+				result = Constants.FAIL;
+			}
+
+			return result;
 		}
 
 		//Creates a list of languages that can be checked
-		public List<GuideLanguage> BuildLanguagesTable(View view, TableLayout languagesTable, int tableRow)
+		public List<GuideLanguage> BuildLanguagesTable(View view, TableLayout languagesTable, int tableRow, 
+			List<GuideLanguage> currentlySelectedLanguageIds)
 		{			
 			List<GuideLanguage> checkedLanguages = new List<GuideLanguage> ();
+
+			//copy the ids into an int list to enable quick searches
+			List<int> selectedIds = new List<int> ();
+			if (currentlySelectedLanguageIds.Count > 0) {
+				foreach (GuideLanguage gl in currentlySelectedLanguageIds) {
+					selectedIds.Add(gl.languageId);
+				}
+			}
 
 			for (int i = 0; i < Constants.AvailableLanguages.Count; i++) {
 				TableRow row = (TableRow)LayoutInflater.From (view.Context).Inflate (tableRow, null);
@@ -154,6 +256,16 @@ namespace TouriDroid
 				c.Text = Constants.AvailableLanguages [i].Item2;
 				c.Id = Constants.AvailableLanguages [i].Item1;
 
+				if (currentlySelectedLanguageIds.Count > 0) {
+					if (selectedIds.Contains (c.Id)) {
+						c.Checked = true;
+
+						GuideLanguage gl = new GuideLanguage();
+						gl.language = c.Text;
+						gl.languageId = c.Id;
+						checkedLanguages.Add(gl);
+					}
+				}
 
 				c.Click += (object sender, EventArgs e) => {
 					if (c.Checked==true)
@@ -185,33 +297,64 @@ namespace TouriDroid
 			return checkedLanguages;
 		}
 
-		public int BuildSelectedExpertiseTable(View view, LinearLayout linearLayout, int expertiseLayout, 
+		public int BuildSelectedExpertiseTable(View view, TableLayout tableLayout, int expertiseLayout, 
 			List<Expertise> selectedExpertises)
 		{			
 			int result = Constants.SUCCESS;
 			for (;;) {
 
-				if (linearLayout == null || view == null) {
+				if (tableLayout == null || view == null) {
 					result = Constants.FAIL;
 					break;
 				}
 
+				//Show in a table view and add rows once we hit the max columns in a row
+				int maxColumns = 3;
+				int currentColumn = 0;
+				ImageView expImage=null;
+				TextView expText = null;
+				TableRow row = (TableRow)LayoutInflater.From (view.Context).Inflate (expertiseLayout, null);
 				for (int i = 0; i < selectedExpertises.Count; i++) {
+					// create a new row 
+					if (currentColumn >= maxColumns) {
+						currentColumn = 0;
+					}
+
 					for (int j = 0; j < Constants.ExpertiseImages.Count; j++) {
 						if (selectedExpertises [i].expertise.Equals (Constants.ExpertiseImages [j].Item3)) {
 							int downImage = Constants.ExpertiseImages [j].Item2;
 							string value = Constants.ExpertiseImages[j].Item3;
 
-							LinearLayout row = (LinearLayout)LayoutInflater.From (view.Context).Inflate (expertiseLayout, null);
+							//this code assumes theres 3 columns!
+							if (currentColumn == 0) {
+								expImage= row.FindViewById<ImageView> (Resource.Id.exp1);
+								expText = row.FindViewById<TextView> (Resource.Id.exp1_text);
+							} else if (currentColumn == 1) {
+								expImage = row.FindViewById<ImageView> (Resource.Id.exp2);
+								expText = row.FindViewById<TextView> (Resource.Id.exp2_text);
+							} else {
+								expImage = row.FindViewById<ImageView> (Resource.Id.exp3);
+								expText = row.FindViewById<TextView> (Resource.Id.exp3_text);
+							}
 
-							ImageView expImage = row.FindViewById<ImageView> (Resource.Id.exp1);
-							TextView expText = row.FindViewById<TextView> (Resource.Id.exp1_text);
 							expImage.SetImageResource (downImage);
 							expText.Text = value;
+							break;
 
-							linearLayout.AddView (row);
 						}
 					}
+					if (currentColumn == (maxColumns-1)) {
+						tableLayout.AddView (row);
+						row = (TableRow)LayoutInflater.From (view.Context).Inflate (expertiseLayout, null);
+						expImage = null;
+						expText = null;
+					}
+					currentColumn++;
+				}
+
+				//if expimage is null that means there's no values to add
+				if (expImage != null) {
+					tableLayout.AddView (row);
 				}
 				break;
 			}//main FOR
@@ -221,9 +364,16 @@ namespace TouriDroid
 
 		//Creates expertise images and puts them in a 3x3 table
 		//images are held in Constants
-		public List<Expertise> BuildExpertiseTable(View view, TableLayout expertiseTable, int tableRowLayout)
+		public List<Expertise> BuildExpertiseTable(View view, TableLayout expertiseTable, int tableRowLayout, List<Expertise> alreadySelectedExps)
 		{			
 			List<Expertise> selectedExpertises = new List<Expertise> ();
+			List<int> alreadySelectedExpIds = new List<int> ();
+			if (alreadySelectedExps.Count > 0) {
+				foreach (Expertise e in alreadySelectedExps) {
+					alreadySelectedExpIds.Add (e.expertiseId); //use a list of ints for faster and simple search
+				}
+			}
+
 			for (int i = 0; i < Constants.ExpertiseImages.Count; i = i + 3) {
 				TableRow row = (TableRow)LayoutInflater.From (view.Context).Inflate (tableRowLayout, null);
 
@@ -245,7 +395,18 @@ namespace TouriDroid
 					string value = Constants.ExpertiseImages[i+j].Item3;
 					int expId = Constants.ExpertiseImages[i+j].Item4;
 					textArray [j].Text = value;
-					b.SetImageResource (upImage);
+
+					if (alreadySelectedExpIds.Contains (expId)) {
+						b.SetImageResource (downImage);
+						b.Selected = true;
+						Expertise expert = new Expertise();
+						expert.expertise = value;
+						expert.expertiseId = expId;
+						selectedExpertises.Add(expert);		
+
+					} else {
+						b.SetImageResource (upImage);
+					}
 
 					b.Click += (object sender, EventArgs e) => {
 						if (!b.Selected)

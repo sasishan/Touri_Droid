@@ -21,7 +21,7 @@ namespace TouriDroid
 		private DrawerLayout 	mDrawer;
 		private ListView		mDrawerList;
 		ActionBarDrawerToggle 	drawerToggle;
-		public Guide			currentGuide;
+		public Guide			currentGuide = null;  //fragments refer to this object
 
 		private List<string> mDrawerItems = new List<string>
 		{

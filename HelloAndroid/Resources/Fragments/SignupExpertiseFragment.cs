@@ -31,7 +31,8 @@ namespace TouriDroid
 
 			// build out the expertises table
 			TableLayout expertiseTable = (TableLayout)view.FindViewById (Resource.Id.table_Expertise);
-			List<Expertise> expertises = sf.BuildExpertiseTable (view, expertiseTable, Resource.Layout.expertise_tablerow);
+			List<Expertise> dummyExpertise = new List<Expertise> ();
+			List<Expertise> expertises = sf.BuildExpertiseTable (view, expertiseTable, Resource.Layout.expertise_tablerow, dummyExpertise);
 
 			expertiseTable.RequestLayout();
 

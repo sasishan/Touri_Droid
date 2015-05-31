@@ -40,6 +40,7 @@ namespace TouriDroid
 
 			if (registered) 
 			{
+				//now we are register, create the guide profile
 				LoginService ls = new LoginService ();
 				String token = await ls.Login (username.Text, password.Text);
 

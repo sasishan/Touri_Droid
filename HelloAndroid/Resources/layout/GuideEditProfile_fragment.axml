@@ -147,7 +147,14 @@
             android:padding="10dp"
             android:gravity="left|center"
             android:textColor="@color/black"
-            android:background="@color/white" />
+            android:background="@color/white">
+            <TableLayout
+                android:id="@+id/table_Expertise"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:padding="00dp"
+                android:stretchColumns="*" />
+        </LinearLayout>
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
