@@ -1,18 +1,17 @@
 ﻿<Properties StartupItem="HelloAndroid\TouriDroid.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.08f7f593031f50f3" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\SupportFunctions.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Fragments\Map_Fragment.cs">
     <Files>
-      <File FileName="HelloAndroid\Resources\Fragments\GuidingFragment.cs" Line="152" Column="1" />
-      <File FileName="HelloAndroid\Resources\SupportFunctions.cs" Line="342" Column="14" />
-      <File FileName="HelloAndroid\Resources\Fragments\SignupExpertiseFragment.cs" Line="35" Column="4" />
+      <File FileName="HelloAndroid\Resources\Fragments\Map_Fragment.cs" Line="36" Column="9" />
+      <File FileName="HelloAndroid\Resources\Activities\GuideProfileActivity.cs" Line="63" Column="20" />
+      <File FileName="HelloAndroid\Resources\Activities\SecondActivity.cs" Line="78" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\GuideFragment.cs" Line="87" Column="8" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Fragments\EditCitiesFragment.cs" line="23" column="39" />
       <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Comms.cs" line="35" column="1" />
-      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Fragments\GuideFragment.cs" line="171" column="1" />
-      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Fragments\GuideFragment.cs" line="188" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>

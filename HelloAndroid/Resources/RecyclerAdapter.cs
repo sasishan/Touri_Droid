@@ -26,7 +26,7 @@ namespace TouriDroid
 		{
 			public View mMainView { get; set; }
 			public TextView mFName { get; set;} 
-			public TextView mDescription { get; set;} 
+			public TextView mSummary { get; set;} 
 			public TextView mAvailability { get; set;} 
 			public TextView mLanguages { get; set;}
 			public TextView mLocations { get; set;}
@@ -47,7 +47,7 @@ namespace TouriDroid
 			TextView FName = row.FindViewById<TextView> (Resource.Id.guide_name);
 			TextView locations = row.FindViewById<TextView> (Resource.Id.locationsServed);
 			TextView languages = row.FindViewById<TextView> (Resource.Id.languages);
-			TextView description = row.FindViewById<TextView> (Resource.Id.description);
+			TextView summary = row.FindViewById<TextView> (Resource.Id.description);
 			TextView availability = row.FindViewById<TextView> (Resource.Id.availability);
 			ImageView photo = row.FindViewById<ImageView> (Resource.Id.guide_photo);
 
@@ -91,7 +91,7 @@ namespace TouriDroid
 			};
 
 
-			MyView view = new MyView (row) { mFName = FName, mLocations=locations, mLanguages = languages, mPhoto=photo, mDescription=description, mAvailability=availability};
+			MyView view = new MyView (row) { mFName = FName, mLocations=locations, mLanguages = languages, mPhoto=photo, mSummary=summary, mAvailability=availability};
 			return view;
 		}
 
@@ -106,12 +106,12 @@ namespace TouriDroid
 
 			//Set description.. for summary only partial description is shown
 			//@todo should their be a summary line for guides like Twitter?
-			if ( (mGuides [position].description!=null) && (mGuides [position].description.Length > Constants.MaxDescriptionLengthInCard) )
+			if ( (mGuides [position].summary!=null) && (mGuides [position].summary.Length > Constants.MaxDescriptionLengthInCard) )
 			{
-				myHolder.mDescription.Text = mGuides [position].description.Substring (0, Constants.MaxDescriptionLengthInCard-1) + "...";
+				myHolder.mSummary.Text = mGuides [position].summary.Substring (0, Constants.MaxDescriptionLengthInCard-1) + "...";
 			} else 
 			{
-				myHolder.mDescription.Text = mGuides [position].description;
+				myHolder.mSummary.Text = mGuides [position].summary;
 			}	
 
 			Converter converter = new Converter ();

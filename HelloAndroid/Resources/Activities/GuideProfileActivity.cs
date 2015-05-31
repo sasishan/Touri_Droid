@@ -59,12 +59,20 @@ namespace TouriDroid
 				}
 				else
 				{
-					var chatActivity = new Intent (this, typeof(ActiveChat));
-					chatActivity.PutExtra ("TargetGuideId", guideId);
-					chatActivity.PutExtra ("TargetUserName", thisGuide.userName);
-					chatActivity.PutExtra ("TargetFirstName", thisGuide.fName);
-					chatActivity.PutExtra ("TargetLastName", thisGuide.lName);
-					this.StartActivity(chatActivity);
+					string myUsername = sm.getEmail();
+					if (myUsername.Equals(thisGuide.userName))
+					{
+						Toast.MakeText(this, "You can't chat with yourself", ToastLength.Short).Show();
+					}
+					else
+					{
+						var chatActivity = new Intent (this, typeof(ActiveChat));
+						chatActivity.PutExtra ("TargetGuideId", guideId);
+						chatActivity.PutExtra ("TargetUserName", thisGuide.userName);
+						chatActivity.PutExtra ("TargetFirstName", thisGuide.fName);
+						chatActivity.PutExtra ("TargetLastName", thisGuide.lName);
+						this.StartActivity(chatActivity);						
+					}
 				}
 			};
 		}

@@ -157,7 +157,7 @@ namespace TouriDroid
 			userName.Text = myProfile.userName;
 			guideName.Text = myProfile.fName + " " + myProfile.lName;
 			aboutMe.Text = myProfile.description;
-			shortAboutme.Text = myProfile.description;
+			shortAboutme.Text = myProfile.summary;
 			foreach (LocationWrapper l in myProfile.placesServedList) {
 				locations.Text += "• "+l.location+"\r\n" ;
 			}
@@ -208,6 +208,11 @@ namespace TouriDroid
 
 			editShortAboutMe.Click += (sender, e) => 
 			{
+				var editGuide = new Intent (Activity, typeof(EditGuideValueActivity));
+				editGuide.PutExtra (Constants.guideSummary, myProfile.summary);	
+				editGuide.PutExtra (Constants.Action, Constants.Action_EditSummary);	
+
+				this.StartActivity (editGuide);
 			};
 
 			editExpertise.Click += (sender, e) => 

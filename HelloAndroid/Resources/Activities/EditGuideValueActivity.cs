@@ -48,6 +48,13 @@ namespace TouriDroid
 
 				newFragment = new EditDescriptionFragment ();
 			}
+			else if (action.Equals(Constants.Action_EditSummary))
+			{
+				string summary = Intent.GetStringExtra (Constants.guideSummary) ?? "Data not available";
+				currentGuide.summary = summary;
+
+				newFragment = new EditSummaryFragment ();
+			}
 			else if (action.Equals(Constants.Action_EditLocations))
 			{
 				string listOfLocations = Intent.GetStringExtra (Constants.selectedLocation) ?? "";

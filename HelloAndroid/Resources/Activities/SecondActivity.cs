@@ -74,6 +74,10 @@ namespace TouriDroid
 			mExpertise = Intent.GetStringExtra (Constants.selectedExpertise) ?? "";
 		}
 
+		protected override void OnDestroy() {
+			base.OnDestroy();
+		}
+
 		public override bool OnOptionsItemSelected (IMenuItem item)
 		{
 			switch (item.ItemId) {

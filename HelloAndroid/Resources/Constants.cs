@@ -131,6 +131,11 @@ namespace TouriDroid
 				g.userName= userName;
 			}
 
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Summary)) {
+				string summary = values [Constants.Guide_WebAPI_Key_Summary];
+				g.summary= summary;
+			}
+
 			if (values.ContainsKey (Constants.Guide_WebAPI_Key_LastName)) {
 				string lName = values [Constants.Guide_WebAPI_Key_LastName];
 				g.lName= lName;
@@ -210,6 +215,8 @@ namespace TouriDroid
 		public const int SUCCESS=1;
 		public const int FAIL=-1;
 
+		public const int MAX_SUMMARY_LENGTH=100;
+
 		//Main Tab positions
 		public const int Main_Expertise_Tab=0;
 		public const int Main_Chat_Tab=1;
@@ -262,6 +269,7 @@ namespace TouriDroid
 		public const string Guide_WebAPI_Key_Expertise = "expertise";
 		public const string Guide_WebAPI_Key_ExpertiseId ="expertiseId";
 		public const string Guide_WebAPI_Key_ProfileImageId ="profileImage";
+		public const string Guide_WebAPI_Key_Summary="summary";
 
 		//Chat messages json
 		public const string Guide_WebAPI_Key_Msg_Id="id";
@@ -379,13 +387,13 @@ namespace TouriDroid
 		//This must match the Expertises table
 		//Up image, down image, expertise name, expertise ID (matches Expertise table in DB)
 		//don't use the '&' sign in names
-		public static List<Tuple<int,int, string, int>> ExpertiseImages = new List<Tuple<int,int, string, int>> {					
-			Tuple.Create(Resource.Drawable.expCool_64, Resource.Drawable.expCool_64_pressed, "Cool and Unique", 1),
-			Tuple.Create(Resource.Drawable.expRestaurant_64, Resource.Drawable.expRestaurant_64_pressed, "Food, Drinks and Fun", 2),
-			Tuple.Create(Resource.Drawable.expMuseum_64, Resource.Drawable.expMuseum_64_pressed, "Art and Museums", 4),
-			Tuple.Create(Resource.Drawable.expColiseum_64, Resource.Drawable.expColiseum_64_pressed, "History", 5),
-			Tuple.Create(Resource.Drawable.expTrekking_64, Resource.Drawable.expTrekking_64_pressed, "Outdoors", 6),
-			Tuple.Create(Resource.Drawable.expDancing_64, Resource.Drawable.expDancing_64_pressed, "Special Events", 7)
+		public static List<Tuple<int,int, string, int, int>> ExpertiseImages = new List<Tuple<int,int, string, int, int>> {					
+			Tuple.Create(Resource.Drawable.expCool_64, Resource.Drawable.expCool_64_pressed, "Cool and Unique", 1, Resource.Drawable.expCool_32_pressed),
+			Tuple.Create(Resource.Drawable.expRestaurant_64, Resource.Drawable.expRestaurant_64_pressed, "Food, Drinks and Fun", 2, Resource.Drawable.expRestaurant_32_pressed),
+			Tuple.Create(Resource.Drawable.expMuseum_64, Resource.Drawable.expMuseum_64_pressed, "Art and Museums", 4, Resource.Drawable.expMuseum_32_pressed),
+			Tuple.Create(Resource.Drawable.expColiseum_64, Resource.Drawable.expColiseum_64_pressed, "History", 5, Resource.Drawable.expColiseum_32_pressed),
+			Tuple.Create(Resource.Drawable.expTrekking_64, Resource.Drawable.expTrekking_64_pressed, "Outdoors", 6, Resource.Drawable.expTrekking_32_pressed),
+			Tuple.Create(Resource.Drawable.expDancing_64, Resource.Drawable.expDancing_64_pressed, "Special Events", 7, Resource.Drawable.expDancing_32_pressed)
 		};
 
 	}

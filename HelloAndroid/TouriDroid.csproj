@@ -136,6 +136,7 @@
     <Compile Include="Resources\Fragments\EditCitiesFragment.cs" />
     <Compile Include="Resources\Fragments\EditLanguagesFragment.cs" />
     <Compile Include="Resources\Fragments\EditExpertiseFragment.cs" />
+    <Compile Include="Resources\Fragments\EditSummaryFragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

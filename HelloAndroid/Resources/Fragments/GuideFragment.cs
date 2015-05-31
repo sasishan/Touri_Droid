@@ -82,8 +82,9 @@ namespace TouriDroid
 					var newFragment = new Map_Fragment ();
 					//var ft = FragmentManager.BeginTransaction ();
 					FragmentTransaction transaction = FragmentManager.BeginTransaction();
-
+					//transaction.Detach(this);
 					transaction.Replace(Resource.Id.fragment_container, newFragment);
+					//transaction.Attach(newFragment);
 					transaction.AddToBackStack(null);
 					//transaction.AddToBackStack(null);
 					transaction.Commit();

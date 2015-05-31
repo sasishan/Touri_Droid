@@ -14,6 +14,7 @@ using Android.Widget;
 using Android.Gms.Maps;
 using Android.Gms.Maps.Model;
 using Android.Locations;
+using Java.Lang.Reflect;
 
 namespace TouriDroid
 {
@@ -32,10 +33,13 @@ namespace TouriDroid
 
 		public override void OnDestroyView() {
 			base.OnDestroyView();
-			MapFragment f = (MapFragment) FragmentManager.FindFragmentById(Resource.Id.map);
-			if (f != null) {
-				FragmentManager.BeginTransaction().Remove(f).Commit ();
+			if (!Activity.IsFinishing) {
+				MapFragment f = (MapFragment) FragmentManager.FindFragmentById(Resource.Id.map);
+				if (f != null) {
+					FragmentManager.BeginTransaction().Remove(f).Commit ();
+				}
 			}
+
 		}
 
 		public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -63,28 +67,33 @@ namespace TouriDroid
 			List<Guide> mGuideList =  ((SecondActivity)Activity).mGuideList;
 			int icon;
 			Random r = new Random ();
-		
+
+			string expertise = ((SecondActivity)Activity).mExpertise;
+
+			icon = GetExpertiseIcon (expertise);
 			foreach (Guide g in mGuideList) {		
-				icon = GetExpertiseIcon ("Cool and Unique");
+
 				foreach (LocationWrapper lw in g.placesServedList) {
 					lw.latitude += (0 + (0.01 - 0) * r.NextDouble ()); //this is to avoid bunching of markers in the same spot
 
 					LatLng l = new LatLng (lw.latitude, lw.longitude);
-					string snip = g.description;
+					string snip = g.summary;
 					setMapLocation (l, 
-						g.fName+" "+g.lName, 
+						g.fName + " " + g.lName, 
 						g.guideId.ToString(), 
 						BitmapDescriptorFactory.DefaultMarker (BitmapDescriptorFactory.HueRed));
+						//BitmapDescriptorFactory.FromResource(icon));
 				}
 			}
 		}
 
 		public int GetExpertiseIcon(string expertise)
 		{
-			int icon = Constants.Uninitialized;
+			int icon = Resource.Drawable.FilledFlag_26; //default
+
 			for (int i = 0; i < Constants.ExpertiseImages.Count; i = i + 3) {
 				if (Constants.ExpertiseImages [i].Item3.Equals (expertise)) {
-					icon= Constants.ExpertiseImages [i].Item1;
+					icon= Constants.ExpertiseImages [i].Item5;
 					break;
 				}
 			}
@@ -118,12 +127,6 @@ namespace TouriDroid
 				Activity.StartActivity(gprofileActivity);
 
 			}
-		}
-
-		public override void OnPause ()
-		{
-			base.OnPause ();
-			//_locationManager.RemoveUpdates (this);
 		}
 
 		public override void OnResume ()
@@ -209,7 +212,7 @@ namespace TouriDroid
 			if (latit != Constants.Uninitialized) {
 				LatLng loc = new LatLng (latit, longit);
 				setMapLocation (loc, 
-					"Your Location", "-1",
+					"Your Location", "",
 					BitmapDescriptorFactory.FromResource (Resource.Drawable.GeoFence_32));
 				setCameraLocation(loc);
 				markGuides ();

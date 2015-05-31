@@ -1,31 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:layout_centerInParent="true"
     android:background="@drawable/linearlayout_bg"
     android:padding="20dp"
     android:layout_gravity="top">
-    <EditText
-        android:id="@+id/summary"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@drawable/edittext_bottom_bg"
-        android:layout_marginTop="-2dp"
-        android:layout_marginBottom="10dp"
-        android:padding="10dp"
-        android:hint="Enter a quick summary (130 chars). This will be displayed when all guides are listed."
-        android:textColorHint="#cccccc"
-        android:textColor="@color/black" />
-    <Button
-        android:id="@+id/buttonUpdate"
-        android:layout_width="match_parent"
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:fillViewport="true"
+        android:layout_above="@+id/m_table_menu">
+        <LinearLayout
+            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/charCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white" />
+            <EditText
+                android:id="@+id/summary"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/edittext_bottom_bg"
+                android:layout_marginTop="-2dp"
+                android:layout_marginBottom="10dp"
+                android:padding="10dp"
+                android:hint="Enter a quick summary of yourself or what you can offer (100 chars). This will be displayed when all guides are listed."
+                android:textColorHint="#cccccc"
+                android:textColor="@color/black"
+                android:maxLength="100" />
+        </LinearLayout>
+    </ScrollView>
+    <TableLayout
+        android:id="@+id/m_table_menu"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_margin="10dp"
-        android:text="Update"
-        style="@style/DefaultButtonText"
-        android:background="@drawable/button_default_bg" />
-</LinearLayout>
+        android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:stretchColumns="*">
+        <Button
+            android:id="@+id/buttonUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:text="Update"
+            style="@style/DefaultButtonText"
+            android:background="@drawable/button_default_bg" />
+    </TableLayout>
+</RelativeLayout>
