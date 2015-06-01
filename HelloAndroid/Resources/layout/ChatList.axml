@@ -16,7 +16,7 @@
             android:textSize="18dp"
             android:layout_marginTop="20dp" />
         <TextView
-            android:text="No messages"
+            android:text="No messages. Start a conversation first."
             android:id="@+id/nomsgs"
             android:layout_width="fill_parent"
             android:layout_height="300dp"

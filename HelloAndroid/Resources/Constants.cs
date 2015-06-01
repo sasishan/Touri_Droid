@@ -222,6 +222,9 @@ namespace TouriDroid
 		public const int Main_Chat_Tab=1;
 		public const string Search_Tab = "Search";
 		public const string Chat_Tab = "Chat Messages";
+		public const string Profile_Tab = "My Profile";
+		public const string Bookings_Tab = "Bookings";
+
 
 		public const int MyResponseYes = 1;
 		public const int MyResponseNo = 0;

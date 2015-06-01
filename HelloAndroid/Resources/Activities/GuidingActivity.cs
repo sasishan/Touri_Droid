@@ -12,6 +12,7 @@ using Android.Views;
 using Android.Widget;
 using Android.Support.V7.App;
 using Android.Support.V4.Widget;
+using Android.Util;
 
 namespace TouriDroid
 {
@@ -37,15 +38,8 @@ namespace TouriDroid
 			// Set our view from the "main" layout resource
 			SetContentView (Resource.Layout.Main);
 
-			Android.Support.V7.App.ActionBar.Tab tab = SupportActionBar.NewTab ();
-			tab.SetText ("My Profile");
-			tab.SetTabListener(this);
-			SupportActionBar.AddTab (tab);
-
-			tab =  SupportActionBar.NewTab ();
-			tab.SetTabListener(this);
-			tab.SetText ("Chat History");
-			SupportActionBar.AddTab (tab);
+			//Android.Support.V7.App.ActionBar.Tab tab = SupportActionBar.NewTab ();
+			configureTabs (Constants.Profile_Tab);
 
 			SessionManager sessionManager = new SessionManager (this);
 			TextView drawerFooter = this.FindViewById<TextView> (Resource.Id.drawer_bottom_text1);
@@ -126,6 +120,50 @@ namespace TouriDroid
 			}			
 		}
 
+		//Configure the tab and set the selectedTab as the one thats open
+		private int configureTabs (string selectedTab)
+		{
+			Boolean selected = false;
+			try
+			{
+				Android.Support.V7.App.ActionBar.Tab tab = SupportActionBar.NewTab ();
+				tab.SetText (Constants.Profile_Tab);
+				tab.SetTabListener(this);
+				if (selectedTab.Equals(tab.Text))
+				{
+					selected = true;
+				}
+				SupportActionBar.AddTab(tab, selected);
+				selected = false;
+
+				tab =  SupportActionBar.NewTab ();
+				tab.SetTabListener(this);
+				tab.SetText (Constants.Chat_Tab);
+				if (selectedTab.Equals(tab.Text))
+				{
+					selected = true;
+				}
+				SupportActionBar.AddTab(tab, selected);
+				selected = false;
+
+				tab =  SupportActionBar.NewTab ();
+				tab.SetTabListener(this);
+				tab.SetText (Constants.Bookings_Tab);
+				if (selectedTab.Equals(tab.Text))
+				{
+					selected = true;
+				}
+				SupportActionBar.AddTab (tab, selected);
+			}
+			catch (Exception e) {
+				Log.Debug ("GuidingActivity", e.Message.ToString ());
+				return Constants.FAIL;
+			}
+
+			return Constants.SUCCESS;
+		}
+
+
 		public void OnTabReselected(Android.Support.V7.App.ActionBar.Tab tab, Android.Support.V4.App.FragmentTransaction ft)
 		{
 			// Optionally refresh/update the displayed tab.
@@ -133,12 +171,17 @@ namespace TouriDroid
 
 		public void OnTabSelected(Android.Support.V7.App.ActionBar.Tab tab, Android.Support.V4.App.FragmentTransaction ft)
 		{
+			string title = tab.Text;
 			FragmentTransaction transaction = FragmentManager.BeginTransaction ();
-			if (tab.Position == Constants.Main_Chat_Tab) {
+
+			if (title.Equals(Constants.Chat_Tab)) {
 				var newFragment = new ChatListFragment ();
 				transaction.Replace (Resource.Id.main_fragment_container, newFragment);
-			} else if (tab.Position == Constants.Main_Expertise_Tab) {
+			} else if (title.Equals(Constants.Profile_Tab)) {
 				var newFragment = new GuidingFragment ();
+				transaction.Replace (Resource.Id.main_fragment_container, newFragment);			
+			} else if (title.Equals(Constants.Bookings_Tab)) {
+				var newFragment = new BookingsFragment ();
 				transaction.Replace (Resource.Id.main_fragment_container, newFragment);			
 			}						
 			transaction.Commit ();
@@ -149,6 +192,11 @@ namespace TouriDroid
 			// Save any state in the displayed fragment.
 			FragmentTransaction transaction = FragmentManager.BeginTransaction ();
 			Fragment currentFrag= FragmentManager.FindFragmentById(Resource.Id.main_fragment_container);
+
+			if (currentFrag == null) {
+				Log.Debug ("GuidingActivity", "currentFrag was null!");
+				return;
+			}
 
 			transaction.Remove (currentFrag);
 			transaction.Commit ();

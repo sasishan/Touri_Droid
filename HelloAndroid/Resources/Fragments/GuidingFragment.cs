@@ -43,13 +43,16 @@ namespace TouriDroid
 		public async void loadMyProfileImage(View view)
 		{
 			//once the profile is loaded (including the image url) this variable is set
-			while ( ((GuidingActivity)Activity).currentGuide==null )
+			while ( Activity!=null && ((GuidingActivity)Activity).currentGuide==null )
 			{
 				await Task.Delay (1000);
 			}
 
-			string imageUrl;
+			if (Activity == null) {
+				return;
+			}
 			Guide myProfile = ((GuidingActivity)Activity).currentGuide;
+			string imageUrl;
 			Comms ca = new Comms ();
 
 			if (myProfile.profileImageId == Constants.Uninitialized) {
@@ -245,7 +248,9 @@ namespace TouriDroid
 			};
 
 			//we've loaded all the details so set the current profile - this is used to load the image async
-			((GuidingActivity)Activity).currentGuide = myProfile;
+			if (Activity != null) {
+				((GuidingActivity)Activity).currentGuide = myProfile;
+			}
 		}
 
 		private string GetStringExpertiseIds(List<Expertise> expList)

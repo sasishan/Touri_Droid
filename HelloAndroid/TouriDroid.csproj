@@ -137,6 +137,7 @@
     <Compile Include="Resources\Fragments\EditLanguagesFragment.cs" />
     <Compile Include="Resources\Fragments\EditExpertiseFragment.cs" />
     <Compile Include="Resources\Fragments\EditSummaryFragment.cs" />
+    <Compile Include="Resources\Fragments\BookingsFragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -265,6 +266,7 @@
     <AndroidResource Include="Resources\drawable\Languages_64.png" />
     <AndroidResource Include="Resources\drawable\Map_64.png" />
     <AndroidResource Include="Resources\layout\selectedExpertise_layout.axml" />
+    <AndroidResource Include="Resources\layout\Bookings_Layout.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
