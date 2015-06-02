@@ -139,20 +139,21 @@ namespace TouriDroid
 			// load the images for each expertise now
 			string imageUrl;
 			List<Expertise> filteredE = new List<Expertise> ();
-		//	foreach (Expertise e in mExpertiseList)
-		//	{
+			foreach (Expertise e in mExpertiseList) {
 				//@remove this if you want to always show all expertises
-			//	if (e.numberOfGuides >0) {
-			//		filteredE.Add (e);
-					//mExpertiseList.Remove (e);
-			//	}
+				//	if (e.numberOfGuides >0) {
+				//		filteredE.Add (e);
+				//mExpertiseList.Remove (e);
+				//	}
 
-		//		imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ e.expertiseImageId;
-		//		Bitmap image = (Bitmap) await ca.getImage (imageUrl);
-		//		e.expertiseImage = image;
-		//		mAdapter.NotifyDataSetChanged ();
+				imageUrl = Constants.DEBUG_BASE_URL + "/api/images/" + e.expertiseImageId;
+				Bitmap image = (Bitmap)await ca.getImage (imageUrl);
+				e.expertiseImage = image;
+			}
+
 		//	}
 		//	mExpertiseList.RemoveAll(item => item.numberOfGuides ==0);
+			mAdapter.NotifyDataSetChanged ();
 			progress.Visibility = ViewStates.Gone;
 
 		}
@@ -244,9 +245,9 @@ namespace TouriDroid
 			myHolder.mExpertise.Text = mExpertise[position].expertise;
 			myHolder.mGuideCount.Text = mExpertise[position].numberOfGuides.ToString();
 
-			string imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ mExpertise[position].expertiseImageId;
-			Bitmap image = (Bitmap) await mCa.getImage (imageUrl);
-			mExpertise[position].expertiseImage = image;
+		//	string imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ mExpertise[position].expertiseImageId;
+		//	Bitmap image = (Bitmap) await mCa.getImage (imageUrl);
+		//	mExpertise[position].expertiseImage = image;
 
 			myHolder.mExpertiseImage.SetImageBitmap(mExpertise[position].expertiseImage);
 		}

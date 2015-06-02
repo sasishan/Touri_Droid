@@ -49,6 +49,7 @@ namespace TouriDroid
 			if (users == null) {
 				Log.Debug ("ChatListFragment", "Unable to use DB");
 				Activity.Finish ();
+				return view;
 			}
 
 			var messages = view.FindViewById<ListView> (Resource.Id.Messages);
