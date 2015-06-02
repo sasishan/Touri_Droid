@@ -57,7 +57,16 @@ namespace TouriDroid
 					string url = String.Format (Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile + Constants.URL_PutProfileImage, guideId);
 					Comms ca = new Comms ();
 
-					ca.PostFile (url, filePath, token);
+					string response = ca.PostFile (url, filePath, token);
+					if (response==null)
+					{
+						Toast.MakeText(this, "There was an error uploading the image", ToastLength.Short).Show();
+					}
+					else
+					{
+						Toast.MakeText(this, "Image uploaded successfully.", ToastLength.Short).Show();
+					}
+
 					Finish ();
 					Intent i = new Intent (this, typeof(GuidingActivity));
 					// Closing all the Activities

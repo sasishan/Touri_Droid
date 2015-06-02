@@ -25,7 +25,7 @@ namespace TouriDroid
 		{
 		}
 
-		public JsonValue PostFile (string p_url, string filename, string accessToken)
+		public string PostFile (string p_url, string filename, string accessToken)
 		{
 			// Create an HTTP web request using the URL:
 			WebClient client = new WebClient();
@@ -39,10 +39,20 @@ namespace TouriDroid
 			client.UploadValuesCompleted += Client_UploadValuesCompleted;
 			//@todo use UploadValuesAsync?
 			//byte[] result = 
-			client.UploadFileAsync (url, filename);
-
-
-			return null;
+			//client.UploadFileAsync (url, filename);
+			try
+			{
+				Byte[] bytes = client.UploadFile (url, filename);
+				if (bytes != null) {
+					return (Encoding.ASCII.GetString (bytes));
+				} else {
+					return null;
+				}
+			}
+			catch (Exception e) {
+				Log.Debug (TAG, e.Message);
+				return null;
+			}
 		}
 
 		public JsonValue PostDataSync (string p_url, NameValueCollection parameters, string accessToken)

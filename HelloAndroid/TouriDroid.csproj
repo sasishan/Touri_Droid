@@ -138,6 +138,7 @@
     <Compile Include="Resources\Fragments\EditExpertiseFragment.cs" />
     <Compile Include="Resources\Fragments\EditSummaryFragment.cs" />
     <Compile Include="Resources\Fragments\BookingsFragment.cs" />
+    <Compile Include="Resources\CommsResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

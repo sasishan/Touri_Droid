@@ -36,9 +36,9 @@ namespace TouriDroid
 			Button next = view.FindViewById<Button> (Resource.Id.buttonNext);
 
 			RegisterService rs = new RegisterService();
-			bool registered = await rs.Register(username.Text, password.Text, password.Text);
+			CommsResult result = await rs.Register(username.Text, password.Text, password.Text);
 
-			if (registered) 
+			if (result.IsSuccess()) 
 			{
 				//now we are register, create the guide profile
 				LoginService ls = new LoginService ();
@@ -103,7 +103,7 @@ namespace TouriDroid
 				//string token = await ls.Login (username.Text, password.Text);
 
 			} else {
-				Toast.MakeText (view.Context, "Error registering your profile", ToastLength.Long).Show ();
+				Toast.MakeText (view.Context, "Error registering: "+ result.message, ToastLength.Long).Show ();
 			}
 		}
 
@@ -153,9 +153,9 @@ namespace TouriDroid
 			Button next = view.FindViewById<Button> (Resource.Id.buttonNext);
 
 			RegisterService rs = new RegisterService();
-			bool registered = await rs.Register(username.Text, password.Text, password.Text);
+			CommsResult result = await rs.Register(username.Text, password.Text, password.Text);
 
-			if (registered) {
+			if (result.IsSuccess()) {
 				Toast.MakeText (view.Context, "You are now registered. Please sign in", ToastLength.Long).Show ();
 
 				Intent i = new Intent(view.Context, typeof(LoginOrSignupActivity));
@@ -164,7 +164,7 @@ namespace TouriDroid
 				this.StartActivity (i);
 
 			} else {
-				Toast.MakeText (view.Context, "Error registering your profile", ToastLength.Long).Show ();
+				Toast.MakeText (view.Context, "Error registering " + result.message, ToastLength.Long).Show ();
 			}
 		}
 
@@ -234,8 +234,12 @@ namespace TouriDroid
 
 			return result;
 		}
-		public async Task<bool> Register(string username, string password, string confirmPassword)
+
+		public async Task<CommsResult> Register(string username, string password, string confirmPassword)
 		{
+			CommsResult result = new CommsResult ();
+			result.SetFail ();
+
 			RegisterModel model = new RegisterModel
 			{
 				ConfirmPassword = password,
@@ -253,25 +257,35 @@ namespace TouriDroid
 			{
 				if (stream == null) {
 					Log.Debug ("SignupRegisterGuide", "Stream is null!");
-					return false;
+					return result;
 				}
 				stream.Write(bytes, 0, bytes.Length);
 			}
 
+			WebResponse wr=null;
 			try
 			{
-				WebResponse wr = await request.GetResponseAsync();
-				if (wr==null)
+				wr= await request.GetResponseAsync();
+				if (wr!=null)
 				{
-					return false;
+					using (var reader = new StreamReader(wr.GetResponseStream()))
+					{
+						string myResponse = reader.ReadToEnd(); 
+						result.SetSuccess(myResponse);
+					}
 				}
-				return true;
+				return result;
 			}
-			catch (Exception ex)
-			{
-				//Toast.MakeText (, "Error ", ToastLength.Long).Show();
-				Log.Debug("Network error", ex.Message);
-				return false;
+			catch (WebException wex) {
+				if (wex.Response != null) {
+					using (var errorResponse = (HttpWebResponse)wex.Response) {
+						using (var reader = new StreamReader(errorResponse.GetResponseStream())) {
+							string error = reader.ReadToEnd();
+							result.SetFail (error);
+						}
+					}
+				}
+				return result;
 			}
 		}
 	}

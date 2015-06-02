@@ -1,17 +1,18 @@
 ﻿<Properties StartupItem="HelloAndroid\TouriDroid.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.08f7f593031f50f3" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\ChatMessageAdapter.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" PreferredExecutionTarget="Android.08acd1362517a34c" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Fragments\SignupRegisterGuide.cs">
     <Files>
-      <File FileName="HelloAndroid\Resources\Fragments\GuideFragment.cs" Line="75" Column="1" />
-      <File FileName="HelloAndroid\Resources\values\Strings.xml" Line="20" Column="25" />
-      <File FileName="HelloAndroid\Resources\Activities\GuidingActivity.cs" Line="31" Column="44" />
-      <File FileName="HelloAndroid\Resources\Constants.cs" Line="226" Column="35" />
-      <File FileName="HelloAndroid\Resources\Activities\MainActivity.cs" Line="104" Column="7" />
-      <File FileName="HelloAndroid\Resources\Fragments\GuidingFragment.cs" Line="253" Column="5" />
-      <File FileName="HelloAndroid\Resources\Fragments\BookingsFragment.cs" Line="31" Column="6" />
-      <File FileName="HelloAndroid\Resources\Fragments\ChatListFragment.cs" Line="63" Column="4" />
-      <File FileName="HelloAndroid\Resources\Activities\ActiveChat.cs" Line="31" Column="21" />
-      <File FileName="HelloAndroid\Resources\ChatMessageAdapter.cs" Line="78" Column="39" />
+      <File FileName="HelloAndroid\Resources\Fragments\GuideFragment.cs" Line="2" Column="18" />
+      <File FileName="HelloAndroid\Resources\values\Strings.xml" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\Activities\GuidingActivity.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\Constants.cs" Line="32" Column="3" />
+      <File FileName="HelloAndroid\Resources\Activities\MainActivity.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\GuidingFragment.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\BookingsFragment.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\ChatListFragment.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\Activities\ActiveChat.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\ChatMessageAdapter.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\SignupRegisterGuide.cs" Line="156" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
