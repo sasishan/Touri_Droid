@@ -34,12 +34,14 @@ namespace TouriDroid
 			var view = inflater.Inflate(Resource.Layout.ChatList, container, false);
 
 			SessionManager sm = new SessionManager (view.Context);
+			SupportFunctions sf = new SupportFunctions ();
 
 			string myUsername = "";
+
 			if (sm.isLoggedIn ()) {
 				myUsername = sm.getEmail ();
 				string token = sm.getAuthorizedToken ();
-				GetMyMessages(token);
+				sf.GetMyMessages(token, mDm);
 			} 
 
 			mDm = new DataManager ();
@@ -75,32 +77,7 @@ namespace TouriDroid
 		}
 
 
-		public async void GetMyMessages(string accessToken)
-		{
-			string url = Constants.DEBUG_BASE_URL + Constants.URL_MyMessages;
-			Comms comms = new Comms();
 
-			var json = await comms.getWebApiData(url, accessToken);
-			if (json==null)
-			{
-				//no need to do anything more
-				return;
-			}
-
-			for (int i = 0; i < json.Count; i++) {
-				ChatMessage cm = mConverter.parseOneChatMessage (json[i]);
-
-				if (cm == null) {
-					continue;
-				}
-
-				//this is not a response from the current user
-				cm.MyResponse=Constants.MyResponseNo;
-				//add it straight to the DB
-				mDm.AddMessage(cm);
-			}
-
-		}
 	}
 }
 

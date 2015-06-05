@@ -146,11 +146,44 @@ namespace TouriDroid
 	public class SupportFunctions
 	{
 		private const string TAG = "SupportFunctions";
+		private Converter mConverter = null;
+
 		public SupportFunctions ()
 		{
-			
+			mConverter = new Converter ();
 		}
 
+		public async Task<int> GetMyMessages(string accessToken, DataManager dm)
+		{
+			if (dm == null) {
+				return 0;
+			}
+
+			string url = Constants.DEBUG_BASE_URL + Constants.URL_MyMessages;
+			Comms comms = new Comms();
+
+			var json = await comms.getWebApiData(url, accessToken);
+			if (json==null)
+			{
+				//no need to do anything more
+				return 0;
+			}
+
+			for (int i = 0; i < json.Count; i++) {
+				ChatMessage cm = mConverter.parseOneChatMessage (json[i]);
+
+				if (cm == null) {
+					continue;
+				}
+
+				//this is not a response from the current user
+				cm.MyResponse=Constants.MyResponseNo;
+				//add it straight to the DB
+				dm.AddMessage(cm);
+			}
+
+			return json.Count;
+		}
 
 		public async Task<int> UpdateAllGuidesLanguages( string token, Guide guide)
 		{

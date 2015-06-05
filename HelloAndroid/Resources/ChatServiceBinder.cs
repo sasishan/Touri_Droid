@@ -11,9 +11,11 @@ namespace TouriDroid
 {
 	[Service]public class ChatService : Service
 	{
-		private const string TAG = "ChatService";
+		private const string 		TAG = "ChatService";
 		private static readonly int MessageReceivedId = 1000;
-		private bool mShowNotifications=true;
+		private bool 				mShowNotifications=true;
+		SessionManager 				mSm = null;
+		string						mMyUsername;
 
 		int mStartMode=0;
 
@@ -23,11 +25,15 @@ namespace TouriDroid
 		/** indicates whether onRebind should be used */
 		bool mAllowRebind=true;
 
-		DataManager dm;
+		DataManager mDm;
 		ChatClient mClient ;
 
 		/** Called when the service is being created. */
 		public override void OnCreate() {
+			mDm = new DataManager ();
+			mDm.SetContext (this);
+			mSm = new SessionManager (this);
+			mMyUsername = mSm.getEmail ();
 		}
 
 		/** The service is starting, due to a call to startService() */
@@ -56,10 +62,10 @@ namespace TouriDroid
 		}
 
 		/** Called when The service is no longer used and is being destroyed */
-		public override async void OnDestroy() {
+		public override void OnDestroy() {
 			Toast.MakeText(this, "Chat server disconnect", ToastLength.Long).Show();
 			Log.Debug (TAG, "OnDestroy");
-			await mClient.disconnect ();
+			mClient.disconnect ();
 		}
 
 		public override StartCommandResult OnStartCommand (Intent intent, StartCommandFlags flags, int startId)
@@ -67,11 +73,35 @@ namespace TouriDroid
 			// Let it continue running until it is stopped.
 			Toast.MakeText(this, "Service Started", ToastLength.Long).Show();
 			Log.Debug (TAG, "OnStartCommand");
-			StartChatConnection ();
+			LoadMyMessages ();
+
+			//PollMyMessages (120);
 
 			//A Sticky Service will get restarted with a null intent if the OS ever shuts it down due to memory pressure:
 			return StartCommandResult.Sticky;
 		}	
+
+		private async void LoadMyMessages ()
+		{
+			string token = mSm.getAuthorizedToken ();
+			SupportFunctions sf = new SupportFunctions ();
+
+			// Create the PendingIntent with the back stack
+			// When the user clicks the notification, SecondActivity will start up.
+			Intent resultIntent = new Intent(this, typeof(MainActivity));
+			resultIntent.PutExtra("CallChat", true);  //tell mainactivity to start chat fragment
+
+			Android.Support.V4.App.TaskStackBuilder stackBuilder = Android.Support.V4.App.TaskStackBuilder.Create(this);
+			stackBuilder.AddNextIntent(resultIntent);
+
+			PendingIntent resultPendingIntent = stackBuilder.GetPendingIntent(0, (int) PendingIntentFlags.UpdateCurrent);
+
+			int count = await sf.GetMyMessages (token, mDm);
+			if (count > 0) {
+				ShowNewMessagesNotification (resultPendingIntent);
+			}
+			StartChatConnection ();
+		}
 
 		protected async Task initalizeClient(string userName)
 		{
@@ -82,16 +112,11 @@ namespace TouriDroid
 			Toast.MakeText(this, "Connected to Chat Server", ToastLength.Long).Show();
 		}
 
-		public async void StartChatConnection () {
-
-			SessionManager sm = new SessionManager (this);
-			string myUsername = sm.getEmail ();
-
+		public async void PollMyMessages(int intervalInSeconds)
+		{
 			Log.Debug (TAG, "StartChatConnection");
-			await initalizeClient (myUsername);
-
-			dm = new DataManager ();
-			dm.SetContext (this);
+			SupportFunctions sf = new SupportFunctions ();
+			string token = mSm.getAuthorizedToken ();
 
 			// Create the PendingIntent with the back stack
 			// When the user clicks the notification, SecondActivity will start up.
@@ -99,7 +124,31 @@ namespace TouriDroid
 			resultIntent.PutExtra("CallChat", true);  //tell mainactivity to start chat fragment
 
 			Android.Support.V4.App.TaskStackBuilder stackBuilder = Android.Support.V4.App.TaskStackBuilder.Create(this);
-		//	stackBuilder.AddParentStack(Class.FromType(typeof(MainActivity)));
+			stackBuilder.AddNextIntent(resultIntent);
+
+			PendingIntent resultPendingIntent = stackBuilder.GetPendingIntent(0, (int) PendingIntentFlags.UpdateCurrent);
+
+			//assume only guides get messages for now so there will be a ToUser name
+			while (true) {
+				int count = await sf.GetMyMessages (token, mDm);
+				if (count > 0) {
+					ShowNewMessagesNotification (resultPendingIntent);
+				}
+				await Task.Delay (intervalInSeconds * 1000);
+			}
+		}
+
+		public async void StartChatConnection () {
+			
+			Log.Debug (TAG, "StartChatConnection");
+			await initalizeClient (mMyUsername);
+
+			// Create the PendingIntent with the back stack
+			// When the user clicks the notification, SecondActivity will start up.
+			Intent resultIntent = new Intent(this, typeof(MainActivity));
+			resultIntent.PutExtra("CallChat", true);  //tell mainactivity to start chat fragment
+
+			Android.Support.V4.App.TaskStackBuilder stackBuilder = Android.Support.V4.App.TaskStackBuilder.Create(this);
 			stackBuilder.AddNextIntent(resultIntent);
 
 			PendingIntent resultPendingIntent = stackBuilder.GetPendingIntent(0, (int) PendingIntentFlags.UpdateCurrent);
@@ -108,40 +157,85 @@ namespace TouriDroid
 			mClient.OnMessageReceived += (sender, message) => { 
 				Log.Debug (TAG, "OnMessageReceived");
 				Log.Debug (TAG, "mShowNotifications "+ mShowNotifications);
-				ChatMessage cm = new ChatMessage ();
-				cm.FromUser = message.fromUser;
-				cm.ToUser = myUsername;
-				cm.Message = message.message;
-				cm.MyResponse=Constants.MyResponseNo;
-				cm.Msgtimestamp = DateTime.Now.ToString ();
 
-				// dont record messages from myself back (eg. could not deliver a message is returned)
-				if (!cm.FromUser.Equals(myUsername))
-				{
-					long id = dm.AddMessage (cm);
-				}
+				LogNewMessage(message);
 
-				// Build the notification
-				//mShowNotifications is set to false if we are in the chat window itself
 				if (mShowNotifications)
 				{
-					NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-						.SetAutoCancel(true) // dismiss the notification from the notification area when the user clicks on it
-						.SetContentIntent(resultPendingIntent) // start up this activity when the user clicks the intent.
-						.SetContentTitle("Touri Message Received") // Set the title
-						.SetSmallIcon(Resource.Drawable.ic_stat_touri_t_logo_trans) // This is the icon to display
-						.SetContentText(String.Format("Message received from {0}", message.fromUser)); // the message to display.
-
-					// Finally publish the notification
-					NotificationManager notificationManager = (NotificationManager)GetSystemService(NotificationService);
-					notificationManager.Notify(MessageReceivedId, builder.Build());
+					ShowNotification(message, resultPendingIntent);
 				}
 			};						
+		}
+
+		private int ShowNewMessagesNotification(PendingIntent pendingIntent)
+		{
+			int result = Constants.FAIL;
+			if (pendingIntent != null ) {
+
+				NotificationCompat.Builder builder = new NotificationCompat.Builder (this)
+					.SetAutoCancel (true) // dismiss the notification from the notification area when the user clicks on it
+					.SetContentIntent (pendingIntent) // start up this activity when the user clicks the intent.
+					.SetContentTitle ("Touri") // Set the title
+					.SetSmallIcon (Resource.Drawable.ic_stat_touri_t_logo_trans) // This is the icon to display
+					.SetContentText ("New message received"); // the message to display.
+
+				// Finally publish the notification
+				NotificationManager notificationManager = (NotificationManager)GetSystemService (NotificationService);
+				notificationManager.Notify (MessageReceivedId, builder.Build ());
+
+				result = Constants.SUCCESS;
+			}
+
+			return result;
+		}
+
+		private int ShowNotification(Message message, PendingIntent pendingIntent)
+		{
+			int result = Constants.FAIL;
+			if (pendingIntent != null && message != null) {
+
+				NotificationCompat.Builder builder = new NotificationCompat.Builder (this)
+				.SetAutoCancel (true) // dismiss the notification from the notification area when the user clicks on it
+				.SetContentIntent (pendingIntent) // start up this activity when the user clicks the intent.
+				.SetContentTitle (message.fromUser) // Set the title
+				.SetSmallIcon (Resource.Drawable.ic_stat_touri_t_logo_trans) // This is the icon to display
+					.SetContentText (message.message); // the message to display.
+
+				// Finally publish the notification
+				NotificationManager notificationManager = (NotificationManager)GetSystemService (NotificationService);
+				notificationManager.Notify (MessageReceivedId, builder.Build ());
+
+				result = Constants.SUCCESS;
+			}
+
+			return result;
+		}
+
+		//Log the message in the database
+		private int LogNewMessage(Message message)
+		{
+			int result = Constants.SUCCESS;
+
+			ChatMessage cm = new ChatMessage ();
+			cm.FromUser = message.fromUser;
+			cm.ToUser = mMyUsername;
+			cm.Message = message.message;
+			cm.MyResponse=Constants.MyResponseNo;
+			cm.Msgtimestamp = DateTime.Now.ToString ();
+
+			// dont insert messages from myself back (eg. could not deliver a message is returned)
+			if (!cm.FromUser.Equals(mMyUsername))
+			{
+				long id = mDm.AddMessage (cm);
+			}
+
+			return result;
 		}
 
 		public async Task<ChatClient> GetChatClient()
 		{
 			Log.Debug (TAG, "GetChatClient");
+
 			if (mClient == null) {
 				SessionManager sm = new SessionManager (this);
 				string myUsername = sm.getEmail ();

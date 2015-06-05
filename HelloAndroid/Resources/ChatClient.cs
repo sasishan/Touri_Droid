@@ -33,10 +33,13 @@ namespace TouriDroid
 
 		public async Task Connect()
 		{			
-			_proxy.On("messageReceived", (string fromUser, string message) =>
+			_proxy.On("messageReceived", (string fromUser, string message, string messageId) =>
 				{
 					if (OnMessageReceived != null)
 					{
+						//acknowledge to the server we received this message
+						_proxy.Invoke("AcknowledgeMessage", messageId);
+
 						Message m = new Message ();
 						m.fromUser = fromUser;
 						m.message = message;
@@ -55,7 +58,7 @@ namespace TouriDroid
 		//	await Send("Connected");
 		}
 
-		public async Task disconnect()
+		public void disconnect()
 		{
 			_connection.Stop ();
 		}
@@ -67,7 +70,13 @@ namespace TouriDroid
 
 		public Task SendPrivateMessage(string message, string targetUsername)
 		{
-			return _proxy.Invoke("SendPrivateMessage", message, _myUsername, targetUsername);
+			while (true) {
+				try {
+					return _proxy.Invoke ("SendPrivateMessage", message, _myUsername, targetUsername);
+				} catch (Exception e) {
+					_connection.Start ();
+				}
+			}
 		}
 
 		public Task Send(string message)
