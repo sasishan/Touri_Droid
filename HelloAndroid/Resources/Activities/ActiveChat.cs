@@ -115,6 +115,7 @@ namespace TouriDroid
 		{
 			try
 			{
+				Log.Debug (TAG, "removeMessageReceivedEvent");
 				mClient.OnMessageReceived -= (sender, message) => RunOnUiThread (() => {
 				});
 			}
@@ -176,6 +177,7 @@ namespace TouriDroid
 
 			mClient.OnMessageReceived+=(sender, message) => RunOnUiThread( () =>
 				{	
+					Log.Debug ("ActiveChat", "In OnMessageReceived");
 					if (message.fromUser.Equals(mTargetUsername))
 					{
 						ChatItem oneNewChatItem = new ChatItem();
@@ -187,7 +189,6 @@ namespace TouriDroid
 						mMyMessages.Add(oneNewChatItem);
 						//@todo check if my message
 						oneNewChatItem.myMessage= false;
-						Log.Debug ("ActiveChat", "OnMessageReceived - Notifydatasetchanged");
 						mAdapter.NotifyDataSetChanged();
 					}
 				}

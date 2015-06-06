@@ -34,11 +34,8 @@ namespace TouriDroid
 			mDm.SetContext (this);
 			mSm = new SessionManager (this);
 			mMyUsername = mSm.getEmail ();
-		}
 
-		/** The service is starting, due to a call to startService() */
-		public int OnStartCommand(Intent intent, int flags, int startId) {
-			return mStartMode;
+			StartChatConnection (120);
 		}
 
 		public override IBinder OnBind (Intent intent)
@@ -73,9 +70,11 @@ namespace TouriDroid
 			// Let it continue running until it is stopped.
 			Toast.MakeText(this, "Service Started", ToastLength.Long).Show();
 			Log.Debug (TAG, "OnStartCommand");
+
 			LoadMyMessages ();
 
 			//PollMyMessages (120);
+
 
 			//A Sticky Service will get restarted with a null intent if the OS ever shuts it down due to memory pressure:
 			return StartCommandResult.Sticky;
@@ -83,6 +82,7 @@ namespace TouriDroid
 
 		private async void LoadMyMessages ()
 		{
+			Log.Debug (TAG, "In LoadMyMessages");
 			string token = mSm.getAuthorizedToken ();
 			SupportFunctions sf = new SupportFunctions ();
 
@@ -100,7 +100,6 @@ namespace TouriDroid
 			if (count > 0) {
 				ShowNewMessagesNotification (resultPendingIntent);
 			}
-			StartChatConnection ();
 		}
 
 		protected async Task initalizeClient(string userName)
@@ -138,7 +137,7 @@ namespace TouriDroid
 			}
 		}
 
-		public async void StartChatConnection () {
+		public async void StartChatConnection (int intervalInSeconds) {
 			
 			Log.Debug (TAG, "StartChatConnection");
 			await initalizeClient (mMyUsername);
@@ -164,7 +163,7 @@ namespace TouriDroid
 				{
 					ShowNotification(message, resultPendingIntent);
 				}
-			};						
+			};			
 		}
 
 		private int ShowNewMessagesNotification(PendingIntent pendingIntent)
@@ -222,6 +221,8 @@ namespace TouriDroid
 			cm.Message = message.message;
 			cm.MyResponse=Constants.MyResponseNo;
 			cm.Msgtimestamp = DateTime.Now.ToString ();
+
+			Log.Debug (TAG, "Logging a message from " + cm.FromUser);
 
 			// dont insert messages from myself back (eg. could not deliver a message is returned)
 			if (!cm.FromUser.Equals(mMyUsername))

@@ -352,8 +352,16 @@ namespace TouriDroid
 					Log.Debug (TAG, "OnResume - Requesting Location updates");
 					mLocationManager.RequestLocationUpdates (Provider, 0, 0, this);
 				} else {
-					Log.Info ("loc", Provider + " is not available. Does the device have location services enabled?");
+					Provider = LocationManager.GpsProvider;
+
+					if (mLocationManager.IsProviderEnabled (Provider)) {
+						Log.Debug (TAG, "OnResume - Requesting Location updates");
+						mLocationManager.RequestLocationUpdates (Provider, 0, 0, this);
+					} else {
+						Log.Info ("loc", Provider + " is not available. Does the device have location services enabled?");
+					}
 				}
+
 			}
 		}
 

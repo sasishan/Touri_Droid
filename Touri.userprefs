@@ -1,10 +1,12 @@
 ﻿<Properties StartupItem="HelloAndroid\TouriDroid.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" PreferredExecutionTarget="Android.SelectDevice" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Activities\ActiveChat.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Constants.cs">
     <Files>
-      <File FileName="HelloAndroid\Resources\ChatServiceBinder.cs" Line="103" Column="27" />
-      <File FileName="HelloAndroid\Resources\ChatClient.cs" Line="22" Column="36" />
-      <File FileName="HelloAndroid\Resources\Activities\ActiveChat.cs" Line="55" Column="31" />
+      <File FileName="HelloAndroid\Resources\ChatServiceBinder.cs" Line="157" Column="1" />
+      <File FileName="HelloAndroid\Resources\ChatClient.cs" Line="45" Column="1" />
+      <File FileName="HelloAndroid\Resources\Activities\ActiveChat.cs" Line="180" Column="1" />
+      <File FileName="HelloAndroid\Resources\Activities\MainActivity.cs" Line="365" Column="5" />
+      <File FileName="HelloAndroid\Resources\Constants.cs" Line="33" Column="5" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
