@@ -97,6 +97,7 @@ namespace TouriDroid
 			switch (item.ItemId) {
 			case Android.Resource.Id.Home:
 				removeMessageReceivedEvent ();
+				//@todo - disconnecting explictly ends our online status
 				mClient.disconnect ();
 				Finish ();
 				return true;
@@ -131,7 +132,7 @@ namespace TouriDroid
 				mClient = new ChatClient (mMyUsername, mTargetUsername);
 			}
 
-			mClient.disconnect ();
+		//	mClient.disconnect ();
 			await mClient.Connect ();
 
 			Button button = FindViewById<Button>(Resource.Id.sendMessageButton);

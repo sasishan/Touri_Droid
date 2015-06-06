@@ -17,12 +17,13 @@ namespace TouriDroid
 		public string _myUsername;
 		public string _targetUserName;
 		public string _myId;
+		public bool   isConnected=false;
 
-		private readonly HubConnection _connection;
-		private readonly IHubProxy _proxy;
+		public 	readonly HubConnection _connection;
+		private IHubProxy _proxy;
 
 		public event EventHandler<Message> OnMessageReceived;
-		public event EventHandler<string> ReceiveMyUserName;
+		public event EventHandler<string> PingMe;
 
 		public ChatClient(string myUsername, string targetUserName)
 		{
@@ -52,13 +53,16 @@ namespace TouriDroid
 					}
 				});
 
-			_proxy.On("receiveMyUserName", (string username) =>
+			_proxy.On("PingClient", (string timestamp) =>
 				{
-					if (ReceiveMyUserName != null)
-						ReceiveMyUserName(this, username);
+					if (PingMe != null)
+					{
+						PingMe(this, timestamp);
+					}
 				});
 
 			await _connection.Start();
+			isConnected = true;
 
 		//	await Send("Connected");
 		}
@@ -66,7 +70,9 @@ namespace TouriDroid
 		public void disconnect()
 		{
 			Log.Debug (TAG, "Disconnecting");
-			_connection.Stop ();
+			_connection.Stop();
+
+			_proxy = null;
 		}
 
 		public Task SendMyUsername()
@@ -83,6 +89,21 @@ namespace TouriDroid
 		public Task Send(string message)
 		{
 			return _proxy.Invoke("Send", _myUsername, message);
+		}
+
+		public Task PingServer()
+		{
+			Log.Debug (TAG, "In PingServer");
+			isConnected = false;
+			Task task = null;
+			try
+			{
+				task = _proxy.Invoke ("PingClient", _myUsername);
+			}
+			catch (Exception e) {
+				Log.Debug (TAG, e.Message);
+			}
+			return task;
 		}
 	}
 }

@@ -16,8 +16,7 @@ namespace TouriDroid
 		private bool 				mShowNotifications=true;
 		SessionManager 				mSm = null;
 		string						mMyUsername;
-
-		int mStartMode=0;
+		private bool				mKeepPinging=true;
 
 		/** interface for clients that bind */
 		IBinder mBinder;     
@@ -35,7 +34,7 @@ namespace TouriDroid
 			mSm = new SessionManager (this);
 			mMyUsername = mSm.getEmail ();
 
-			StartChatConnection (120);
+
 		}
 
 		public override IBinder OnBind (Intent intent)
@@ -62,7 +61,12 @@ namespace TouriDroid
 		public override void OnDestroy() {
 			Toast.MakeText(this, "Chat server disconnect", ToastLength.Long).Show();
 			Log.Debug (TAG, "OnDestroy");
+			mKeepPinging = false;
+			mClient.OnMessageReceived -= (sender, message) => { };
+			mClient.PingMe -= (sender, timestamp) => {};
 			mClient.disconnect ();
+			mClient = null;
+			base.OnDestroy ();
 		}
 
 		public override StartCommandResult OnStartCommand (Intent intent, StartCommandFlags flags, int startId)
@@ -71,6 +75,18 @@ namespace TouriDroid
 			Toast.MakeText(this, "Service Started", ToastLength.Long).Show();
 			Log.Debug (TAG, "OnStartCommand");
 
+			/*	var ongoing = new Notification (Resource.Drawable.ic_touri_logo_trans, "Touri");
+			// Create the PendingIntent with the back stack
+			// When the user clicks the notification, SecondActivity will start up.
+			Intent resultIntent = new Intent(this, typeof(MainActivity));
+			resultIntent.PutExtra("CallChat", true);  //tell mainactivity to start chat fragment
+			Android.Support.V4.App.TaskStackBuilder stackBuilder = Android.Support.V4.App.TaskStackBuilder.Create(this);
+			stackBuilder.AddNextIntent(resultIntent);
+			PendingIntent resultPendingIntent = stackBuilder.GetPendingIntent(0, (int) PendingIntentFlags.UpdateCurrent);
+
+			ongoing.SetLatestEventInfo (this, "Touri", "You are online", resultPendingIntent);
+			StartForeground ((int)NotificationFlags.ForegroundService, ongoing);*/
+			StartChatConnection (300);
 			LoadMyMessages ();
 
 			//PollMyMessages (120);
@@ -96,10 +112,13 @@ namespace TouriDroid
 
 			PendingIntent resultPendingIntent = stackBuilder.GetPendingIntent(0, (int) PendingIntentFlags.UpdateCurrent);
 
+			Log.Debug (TAG, "Calling GetMyMessages");
 			int count = await sf.GetMyMessages (token, mDm);
 			if (count > 0) {
 				ShowNewMessagesNotification (resultPendingIntent);
 			}
+
+			Log.Debug (TAG, "Exiting LoadMyMessages");
 		}
 
 		protected async Task initalizeClient(string userName)
@@ -138,7 +157,7 @@ namespace TouriDroid
 		}
 
 		public async void StartChatConnection (int intervalInSeconds) {
-			
+
 			Log.Debug (TAG, "StartChatConnection");
 			await initalizeClient (mMyUsername);
 
@@ -152,7 +171,14 @@ namespace TouriDroid
 
 			PendingIntent resultPendingIntent = stackBuilder.GetPendingIntent(0, (int) PendingIntentFlags.UpdateCurrent);
 
+			mClient.PingMe -= (sender, timestamp) => {};
+			mClient.PingMe += (sender, timestamp) => {
+				Log.Debug(TAG, "Pinged, we are connected at " + timestamp);
+				mClient.isConnected=true;
+			};
+
 			//assume only guides get messages for now so there will be a ToUser name
+			mClient.OnMessageReceived -= (sender, message) => { };
 			mClient.OnMessageReceived += (sender, message) => { 
 				Log.Debug (TAG, "OnMessageReceived");
 				Log.Debug (TAG, "mShowNotifications "+ mShowNotifications);
@@ -164,6 +190,17 @@ namespace TouriDroid
 					ShowNotification(message, resultPendingIntent);
 				}
 			};			
+
+			while (mKeepPinging) {
+				if (mClient.isConnected == false) {
+					await mClient._connection.Start ();
+					mClient.isConnected = true;
+				}
+				await mClient.PingServer ();
+				await Task.Delay (intervalInSeconds * 1000);
+			}
+
+			return;
 		}
 
 		private int ShowNewMessagesNotification(PendingIntent pendingIntent)
@@ -194,10 +231,10 @@ namespace TouriDroid
 			if (pendingIntent != null && message != null) {
 
 				NotificationCompat.Builder builder = new NotificationCompat.Builder (this)
-				.SetAutoCancel (true) // dismiss the notification from the notification area when the user clicks on it
-				.SetContentIntent (pendingIntent) // start up this activity when the user clicks the intent.
-				.SetContentTitle (message.fromUser) // Set the title
-				.SetSmallIcon (Resource.Drawable.ic_stat_touri_t_logo_trans) // This is the icon to display
+					.SetAutoCancel (true) // dismiss the notification from the notification area when the user clicks on it
+					.SetContentIntent (pendingIntent) // start up this activity when the user clicks the intent.
+					.SetContentTitle (message.fromUser) // Set the title
+					.SetSmallIcon (Resource.Drawable.ic_stat_touri_t_logo_trans) // This is the icon to display
 					.SetContentText (message.message); // the message to display.
 
 				// Finally publish the notification

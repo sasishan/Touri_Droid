@@ -180,6 +180,8 @@ namespace TouriDroid
 				// Perform action on clicks
 				if (online.Checked)
 				{
+					//stop any existing service and restart it
+					Activity.StopService (new Intent (Activity, typeof(ChatService)));
 					Activity.StartService (new Intent (Activity, typeof(ChatService)));
 					Toast.MakeText(view.Context, "Online", ToastLength.Short).Show ();
 				}
