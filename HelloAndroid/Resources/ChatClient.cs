@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Android.Util;
+using System.Reflection;
+using Java.Lang.Reflect;
 
 namespace TouriDroid
 {
@@ -38,12 +40,22 @@ namespace TouriDroid
 		public async Task Connect()
 		{		
 			Log.Debug (TAG, "In connect");	
+
 			_proxy.On("messageReceived", (string fromUser, string message, string messageId) =>
 				{
 					if (OnMessageReceived != null)
 					{
 						//acknowledge to the server we received this message
-						_proxy.Invoke("AcknowledgeMessage", messageId);
+
+						try
+						{
+							_proxy.Invoke("AcknowledgeMessage", messageId);
+						}
+						catch (Exception e)
+						{
+							//return;
+							Log.Debug(TAG, "AcknowledgeMessage error");
+						}
 						Log.Debug (TAG, "Acknowledged message with id " + messageId);
 
 						Message m = new Message ();
@@ -61,29 +73,49 @@ namespace TouriDroid
 					}
 				});
 
-			await _connection.Start();
-			isConnected = true;
-
+			try
+			{
+				await _connection.Start();
+				isConnected = true;
+			}
+			catch (Exception e) {
+				//do nothing
+				isConnected = false;
+			}
 		//	await Send("Connected");
 		}
 
-		public void disconnect()
+		public async void disconnect()
 		{
 			Log.Debug (TAG, "Disconnecting");
-			_connection.Stop();
 
-			_proxy = null;
+			try
+			{
+				Log.Debug (TAG, "Trying to stop connection");
+				_connection.Stop();
+				//_proxy = null;
+			}
+			catch (Exception e)
+			{
+				Log.Debug (TAG, "Disconnect error");
+				//do nothing
+			}
 		}
 
-		public Task SendMyUsername()
+		public async Task<int> SendPrivateMessage(string message, string targetUsername)
 		{
-			return _proxy.Invoke("SendMyUserName");
-		}
+			Log.Debug (TAG, "In SendPrivateMessage");
 
-		public Task SendPrivateMessage(string message, string targetUsername)
-		{
-			Log.Debug (TAG, "Disconnecting");
-			return _proxy.Invoke ("SendPrivateMessage", message, _myUsername, targetUsername);
+			try
+			{
+				await _proxy.Invoke ("SendPrivateMessage", message, _myUsername, targetUsername);
+			}
+			catch (Exception e) {
+				Log.Debug (TAG, "SendPrivateMessage erorr");
+				return Constants.FAIL;
+			}
+
+			return Constants.SUCCESS;
 		}
 
 		public Task Send(string message)
@@ -91,19 +123,29 @@ namespace TouriDroid
 			return _proxy.Invoke("Send", _myUsername, message);
 		}
 
-		public Task PingServer()
+		public async Task PingServer()
 		{
-			Log.Debug (TAG, "In PingServer");
+			Log.Info (TAG, "In PingServer");
 			isConnected = false;
-			Task task = null;
+
 			try
 			{
-				task = _proxy.Invoke ("PingClient", _myUsername);
+				Log.Debug (TAG, "Invoking PingClient");
+				await _proxy.Invoke ("PingClient", _myUsername);
+			}
+			catch (TargetInvocationException  e) {
+				Log.Debug (TAG, "PingClient TargetInvocationException error");
+			}
+			catch (InvocationTargetException e) {
+				Log.Debug (TAG, "PingClient InvocationTargetException error");
+			}
+			catch (InvalidOperationException e) {
+				Log.Debug (TAG, "PingClient InvalidOperationException error");
 			}
 			catch (Exception e) {
-				Log.Debug (TAG, e.Message);
+				Log.Debug (TAG, "PingClient error 4");
 			}
-			return task;
+
 		}
 	}
 }

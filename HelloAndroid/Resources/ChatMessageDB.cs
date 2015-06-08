@@ -16,13 +16,14 @@ namespace TouriDroid
 		public String Message { get; set; }
 		public String Msgtimestamp { get; set; }
 		public int MyResponse { get; set; }  //set this to 1 (TRUE) if its a response from the current user
+		public String Delivered { get; set; } 
 		//public char downloaded { get; set; }
 		//public string lastDownloaded { get; set; }
 
 		public override string ToString()
 		{
-			return string.Format("[ChatMessageEntry: ID={0}, FromUser={1}, ToUser={2}, Message={3}, Msgtimestamp={4}]", 
-				ID, FromUser, ToUser, Message, Msgtimestamp);
+			return string.Format("[ChatMessageEntry: ID={0}, FromUser={1}, ToUser={2}, Message={3}, Msgtimestamp={4}, delivered={5}]", 
+				ID, FromUser, ToUser, Message, Msgtimestamp, Delivered);
 		}
 	}
 
@@ -36,6 +37,7 @@ namespace TouriDroid
 		public const String COLUMN_MYRESPONSE_SUBTITLE = "MyResponse";
 		public const String COLUMN_MESSAGE = "Message";
 		public const String COLUMN_TIMESTAMP = "Msgtimestamp";
+		public const String COLUMN_DELIVERED = "Delivered";
 	}
 
 	public static class ChatMessageContract {
@@ -50,7 +52,8 @@ namespace TouriDroid
 			ChatMessageEntry.COLUMN_TOUSER_SUBTITLE + TEXT_TYPE + COMMA_SEP +
 			ChatMessageEntry.COLUMN_MYRESPONSE_SUBTITLE + INT_TYPE + COMMA_SEP +
 			ChatMessageEntry.COLUMN_MESSAGE + TEXT_TYPE + COMMA_SEP +
-			ChatMessageEntry.COLUMN_TIMESTAMP +	TEXT_TYPE +
+			ChatMessageEntry.COLUMN_TIMESTAMP +	TEXT_TYPE + COMMA_SEP +
+			ChatMessageEntry.COLUMN_DELIVERED +	TEXT_TYPE +
 				" )";
 
 		public const String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + ChatMessageEntry.TABLE_NAME;

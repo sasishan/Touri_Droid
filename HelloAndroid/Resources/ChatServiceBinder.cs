@@ -174,7 +174,15 @@ namespace TouriDroid
 			mClient.PingMe -= (sender, timestamp) => {};
 			mClient.PingMe += (sender, timestamp) => {
 				Log.Debug(TAG, "Pinged, we are connected at " + timestamp);
-				mClient.isConnected=true;
+
+				if (mClient==null)
+				{
+					Log.Debug(TAG, "mClient is null!!");
+				}
+				else
+				{
+					mClient.isConnected=true;
+				}
 			};
 
 			//assume only guides get messages for now so there will be a ToUser name
@@ -192,11 +200,28 @@ namespace TouriDroid
 			};			
 
 			while (mKeepPinging) {
-				if (mClient.isConnected == false) {
-					await mClient._connection.Start ();
-					mClient.isConnected = true;
+				if (mClient == null) {
+					Log.Debug (TAG, "Fatal: mClient is null!");
+				} 
+				else if (mClient.isConnected == false) {
+					try
+					{
+						Log.Debug (TAG, "isConnect is false" );
+						await mClient._connection.Start ();
+						LoadMyMessages();
+					}
+					catch (Exception e) {
+						Log.Debug (TAG, "Exception on Pinging caught but keep moving ");
+					}
+					//mClient.isConnected = true;
 				}
-				await mClient.PingServer ();
+
+				if (mClient == null) {
+					Log.Debug (TAG, "Fatal: mClient is null!");
+				} else {
+					Log.Debug (TAG, "Going to ping server");
+					await mClient.PingServer ();
+				}
 				await Task.Delay (intervalInSeconds * 1000);
 			}
 

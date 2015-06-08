@@ -50,7 +50,11 @@ namespace TouriDroid
 				}
 			}
 			catch (Exception e) {
-				Log.Debug (TAG, e.Message);
+				if (e.Message != null) {
+					Log.Debug (TAG, "Error PostFile" + e.Message);
+				} else {
+					Log.Debug (TAG, "Error PostFile");
+				}
 				return null;
 			}
 		}
@@ -74,7 +78,12 @@ namespace TouriDroid
 				result = client.UploadValues (url, parameters);
 			}
 			catch (Exception e) {
-				Log.Debug (TAG, e.Message);
+				if (e.Message != null) {
+					Log.Debug (TAG, "Error PostDataSync" + e.Message);
+				} else {
+					Log.Debug (TAG, "Error PostDataSync");
+				}
+
 				return null;
 			}
 
@@ -113,7 +122,11 @@ namespace TouriDroid
 				httpresponse = await Task.Run(() => httpclient.Execute(httppostreq));
 			}
 			catch (Exception e) {
-				Log.Debug (TAG, e.Message);
+				if (e.Message != null) {
+					Log.Debug (TAG, "Error PostDataSyncUsingUri" + e.Message);
+				} else {
+					Log.Debug (TAG, "Error PostDataSyncUsingUri");
+				}
 				return null;
 			}
 
@@ -124,7 +137,11 @@ namespace TouriDroid
 			} 
 			catch (ParseException e) 
 			{ 
-				Log.Debug(TAG,e.Message);
+				if (e.Message != null) {
+					Log.Debug (TAG, "Error PostDataSyncUsingUri" + e.Message);
+				} else {
+					Log.Debug (TAG, "Error PostDataSyncUsingUri");
+				}
 			}
 
 			return responseText;
@@ -232,7 +249,18 @@ namespace TouriDroid
 			Uri url = new Uri(p_url);	
 
 			client.UploadValuesCompleted += Client_UploadValuesCompleted;
-			client.UploadValuesAsync (url, parameters);
+
+			try
+			{
+				client.UploadValuesAsync (url, parameters);
+			}
+			catch (Exception e) {
+				if (e.Message != null) {
+					Log.Debug (TAG, "Error PostWebApiData" + e.Message);
+				} else {
+					Log.Debug (TAG, "Error PostWebApiData");
+				}
+			}
 		}
 
 		void Client_UploadValuesCompleted (object sender, UploadValuesCompletedEventArgs e)
@@ -272,9 +300,9 @@ namespace TouriDroid
 					}
 					catch (Exception e)
 					{			
-						if (e.InnerException!=null)
+						if (e.Message!=null)
 						{
-							Log.Debug(TAG, e.InnerException.ToString());
+							Log.Debug(TAG, e.Message);
 						}
 						else
 						{

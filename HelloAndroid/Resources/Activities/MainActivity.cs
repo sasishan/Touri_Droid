@@ -44,7 +44,7 @@ namespace TouriDroid
 		public string 			mPlace="";
 
 		private List<string> mDrawerItems = new List<string>
-			{
+		{
 			//blank initially
 		};
 
@@ -67,15 +67,16 @@ namespace TouriDroid
 			//SetContentView (Resource.Layout.Second);
 			SetContentView (Resource.Layout.Main);
 
+			Log.Info (TAG, "Version= " + Constants.TOURI_VER);
 			initializeGlobals ();
 
 			if (mSessionManager.isLoggedIn () == true) {
 				//bind to the chat service
 				//this way we don't have to invoke multiple connections
-			//	var chatServiceIntent = new Intent (this, typeof(ChatService));
-			//	MainChatServiceConnection chatServiceConnection = new MainChatServiceConnection (this);
+				//	var chatServiceIntent = new Intent (this, typeof(ChatService));
+				//	MainChatServiceConnection chatServiceConnection = new MainChatServiceConnection (this);
 
-			//	bool connected = BindService (chatServiceIntent, chatServiceConnection, Bind.AutoCreate);
+				//	bool connected = BindService (chatServiceIntent, chatServiceConnection, Bind.AutoCreate);
 			}
 
 			int returnVal = configureDrawer ();
@@ -83,7 +84,7 @@ namespace TouriDroid
 				Log.Debug (TAG, "Failed to configure the left drawer");
 				return;
 			}
-				
+
 			SupportActionBar.SetDisplayHomeAsUpEnabled (true);
 			SupportActionBar.SetHomeButtonEnabled (true);
 
@@ -143,14 +144,14 @@ namespace TouriDroid
 			}
 
 			string lastLocation = "";
-		//	if (mSessionManager.isLoggedIn ()) {
+			//	if (mSessionManager.isLoggedIn ()) {
 			lastLocation = mSessionManager.getLastLocation ();
 
 			// only waste time if it's not blank
 			if (!lastLocation.Equals ("")) {
 				setMyPlace (lastLocation);
 			}
-		//	}
+			//	}
 
 			return base.OnCreateOptionsMenu(menu);
 		} 
@@ -173,7 +174,7 @@ namespace TouriDroid
 			base.OnPostCreate (savedInstanceState);
 			drawerToggle.SyncState ();
 		}
-						
+
 		//if the search action bar has a value added
 		private void searchPlaces_ItemClick (object sender, AdapterView.ItemClickEventArgs e)
 		{
@@ -196,7 +197,7 @@ namespace TouriDroid
 					//ef.View.RequestFocus ();
 					InputMethodManager imm = (InputMethodManager) GetSystemService(Activity.InputMethodService);
 					imm.HideSoftInputFromWindow(CurrentFocus.WindowToken, 0);
-										
+
 				} 
 				else if (mCurrentFragment == typeof(GuideFragment) )
 				{
@@ -254,10 +255,13 @@ namespace TouriDroid
 			}
 			else if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.DrawerOptionSwitchGuide)) {
 				mDrawer.CloseDrawers ();
-				this.StartActivity (typeof(GuidingActivity));
+				Intent i = new Intent (this, typeof(GuidingActivity));
+				// Closing all the Activities
+				i.SetFlags (ActivityFlags.NewTask | ActivityFlags.ClearTask);
+				this.StartActivity (i);
 			}
 		}
-			
+
 		public override bool OnOptionsItemSelected (IMenuItem item)
 		{
 			if (drawerToggle.OnOptionsItemSelected (item)) 
@@ -267,16 +271,16 @@ namespace TouriDroid
 
 			switch (item.ItemId) 
 			{
-				case Resource.Id.search:
-					mSearchPlaces.Text = "";
-					return base.OnOptionsItemSelected (item);
+			case Resource.Id.search:
+				mSearchPlaces.Text = "";
+				return base.OnOptionsItemSelected (item);
 
-				case Android.Resource.Id.Home:
-					Finish ();
-					return true;
+			case Android.Resource.Id.Home:
+				Finish ();
+				return true;
 
-				default:
-					return base.OnOptionsItemSelected (item);
+			default:
+				return base.OnOptionsItemSelected (item);
 			}			
 		}
 
@@ -346,22 +350,24 @@ namespace TouriDroid
 
 			if (mPlace.Equals ("")) {
 				Log.Debug (TAG, "OnResume - mPlace is empty");
-				string Provider = LocationManager.NetworkProvider;
+				//string Provider = LocationManager.NetworkProvider;
+			
+				Criteria locationCriteria = new Criteria();
 
-				if (mLocationManager.IsProviderEnabled (Provider)) {
-					Log.Debug (TAG, "OnResume - Requesting Location updates");
-					mLocationManager.RequestLocationUpdates (Provider, 0, 0, this);
-				} else {
-					Provider = LocationManager.GpsProvider;
+				locationCriteria.Accuracy = Accuracy.Coarse;
+				locationCriteria.PowerRequirement = Power.Low;
 
-					if (mLocationManager.IsProviderEnabled (Provider)) {
-						Log.Debug (TAG, "OnResume - Requesting Location updates");
-						mLocationManager.RequestLocationUpdates (Provider, 0, 0, this);
-					} else {
-						Log.Info ("loc", Provider + " is not available. Does the device have location services enabled?");
-					}
+				string provider = mLocationManager.GetBestProvider (locationCriteria, true);
+
+				if (provider != null)
+				{
+					mLocationManager.RequestLocationUpdates (provider, 0, 0, this);
 				}
-
+				else
+				{
+					setMyPlace ("Chicago, Illinois, USA");
+					Log.Info(TAG, "No location providers available");
+				}
 			}
 		}
 

@@ -94,7 +94,10 @@ namespace TouriDroid
 			} 
 			else if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.DrawerOptionSwitchTravel)) {
 				mDrawer.CloseDrawers ();
-				this.StartActivity (typeof(MainActivity));
+				Intent i = new Intent (this, typeof(MainActivity));
+				// Closing all the Activities
+				i.SetFlags (ActivityFlags.NewTask | ActivityFlags.ClearTask);
+				this.StartActivity (i);
 			}
 		}
 

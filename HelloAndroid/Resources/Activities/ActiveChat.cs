@@ -80,6 +80,7 @@ namespace TouriDroid
 				oneChatItem.messageTimestamp = m.Msgtimestamp;
 				oneChatItem.user = m.FromUser;
 				oneChatItem.myMessage = false;
+				oneChatItem.deliveredToServer = m.Delivered;
 
 				if (m.MyResponse == Constants.MyResponseYes) {
 					oneChatItem.myMessage = true;
@@ -135,45 +136,67 @@ namespace TouriDroid
 		//	mClient.disconnect ();
 			await mClient.Connect ();
 
+			if (mClient.isConnected == false) {
+				Toast.MakeText(this, "Could not connect to chat server. Check you internet connection.", ToastLength.Short).Show();
+				Finish ();
+				return;
+			}
+
 			Button button = FindViewById<Button>(Resource.Id.sendMessageButton);
 			var input = FindViewById<EditText> (Resource.Id.inputChat);
 
 			//get chat cient waits till the service starts
 			//await GetChatClient ();
-			button.Click += (o, e) => {
-				if (string.IsNullOrEmpty(input.Text))
+			string newMessage;
+			button.Click += async (o, e) => {
+
+				newMessage = input.Text;
+				input.Text="";
+				if (string.IsNullOrEmpty(newMessage))
 				{
 					return;
 				}
 
 				Log.Debug (TAG, "button.Click - Sending private message");
 
-				mClient.SendPrivateMessage(input.Text, mTargetUsername);
-
 				ChatItem oneNewChatItem = new ChatItem();
-				oneNewChatItem.message = input.Text;
+				oneNewChatItem.message = newMessage;
 				oneNewChatItem.user = "Me";
 				oneNewChatItem.messageTimestamp=DateTime.Now.ToString();
 				oneNewChatItem.myMessage= true;
+				oneNewChatItem.deliveredToServer="sending...";
 
 				//add this to the listview to show it on screen
 				Log.Debug ("ActiveChat", "button.Click- Add item to message list");
 				mMyMessages.Add(oneNewChatItem);
+				mAdapter.NotifyDataSetChanged();
+
+				int result = await mClient.SendPrivateMessage(input.Text, mTargetUsername);
+
+				//@todo more efficient way?
+				if (result==Constants.SUCCESS)
+				{
+					oneNewChatItem.deliveredToServer="delivered";
+				}
+				else
+				{
+					oneNewChatItem.deliveredToServer="not delivered";
+				}
+				mAdapter.NotifyDataSetChanged();
 
 				//add it to the Database as well
 				ChatMessage cm = new ChatMessage();
-				cm.Message = input.Text;
+				cm.Message = newMessage;
 				cm.FromUser = mTargetUsername;
 				cm.ToUser =	mMyUsername;
 				cm.Msgtimestamp = oneNewChatItem.messageTimestamp;
 				cm.MyResponse=Constants.MyResponseYes; // this is my response
+				cm.Delivered = oneNewChatItem.deliveredToServer;
 
 				Log.Debug ("ActiveChat", "button.Click - Add item to DB");
 				dm.AddMessage(cm);
 
 				Log.Debug ("ActiveChat", "button.Click - Notifydatasetchanged");
-				mAdapter.NotifyDataSetChanged();
-				input.Text ="";
 			};
 
 			mClient.OnMessageReceived+=(sender, message) => RunOnUiThread( () =>

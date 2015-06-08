@@ -9,6 +9,7 @@ namespace TouriDroid
 {
 	public static class Constants
 	{
+		public const string TOURI_VER = "v.0.1.06.08.15.1";
 		//Success, Fail values for function calls
 		public const int SUCCESS=1;
 		public const int FAIL=-1;
