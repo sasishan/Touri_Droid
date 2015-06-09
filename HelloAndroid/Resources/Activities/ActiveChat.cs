@@ -33,14 +33,13 @@ namespace TouriDroid
 		//Messages need to be cleared cos OnStart is recalled each time, while onCreate is only called on startup
 		protected override void OnStart ()
 		{
-			base.OnStart ();
 
-			HandleClicks ();
+			base.OnStart ();
 		}			
 
-		protected override async void OnCreate (Bundle bundle)
+		protected override async void OnCreate (Bundle savedInstanceState)
 		{
-			base.OnCreate (bundle);
+			base.OnCreate (savedInstanceState);
 			SetContentView (Resource.Layout.ActiveChat_Activity);
 
 			ActionBar.SetDisplayHomeAsUpEnabled (true);
@@ -57,6 +56,17 @@ namespace TouriDroid
 				mMyUsername = sm.getEmail ();
 			}
 
+			HandleClicks ();
+		}
+
+		protected override void OnResume ()
+		{
+			LoadScreen ();
+			base.OnResume ();
+		}
+
+		public void LoadScreen()
+		{
 			var messages = FindViewById<ListView> (Resource.Id.Messages);
 			messages.TranscriptMode = TranscriptMode.AlwaysScroll;
 
@@ -107,11 +117,12 @@ namespace TouriDroid
 			}			
 		}
 
-		protected override void OnDestroy ()
+		protected override void OnStop ()
 		{
 			removeMessageReceivedEvent ();
-			base.OnDestroy ();
+			base.OnStop ();
 		}
+
 
 		private void removeMessageReceivedEvent()
 		{
@@ -137,7 +148,7 @@ namespace TouriDroid
 			await mClient.Connect ();
 
 			if (mClient.isConnected == false) {
-				Toast.MakeText(this, "Could not connect to chat server. Check you internet connection.", ToastLength.Short).Show();
+				Toast.MakeText(this, "Could not connect to chat server. Check your internet connection.", ToastLength.Short).Show();
 				Finish ();
 				return;
 			}
@@ -148,6 +159,7 @@ namespace TouriDroid
 			//get chat cient waits till the service starts
 			//await GetChatClient ();
 			string newMessage;
+			button.Click -= async (o, e) => {};
 			button.Click += async (o, e) => {
 
 				newMessage = input.Text;
@@ -171,7 +183,7 @@ namespace TouriDroid
 				mMyMessages.Add(oneNewChatItem);
 				mAdapter.NotifyDataSetChanged();
 
-				int result = await mClient.SendPrivateMessage(input.Text, mTargetUsername);
+				int result = await mClient.SendPrivateMessage(newMessage, mTargetUsername);
 
 				//@todo more efficient way?
 				if (result==Constants.SUCCESS)
@@ -199,6 +211,8 @@ namespace TouriDroid
 				Log.Debug ("ActiveChat", "button.Click - Notifydatasetchanged");
 			};
 
+
+			removeMessageReceivedEvent ();
 			mClient.OnMessageReceived+=(sender, message) => RunOnUiThread( () =>
 				{	
 					Log.Debug ("ActiveChat", "In OnMessageReceived");

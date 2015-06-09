@@ -37,12 +37,10 @@ namespace TouriDroid
 			SupportFunctions sf = new SupportFunctions ();
 
 			string myUsername = "";
-
-			if (sm.isLoggedIn ()) {
-				myUsername = sm.getEmail ();
-				string token = sm.getAuthorizedToken ();
-				sf.GetMyMessages(token, mDm);
-			} 
+			if (sm.isLoggedIn() == true) {
+				myUsername= sm.getEmail();
+				loadMyMessages (sm, sf);
+			}
 
 			mDm = new DataManager ();
 			mDm.SetContext (view.Context);
@@ -76,7 +74,12 @@ namespace TouriDroid
 			return view;
 		}
 
-
+		public async void loadMyMessages(SessionManager sm, SupportFunctions sf)
+		{
+			string token = sm.getAuthorizedToken ();
+			await sf.GetMyMessages(token, mDm);
+			return;
+		}
 
 	}
 }
