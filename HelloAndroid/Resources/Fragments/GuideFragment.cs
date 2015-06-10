@@ -52,7 +52,9 @@ namespace TouriDroid
 			SetHasOptionsMenu(true);
 
 			if (mGuideSearch == null) {
-				mGuideSearch = ((SecondActivity)this.Activity).mGuideSearch;
+				if ((SecondActivity)this.Activity != null) {
+					mGuideSearch = ((SecondActivity)this.Activity).mGuideSearch;
+				}
 			}
 
 			ImageView mapIcon  = view.FindViewById<ImageView> (Resource.Id.mapicon);
@@ -68,11 +70,11 @@ namespace TouriDroid
 			mGuideSearch.placesServedList.Clear ();
 			mGuideSearch.placesServedList.Add (mPlace);
 			mGuideSearch.expertiseList.Add (expertise);
+			mAdapter = new RecyclerAdapter (mGuideList, this.Activity);
+			((RecyclerAdapter)mAdapter).ItemClick += guideClick;
+			mRecyclerView.SetAdapter (mAdapter);
 
 			RefineSearch(mGuideSearch);
-
-			mAdapter = new RecyclerAdapter (mGuideList, this.Activity);
-			mRecyclerView.SetAdapter (mAdapter);
 
 			mapIcon.Click += (object sender, EventArgs e) => {
 
@@ -89,6 +91,10 @@ namespace TouriDroid
 					//transaction.AddToBackStack(null);
 					transaction.Commit();
 				}
+				else
+				{
+					Toast.MakeText (this.Activity, "Still loading all the guides", ToastLength.Short);
+				}
 			};
 
 			return view;
@@ -101,6 +107,44 @@ namespace TouriDroid
 			var item = menu.FindItem (Resource.Id.map);
 
 			base.OnCreateOptionsMenu(menu, menuInflater);				
+		}
+
+
+		public void guideClick(object sender, int position)
+		{
+			int itemPosition = position;
+
+			Guide guide = ((RecyclerAdapter)mAdapter).GetGuide (position);
+
+			var gprofileActivity = new Intent (Activity, typeof(GuideProfileActivity));
+			gprofileActivity.PutExtra ("GuideId", guide.guideId.ToString());
+			gprofileActivity.PutExtra ("UName", guide.userName);
+			gprofileActivity.PutExtra ("FName", guide.fName);
+			gprofileActivity.PutExtra ("LName", guide.lName);
+
+			string langs="";
+			foreach(string l in guide.languageList)
+			{
+				langs+=l+"; ";
+			}
+
+			string expertises="";
+			foreach(Expertise exp in guide.expertise)
+			{
+				expertises+=exp.expertise+"; ";
+			}
+			if (guide.expertise.Count>0)
+			{
+				langs = langs.Remove (langs.Length - 2);
+				expertises = expertises.Remove (expertises.Length - 2);
+			}
+
+			gprofileActivity.PutExtra ("Languages", langs);
+			gprofileActivity.PutExtra ("Description", guide.description);
+			gprofileActivity.PutExtra ("Expertise", expertises);
+			//		gprofileActivity.PutExtra ("JSON", mGuides[itemPosition].jsonText.ToString());
+
+			Activity.StartActivity(gprofileActivity);
 		}
 
 		private void searchPlaces_ItemClick (object sender, AdapterView.ItemClickEventArgs e)
@@ -195,14 +239,27 @@ namespace TouriDroid
 				
 			guidesLoaded = false;
 			await loadGuideProfiles (url);
+			await LoadGuideImages ();
 			guidesLoaded = true;
 		}
 
+		public async Task LoadGuideImages()
+		{
+			int position = 0;
+			foreach (Guide g in mGuideList) {
+				string imageUrl = Constants.DEBUG_BASE_URL + "/api/images/" + g.profileImageId;// + "/thumbnail";
+				Bitmap image = (Bitmap) await mComms.getScaledImage (imageUrl, Constants.GuideListingReqWidth, Constants.GuideListingReqHeight);
+				g.profileImage = image;
+				mAdapter.NotifyItemChanged (position++);
+			}
+		}
 
 		public async Task<List<Guide>> loadGuideProfiles(string url)
 		{
 			mGuideList.Clear ();
-			((SecondActivity)this.Activity).availableLanguages.Clear ();
+			if ((SecondActivity)this.Activity != null) {
+				((SecondActivity)this.Activity).availableLanguages.Clear ();
+			}
 
 			if (mConverter == null || mComms==null) {
 				Log.Debug(TAG, "mConverter or mCA was null");
@@ -219,16 +276,26 @@ namespace TouriDroid
 					if (g == null) {
 						continue;
 					}
+
+			//		string imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ g.profileImageId + "/thumbnail";
+			//		Bitmap image = (Bitmap) await mComms.getScaledImage (imageUrl, Constants.GuideListingReqWidth, Constants.GuideListingReqHeight);
+			//		g.profileImage = image;
+
 					mGuideList.Add (g);
 					mAdapter.NotifyItemInserted (i);
 
 					//add the languages to filterable languages list for all guides
 					foreach (string l in g.languageList) {
-						((SecondActivity)this.Activity).availableLanguages.Add (l);
+						if (((SecondActivity)this.Activity) != null) {
+							((SecondActivity)this.Activity).availableLanguages.Add (l);	
+						}
 					}
 				}
 
-				((SecondActivity)this.Activity).mGuideList = mGuideList;
+				if (((SecondActivity)this.Activity) != null) {
+					((SecondActivity)this.Activity).mGuideList = mGuideList;
+				}
+
 			//	mAdapter.NotifyDataSetChanged ();
 
 				// If there are no guides, set the message

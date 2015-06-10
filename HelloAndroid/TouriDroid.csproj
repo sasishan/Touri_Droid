@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -113,6 +113,7 @@
     <Compile Include="Resources\SupportFunctions.cs" />
     <Compile Include="Resources\Fragments\SignupLanguagesFragment.cs" />
     <Compile Include="Resources\Fragments\SignupRegisterGuide.cs" />
+    <Compile Include="Resources\Fragments\Map_Fragment.cs" />
     <Compile Include="Resources\Fragments\SignInFragment.cs" />
     <Compile Include="Resources\Activities\SignUpAsGuideActivity.cs" />
     <Compile Include="Resources\ChatServiceBinder.cs" />
@@ -126,7 +127,6 @@
     <Compile Include="Resources\Activities\ImageSelectActivity.cs" />
     <Compile Include="Resources\Fragments\EditNameFragment.cs" />
     <Compile Include="Resources\Fragments\EditDescriptionFragment.cs" />
-    <Compile Include="Resources\Fragments\Map_Fragment.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Resources\Activities\FilterActivity.cs" />
     <Compile Include="Resources\PlacesAutoComplete.cs" />

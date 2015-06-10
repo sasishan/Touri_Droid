@@ -48,10 +48,16 @@ namespace TouriDroid
 				var newFragment = new GuideFragment ();
 				//var ft = FragmentManager.BeginTransaction ();
 
-				((SecondActivity)this.Activity).mGuideSearch.languageList.Clear();
+				if ((SecondActivity)this.Activity!=null)
+				{
+					((SecondActivity)this.Activity).mGuideSearch.languageList.Clear();
+				}
 				foreach (String l in ((SecondActivity)this.Activity).checkedLanguages)
 				{
-					((SecondActivity)this.Activity).mGuideSearch.languageList.Add(l);
+					if ((SecondActivity)this.Activity!=null)
+					{
+						((SecondActivity)this.Activity).mGuideSearch.languageList.Add(l);
+					}
 				}
 
 				FragmentTransaction transaction = FragmentManager.BeginTransaction();

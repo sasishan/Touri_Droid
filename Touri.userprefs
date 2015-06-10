@@ -1,19 +1,20 @@
 ﻿<Properties StartupItem="HelloAndroid\TouriDroid.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" PreferredExecutionTarget="Android.08f7f593031f50f3" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="c:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Activities\ActiveChat.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" PreferredExecutionTarget="Android.SelectDevice" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Activities\ActiveChat.cs">
     <Files>
       <File FileName="HelloAndroid\Resources\ChatServiceBinder.cs" Line="151" Column="5" />
+      <File FileName="HelloAndroid\Resources\Activities\ActiveChat.cs" Line="48" Column="3" />
+      <File FileName="HelloAndroid\Resources\Activities\MainActivity.cs" Line="60" Column="62" />
       <File FileName="HelloAndroid\Resources\Constants.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\ChatClient.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\ChatListFragment.cs" Line="1" Column="1" />
       <File FileName="HelloAndroid\Resources\Activities\SecondActivity.cs" Line="1" Column="1" />
       <File FileName="HelloAndroid\Resources\Fragments\SignupRegisterGuide.cs" Line="1" Column="1" />
       <File FileName="HelloAndroid\Resources\Comms.cs" Line="1" Column="1" />
       <File FileName="HelloAndroid\Resources\ChatMessageAdapter.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\Activities\MainActivity.cs" Line="27" Column="15" />
       <File FileName="HelloAndroid\Resources\ChatMessageDB.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\SupportFunctions.cs" Line="169" Column="14" />
-      <File FileName="HelloAndroid\Resources\Fragments\ChatListFragment.cs" Line="40" Column="23" />
-      <File FileName="c:\Bitbucket\Touri_Droid\HelloAndroid\Resources\ChatClient.cs" Line="61" Column="7" />
-      <File FileName="c:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Activities\ActiveChat.cs" Line="162" Column="1" />
+      <File FileName="HelloAndroid\Resources\SupportFunctions.cs" Line="161" Column="4" />
+      <File FileName="HelloAndroid\Resources\Activities\GuidingActivity.cs" Line="200" Column="56" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

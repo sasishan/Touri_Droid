@@ -14,6 +14,7 @@ namespace TouriDroid
 		private List<Guide> mGuides;
 		private Activity thisActivity;
 		private Comms mCa;
+		public event EventHandler<int> ItemClick;
 
 		public RecyclerAdapter(List<Guide> guideList, Activity thisAct)
 		{
@@ -32,9 +33,10 @@ namespace TouriDroid
 			public TextView mLocations { get; set;}
 			public ImageView mPhoto { get; set; }
 
-			public MyView(View view): base(view)
+			public MyView(View view, Action<int> listener): base(view)
 			{
 				mMainView = view;
+				view.Click += (sender, e) => listener (base.Position);
 			}
 		}
 
@@ -90,12 +92,11 @@ namespace TouriDroid
 
 			};
 
-
-			MyView view = new MyView (row) { mFName = FName, mLocations=locations, mLanguages = languages, mPhoto=photo, mSummary=summary, mAvailability=availability};
+			MyView view = new MyView (row, OnClick) { mFName = FName, mLocations=locations, mLanguages = languages, mPhoto=photo, mSummary=summary, mAvailability=availability};
 			return view;
 		}
 
-		public async override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
+		public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
 		{
 			MyView myHolder = holder as MyView;
 
@@ -135,56 +136,33 @@ namespace TouriDroid
 
 			//myHolder.mPhoto.SetImageResource (Resource.Drawable.placeholder_photo);
 
-			string imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ mGuides [position].profileImageId;
+			//get the thumbnails if available
+			//string imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ mGuides [position].profileImageId + "/thumbnail";
 
-			Bitmap image = (Bitmap) await mCa.getScaledImage (imageUrl, Constants.GuideListingReqWidth, Constants.GuideListingReqHeight);
-			mGuides [position].profileImage = image;
+//			Bitmap image = (Bitmap) await mCa.getScaledImage (imageUrl, Constants.GuideListingReqWidth, Constants.GuideListingReqHeight);
+//			mGuides [position].profileImage = image;
 			myHolder.mPhoto.SetImageBitmap (mGuides [position].profileImage);		
 
 			//myHolder.ItemView.Click += (sender, e) => {
 			LinearLayout content = myHolder.ItemView.FindViewById<LinearLayout> (Resource.Id.guideContentLayout);
-
-			content.Click += (sender, e) => {
-				int itemPosition = myHolder.Position;
-
-				var gprofileActivity = new Intent (thisActivity, typeof(GuideProfileActivity));
-				gprofileActivity.PutExtra ("GuideId", mGuides[itemPosition].guideId.ToString());
-				gprofileActivity.PutExtra ("UName", mGuides[itemPosition].userName);
-				gprofileActivity.PutExtra ("FName", mGuides[itemPosition].fName);
-				gprofileActivity.PutExtra ("LName", mGuides[itemPosition].lName);
-
-				string langs="";
-				foreach(string l in mGuides[itemPosition].languageList)
-				{
-					langs+=l+"; ";
-				}
-
-				string expertises="";
-				foreach(Expertise exp in mGuides[itemPosition].expertise)
-				{
-					expertises+=exp.expertise+"; ";
-				}
-				if (mGuides[itemPosition].expertise.Count>0)
-				{
-					langs = langs.Remove (langs.Length - 2);
-					expertises = expertises.Remove (expertises.Length - 2);
-				}
-
-				gprofileActivity.PutExtra ("Languages", langs);
-				gprofileActivity.PutExtra ("Description", mGuides[itemPosition].description);
-				gprofileActivity.PutExtra ("Expertise", expertises);
-				//		gprofileActivity.PutExtra ("JSON", mGuides[itemPosition].jsonText.ToString());
-
-				thisActivity.StartActivity(gprofileActivity);
-
-				//				StartActivity (typeof(GuideProfileActivity));
-
-			};
 		}
 
 		public override int ItemCount{
 			get { return mGuides.Count; }
 		}
+
+		public Guide GetGuide(int position)
+		{
+			return mGuides [position];
+		}
+
+		void OnClick (int position)
+		{
+			if (ItemClick != null) {
+				ItemClick (this, position);
+			}
+		}
+
 	}
 
 }
