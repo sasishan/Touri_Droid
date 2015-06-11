@@ -10,6 +10,7 @@ using Android.Util;
 using Org.Json;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Android.Graphics;
 
 namespace TouriDroid
 {
@@ -184,6 +185,8 @@ namespace TouriDroid
 
 			return json.Count;
 		}
+
+
 
 		public async Task<int> UpdateAllGuidesLanguages( string token, Guide guide)
 		{

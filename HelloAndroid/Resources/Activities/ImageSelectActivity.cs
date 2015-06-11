@@ -48,23 +48,28 @@ namespace TouriDroid
 					Android.Net.Uri selectedImage = data.Data;
 
 					string filePath = GetPathToImage (selectedImage);
-					//String filePath = (selectedImage.Path);
-					//	String file_extn = filePath.Substring(filePath.LastIndexOf(".")+1);
-
-					SessionManager sm = new SessionManager (this);
-					string token = sm.getAuthorizedToken ();
-					int guideId = sm.getGuideId ();
-					string url = String.Format (Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile + Constants.URL_PutProfileImage, guideId);
-					Comms ca = new Comms ();
-
-					string response = ca.PostFile (url, filePath, token);
-					if (response==null)
+					if (filePath==null)
 					{
-						Toast.MakeText(this, "There was an error uploading the image", ToastLength.Short).Show();
+						Toast.MakeText(this, "There was an error getting the image", ToastLength.Short).Show();
 					}
 					else
 					{
-						Toast.MakeText(this, "Image uploaded successfully.", ToastLength.Short).Show();
+						SessionManager sm = new SessionManager (this);
+						string token = sm.getAuthorizedToken ();
+						int guideId = sm.getGuideId ();
+						string url = String.Format (Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile + Constants.URL_PutProfileImage, guideId);
+						Comms ca = new Comms ();
+
+						string response = ca.PostFile (url, filePath, token);
+						//string response = ca.ScaleAndUploadPic(url, filePath, token,Constants.FULL_SIZE, Constants.FULL_SIZE);
+						if (response==null)
+						{
+							Toast.MakeText(this, "There was an error uploading the image", ToastLength.Short).Show();
+						}
+						else
+						{
+							Toast.MakeText(this, "Image uploaded successfully.", ToastLength.Short).Show();
+						}
 					}
 
 					Finish ();

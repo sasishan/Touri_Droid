@@ -247,7 +247,7 @@ namespace TouriDroid
 		{
 			int position = 0;
 			foreach (Guide g in mGuideList) {
-				string imageUrl = Constants.DEBUG_BASE_URL + "/api/images/" + g.profileImageId;// + "/thumbnail";
+				string imageUrl = Constants.DEBUG_BASE_URL + "/api/images/" + g.profileImageId + "/thumbnail";
 				Bitmap image = (Bitmap) await mComms.getScaledImage (imageUrl, Constants.GuideListingReqWidth, Constants.GuideListingReqHeight);
 				g.profileImage = image;
 				mAdapter.NotifyItemChanged (position++);

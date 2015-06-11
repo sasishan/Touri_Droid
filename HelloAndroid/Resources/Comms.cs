@@ -15,6 +15,8 @@ using Org.Json;
 using Org.Apache.Http.Message;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.IO;
 
 namespace TouriDroid
 {
@@ -24,6 +26,74 @@ namespace TouriDroid
 		public Comms()
 		{
 		}
+
+		public string ScaleAndUploadPic(string p_url, string filename, string accessToken, int targetW, int targetH) {
+
+			// Get the dimensions of the bitmap
+			BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+
+			bmOptions.InJustDecodeBounds = true;
+			BitmapFactory.DecodeFile(filename, bmOptions);
+			int photoW = bmOptions.OutWidth;
+			int photoH = bmOptions.OutHeight;
+
+			// Determine how much to scale down the image
+			int scaleFactor = Math.Min(photoW/targetW, photoH/targetH);
+
+			// Decode the image file into a Bitmap sized to fill the View
+			bmOptions.InJustDecodeBounds = false;
+			bmOptions.InSampleSize = scaleFactor;
+			bmOptions.InPurgeable = true;
+
+			Bitmap bitmap = BitmapFactory.DecodeFile(filename, bmOptions);
+
+			byte[] bitmapData;
+			byte[] encodedBitmapData;
+			using (var stream = new MemoryStream())
+			{
+				try{
+					bitmap.Compress(Bitmap.CompressFormat.Jpeg, 0, stream);
+					bitmapData = stream.ToArray();
+					encodedBitmapData = Base64.Encode( bitmapData, Base64Flags.Default);
+				}
+				catch (Exception e) {
+					Log.Debug (TAG, "Error converting image");
+					return null;
+				}
+			}
+
+
+			WebClient client = new WebClient();
+
+			Uri url = new Uri(p_url);
+
+			if (accessToken != null) {
+				client.Headers.Add("Authorization", String.Format("Bearer {0}", accessToken));
+			}
+
+			client.UploadValuesCompleted += Client_UploadValuesCompleted;
+			//@todo use UploadValuesAsync?
+			//byte[] result = 
+			//client.UploadFileAsync (url, filename);
+			try
+			{
+				Byte[] bytes = client.UploadData(url, encodedBitmapData);
+				if (bytes != null) {
+					return (Encoding.ASCII.GetString (bytes));
+				} else {
+					return null;
+				}
+			}
+			catch (Exception e) {
+				if (e.Message != null) {
+					Log.Debug (TAG, "Error PostFile" + e.Message);
+				} else {
+					Log.Debug (TAG, "Error PostFile");
+				}
+				return null;
+			}
+		}
+
 
 		public string PostFile (string p_url, string filename, string accessToken)
 		{
