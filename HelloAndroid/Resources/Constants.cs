@@ -30,8 +30,8 @@ namespace TouriDroid
 
 		//URL values for WebApi calls
 		//public const string DEBUG_BASE_IP = "http://192.168.0.12";
-		//public const string DEBUG_BASE_IP = "http://54.69.185.48"; //PRODUCTION SYSTEM
-		public const string DEBUG_BASE_IP = "http://192.168.0.28";
+		public const string DEBUG_BASE_IP = "http://54.69.185.48"; //PRODUCTION SYSTEM
+		//public const string DEBUG_BASE_IP = "http://192.168.0.28";
 		public const string DEBUG_BASE_PORT = "50467";
 		public const string DEBUG_BASE_URL = DEBUG_BASE_IP + ":"+ DEBUG_BASE_PORT;//"http://192.168.0.28:50467";//"http://192.168.43.247:50467";//"http://192.168.0.12:50467";//"http://192.168.1.14:50467"; "http://192.168.1.189:50467"
 		public const string URL_Get_All_Guides = "/api/guides";

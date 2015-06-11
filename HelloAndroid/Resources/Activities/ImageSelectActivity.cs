@@ -48,6 +48,7 @@ namespace TouriDroid
 					Android.Net.Uri selectedImage = data.Data;
 
 					string filePath = GetPathToImage (selectedImage);
+					//string filePath = selectedImage.Path;
 					if (filePath==null)
 					{
 						Toast.MakeText(this, "There was an error getting the image", ToastLength.Short).Show();
@@ -96,13 +97,16 @@ namespace TouriDroid
 			// The projection contains the columns we want to return in our query.
 			string[] projection = new[] { Android.Provider.MediaStore.Images.Media.InterfaceConsts.Id };
 			string selection = Android.Provider.MediaStore.Images.Media.InterfaceConsts.Id + " =? ";
+
 			using (ICursor cursor = ContentResolver.Query(Android.Provider.MediaStore.Images.Media.ExternalContentUri, null, selection, new string[] {docId}, null))
 			{
 				if (cursor != null)
 				{
 					int columnIndex = cursor.GetColumnIndexOrThrow (Android.Provider.MediaStore.Images.Media.InterfaceConsts.Data);
 					cursor.MoveToFirst();
-					path = cursor.GetString(columnIndex);
+					if (cursor.Count > 0) {
+						path = cursor.GetString (columnIndex);
+					}
 				}
 			}
 

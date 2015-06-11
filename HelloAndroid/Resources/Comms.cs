@@ -119,6 +119,17 @@ namespace TouriDroid
 					return null;
 				}
 			}
+			catch (WebException wex) {
+				if (wex.Response != null) {
+					using (var errorResponse = (HttpWebResponse)wex.Response) {
+						using (var reader = new StreamReader(errorResponse.GetResponseStream())) {
+							string error = reader.ReadToEnd();
+							Log.Debug (TAG, "Error PostFile" + error);
+						}
+					}
+				}
+				return null;
+			}
 			catch (Exception e) {
 				if (e.Message != null) {
 					Log.Debug (TAG, "Error PostFile" + e.Message);
