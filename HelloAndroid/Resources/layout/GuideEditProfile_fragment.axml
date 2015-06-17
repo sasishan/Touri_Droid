@@ -29,15 +29,35 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true" />
         </RelativeLayout>
-        <Switch
-            android:id="@+id/toggleChatOn"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chat Status"
-            android:textOn="Online for Chat"
-            android:textOff="Offline for Chat"
-            android:textColor="@color/black"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="5dp"
+            android:weightSum="100">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:gravity="left|center_vertical"
+                android:textColor="@color/black"
+                android:text="Chat Notifications"
+                android:layout_weight="100" />
+            <ToggleButton
+                android:id="@+id/toggleChatOn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chat Status"
+                android:textOn="ON"
+                android:textOff="OFF"
+                android:textColor="@color/black"
+                android:layout_gravity="center" />
+        </LinearLayout>
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"

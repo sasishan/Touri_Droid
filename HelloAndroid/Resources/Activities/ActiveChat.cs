@@ -109,7 +109,7 @@ namespace TouriDroid
 			case Android.Resource.Id.Home:
 				removeMessageReceivedEvent ();
 				//@todo - disconnecting explictly ends our online status
-				mClient.disconnect ();
+				//mClient.disconnect ();
 				Finish ();
 				return true;
 			default:

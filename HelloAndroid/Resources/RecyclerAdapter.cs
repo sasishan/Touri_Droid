@@ -55,7 +55,9 @@ namespace TouriDroid
 
 			//set click listener for more button
 			Button moreButton = row.FindViewById<Button>(Resource.Id.moreButton);
-			moreButton.Click += (sender, e) => {
+			LinearLayout moreContainer = row.FindViewById<LinearLayout>(Resource.Id.more);
+			TextView moreText = row.FindViewById<TextView> (Resource.Id.moreText);
+			moreContainer.Click += (sender, e) => {
 				LinearLayout more = (LinearLayout) row.FindViewById(Resource.Id.moreLayout);
 
 				View card = row.FindViewById(Resource.Id.guideCardViewLayout);
@@ -67,6 +69,7 @@ namespace TouriDroid
 					newHeight =card.Height-more.Height;	
 					more.Visibility=ViewStates.Gone;
 					moreButton.SetBackgroundResource(Resource.Drawable.expander_ic_minimized);
+					moreText.Text = "More";
 					//moreButton.Background=DRawabl(Resource.Drawable.expander_ic_minimized);
 				}
 				else //make it visible
@@ -74,6 +77,7 @@ namespace TouriDroid
 					newHeight =card.Height+more.Height;
 					more.Visibility=ViewStates.Visible;
 					moreButton.SetBackgroundResource(Resource.Drawable.expander_ic_maximized);
+					moreText.Text = "Less";
 				}
 
 				//more.Alpha=0.0f;

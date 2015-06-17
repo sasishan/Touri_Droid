@@ -60,7 +60,8 @@ namespace TouriDroid
 			} else {
 				imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ myProfile.profileImageId;
 
-				Bitmap image = (Bitmap) await ca.getScaledImage (imageUrl,  Constants.ProfileReqWidth, Constants.ProfileReqHeight);
+				//Bitmap image = (Bitmap) await ca.getScaledImage (imageUrl,  Constants.ProfileReqWidth, Constants.ProfileReqHeight);
+				Bitmap image = (Bitmap) await ca.getImage (imageUrl);
 				myProfile.profileImage = image;
 			}
 
@@ -101,7 +102,7 @@ namespace TouriDroid
 			Converter converter = new Converter ();
 			Guide myProfile = converter.parseOneGuideProfile (json);//parseGuideProfiles (json);
 
-			Switch online = view.FindViewById<Switch> (Resource.Id.toggleChatOn);
+			ToggleButton online = view.FindViewById<ToggleButton> (Resource.Id.toggleChatOn);
 			if (myProfile.availability == Constants.AvailableNowValue) {
 				online.Checked = true;
 			}

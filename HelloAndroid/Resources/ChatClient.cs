@@ -147,6 +147,12 @@ namespace TouriDroid
 			}
 
 		}
+
+		public async Task ConnectOnExpertise()
+		{
+
+		}
+
 	}
 }
 

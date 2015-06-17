@@ -9,7 +9,8 @@ namespace TouriDroid
 {
 	public static class Constants
 	{
-		public const string TOURI_VER = "v.0.1.06.08.15.2";
+		public const string TOURI_VER = "v.0.1.06.16.15.2";
+		public const string TOURI_TAG = "Touri";
 		//Success, Fail values for function calls
 		public const int SUCCESS=1;
 		public const int FAIL=-1;
@@ -29,7 +30,7 @@ namespace TouriDroid
 		public const int MyResponseNo = 0;
 
 		//URL values for WebApi calls
-		//public const string DEBUG_BASE_IP = "http://192.168.0.12";
+		//public const string DEBUG_BASE_IP = "http://192.168.0.13";
 		public const string DEBUG_BASE_IP = "http://54.69.185.48"; //PRODUCTION SYSTEM
 		//public const string DEBUG_BASE_IP = "http://192.168.0.28";
 		public const string DEBUG_BASE_PORT = "50467";
@@ -49,6 +50,10 @@ namespace TouriDroid
 		public const string URL_PutGuideDescription = "/{0}/description";
 		public const string URL_PutGuideSummary= "/{0}/summary";
 		public const string URL_MyMessages= "/api/messages";
+
+		//online offline
+		public const string ONLINE_NOTIFICATIONS = "Chat Notifications are ON";
+		public const string OFFLINE_NOTIFICATIONS = "Chat Notifications are OFF";
 
 		// WebApi Keys
 		public const string Guide_WebAPI_Key_Username="username";

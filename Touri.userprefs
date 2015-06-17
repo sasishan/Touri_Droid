@@ -1,28 +1,22 @@
 ﻿<Properties StartupItem="HelloAndroid\TouriDroid.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" PreferredExecutionTarget="Android.08f7f593031f50f3" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Activities\ImageSelectActivity.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Constants.cs">
     <Files>
-      <File FileName="HelloAndroid\Resources\Activities\GuidingActivity.cs" Line="200" Column="56" />
-      <File FileName="HelloAndroid\Resources\Fragments\GuideFragment.cs" Line="250" Column="84" />
-      <File FileName="HelloAndroid\Resources\Fragments\ExpertiseFragment.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\RecyclerAdapter.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\Activities\MainActivity.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\Activities\ImageSelectActivity.cs" Line="113" Column="1" />
-      <File FileName="HelloAndroid\Resources\Comms.cs" Line="128" Column="1" />
+      <File FileName="HelloAndroid\Resources\ChatClient.cs" Line="153" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\ChatListFragment.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\ChatServiceBinder.cs" Line="1" Column="1" />
       <File FileName="HelloAndroid\Resources\Constants.cs" Line="34" Column="5" />
-      <File FileName="HelloAndroid\Resources\Fragments\FilterFragment.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\SupportFunctions.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\Fragments\SignupRegisterGuide.cs" Line="289" Column="5" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Fragments\EditCitiesFragment.cs" line="23" column="39" />
-      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Comms.cs" line="123" column="1" />
+      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\ChatClient.cs" line="36" column="122" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="HelloAndroid\GuideFragment.cs" line="157" offsetX="844" offsetY="2496" expression="this.Activity.mPlace" liveUpdate="False" />
     <Watch file="HelloAndroid\Resources\SupportFunctions.cs" line="132" offsetX="501" offsetY="2096" expression="c.Tag" liveUpdate="False" />
   </MonoDevelop.Ide.DebuggingService.PinnedWatches>
+  <MonoDevelop.Ide.ItemProperties.TouriDroid AndroidDesignerPreferredDevice="Nexus 4" />
 </Properties>

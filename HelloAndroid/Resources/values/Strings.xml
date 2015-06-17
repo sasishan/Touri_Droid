@@ -21,7 +21,7 @@
 	<color name="dark_grey">#7e7e7e</color>
 	<color name="black">#000000</color>
 	<color name="light_blue">#d5e7fb</color>
-
+	<color name="green">#009900</color>
 
     <style name="DefaultButtonText">
        <item name="android:layout_width">fill_parent</item>

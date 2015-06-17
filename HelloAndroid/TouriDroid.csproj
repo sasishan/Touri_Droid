@@ -171,8 +171,6 @@
     <AndroidResource Include="Resources\layout\Second_backup.axml" />
     <AndroidResource Include="Resources\layout\Main_backup.axml" />
     <AndroidResource Include="Resources\drawable\ic_action_search_grey.png" />
-    <AndroidResource Include="Resources\drawable\expander_ic_maximized.9.png" />
-    <AndroidResource Include="Resources\drawable\expander_ic_minimized.9.png" />
     <AndroidResource Include="Resources\layout\menu_item.axml" />
     <AndroidResource Include="Resources\menu\menu_filters.xml" />
     <AndroidResource Include="Resources\layout\fragment_filter.axml" />
@@ -269,6 +267,8 @@
     <AndroidResource Include="Resources\drawable\Map_64.png" />
     <AndroidResource Include="Resources\layout\selectedExpertise_layout.axml" />
     <AndroidResource Include="Resources\layout\Bookings_Layout.axml" />
+    <AndroidResource Include="Resources\drawable\expander_ic_maximized.png" />
+    <AndroidResource Include="Resources\drawable\expander_ic_minimized.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

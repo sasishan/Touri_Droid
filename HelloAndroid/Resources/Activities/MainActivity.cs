@@ -150,6 +150,8 @@ namespace TouriDroid
 			// only waste time if it's not blank
 			if (!lastLocation.Equals ("")) {
 				setMyPlace (lastLocation);
+			} else {
+				setMyPlace ("Markham, Ontario, Canada");
 			}
 			//	}
 
