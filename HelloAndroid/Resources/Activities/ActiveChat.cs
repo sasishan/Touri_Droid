@@ -20,7 +20,6 @@ namespace TouriDroid
 	[Activity (Label = "Chat", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
 	public class ActiveChat : Activity
 	{
-		private string 					TAG = "ActiveChat";
 		ChatClient 						mClient = null;	
 		DataManager 					dm;
 		public string 					mTargetUsername="";
@@ -77,7 +76,7 @@ namespace TouriDroid
 
 			List<ChatMessage> myChatMessages = dm.GetMessagesFromUser(mMyUsername, mTargetUsername);
 			if (myChatMessages == null) {
-				Log.Debug (TAG, "failed to get DB messages!");
+				Log.Debug (Constants.TOURI_TAG, "failed to get DB messages!");
 				Toast.MakeText(this, "Failed to open DB", ToastLength.Short).Show();
 				Finish ();
 				return;
@@ -128,7 +127,7 @@ namespace TouriDroid
 		{
 			try
 			{
-				Log.Debug (TAG, "removeMessageReceivedEvent");
+				Log.Debug (Constants.TOURI_TAG, "removeMessageReceivedEvent");
 				mClient.OnMessageReceived -= (sender, message) => RunOnUiThread (() => {
 				});
 			}
@@ -169,7 +168,7 @@ namespace TouriDroid
 					return;
 				}
 
-				Log.Debug (TAG, "button.Click - Sending private message");
+				Log.Debug (Constants.TOURI_TAG, "button.Click - Sending private message");
 
 				ChatItem oneNewChatItem = new ChatItem();
 				oneNewChatItem.message = newMessage;

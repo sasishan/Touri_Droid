@@ -15,7 +15,6 @@ namespace TouriDroid
 
 	public class ChatClient
 	{
-		private const string TAG = "ChatClient";
 		public string _myUsername;
 		public string _targetUserName;
 		public string _myId;
@@ -39,7 +38,7 @@ namespace TouriDroid
 
 		public async Task Connect()
 		{		
-			Log.Debug (TAG, "In connect");	
+			Log.Debug (Constants.TOURI_TAG, "In connect");	
 
 			_proxy.On("messageReceived", (string fromUser, string message, string messageId) =>
 				{
@@ -54,9 +53,9 @@ namespace TouriDroid
 						catch (Exception e)
 						{
 							//return;
-							Log.Debug(TAG, "AcknowledgeMessage error");
+							Log.Debug(Constants.TOURI_TAG, "AcknowledgeMessage error");
 						}
-						Log.Debug (TAG, "Acknowledged message with id " + messageId);
+						Log.Debug (Constants.TOURI_TAG, "Acknowledged message with id " + messageId);
 
 						Message m = new Message ();
 						m.fromUser = fromUser;
@@ -87,31 +86,31 @@ namespace TouriDroid
 
 		public async void disconnect()
 		{
-			Log.Debug (TAG, "Disconnecting");
+			Log.Debug (Constants.TOURI_TAG, "Disconnecting");
 
 			try
 			{
-				Log.Debug (TAG, "Trying to stop connection");
+				Log.Debug (Constants.TOURI_TAG, "Trying to stop connection");
 				_connection.Stop();
 				//_proxy = null;
 			}
 			catch (Exception e)
 			{
-				Log.Debug (TAG, "Disconnect error");
+				Log.Debug (Constants.TOURI_TAG, "Disconnect error");
 				//do nothing
 			}
 		}
 
 		public async Task<int> SendPrivateMessage(string message, string targetUsername)
 		{
-			Log.Debug (TAG, "In SendPrivateMessage");
+			Log.Debug (Constants.TOURI_TAG, "In SendPrivateMessage");
 
 			try
 			{
 				await _proxy.Invoke ("SendPrivateMessage", message, _myUsername, targetUsername);
 			}
 			catch (Exception e) {
-				Log.Debug (TAG, "SendPrivateMessage erorr");
+				Log.Debug (Constants.TOURI_TAG, "SendPrivateMessage erorr");
 				return Constants.FAIL;
 			}
 
@@ -123,28 +122,32 @@ namespace TouriDroid
 			return _proxy.Invoke("Send", _myUsername, message);
 		}
 
-		public async Task PingServer()
+		public async Task<int> PingServer()
 		{
-			Log.Info (TAG, "In PingServer");
+			Log.Info (Constants.TOURI_TAG, "In PingServer");
 			isConnected = false;
+			int result = Constants.FAIL;
 
 			try
 			{
-				Log.Debug (TAG, "Invoking PingClient");
+				Log.Debug (Constants.TOURI_TAG, "Invoking PingClient");
 				await _proxy.Invoke ("PingClient", _myUsername);
+				result = Constants.SUCCESS;
 			}
 			catch (TargetInvocationException  e) {
-				Log.Debug (TAG, "PingClient TargetInvocationException error");
+				Log.Debug (Constants.TOURI_TAG, "PingClient TargetInvocationException error");
 			}
 			catch (InvocationTargetException e) {
-				Log.Debug (TAG, "PingClient InvocationTargetException error");
+				Log.Debug (Constants.TOURI_TAG, "PingClient InvocationTargetException error");
 			}
 			catch (InvalidOperationException e) {
-				Log.Debug (TAG, "PingClient InvalidOperationException error");
+				Log.Debug (Constants.TOURI_TAG, "PingClient InvalidOperationException error");
 			}
 			catch (Exception e) {
-				Log.Debug (TAG, "PingClient error 4");
+				Log.Debug (Constants.TOURI_TAG, "PingClient error 4");
 			}
+
+			return result;
 
 		}
 

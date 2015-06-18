@@ -25,7 +25,6 @@ namespace TouriDroid
 	{
 		public List<String> 	availableLanguages = new List<String> ();
 		private	Activity thisActivity = null;
-		private const string TAG="SecondActivity";
 
 		//Variables referenced by child fragments
 		public GuideSearch 		mGuideSearch;
@@ -87,10 +86,10 @@ namespace TouriDroid
 					//intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					//startActivity(intent);
 				if (FragmentManager.BackStackEntryCount > 0) {
-					Log.Debug (TAG, "popping backstack which has " + FragmentManager.BackStackEntryCount + " entries");
+					Log.Debug (Constants.TOURI_TAG, "popping backstack which has " + FragmentManager.BackStackEntryCount + " entries");
 					FragmentManager.PopBackStack ();
 				} else {
-					Log.Debug (TAG, "Finishing second activity");
+					Log.Debug (Constants.TOURI_TAG, "Finishing second activity");
 					Finish ();
 				}
 				return true;
@@ -119,7 +118,7 @@ namespace TouriDroid
 				 
 			} else {
 				//@todo
-				Log.Debug(TAG, "sender was null");
+				Log.Debug(Constants.TOURI_TAG, "sender was null");
 			}
 		}
 	}

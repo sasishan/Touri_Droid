@@ -22,7 +22,6 @@ namespace TouriDroid
 {
 	public class Comms
 	{
-		private const string TAG = "Comms";
 		public Comms()
 		{
 		}
@@ -57,7 +56,7 @@ namespace TouriDroid
 					encodedBitmapData = Base64.Encode( bitmapData, Base64Flags.Default);
 				}
 				catch (Exception e) {
-					Log.Debug (TAG, "Error converting image");
+					Log.Debug (Constants.TOURI_TAG, "Error converting image");
 					return null;
 				}
 			}
@@ -86,9 +85,9 @@ namespace TouriDroid
 			}
 			catch (Exception e) {
 				if (e.Message != null) {
-					Log.Debug (TAG, "Error PostFile" + e.Message);
+					Log.Debug (Constants.TOURI_TAG, "Error PostFile" + e.Message);
 				} else {
-					Log.Debug (TAG, "Error PostFile");
+					Log.Debug (Constants.TOURI_TAG, "Error PostFile");
 				}
 				return null;
 			}
@@ -124,7 +123,7 @@ namespace TouriDroid
 					using (var errorResponse = (HttpWebResponse)wex.Response) {
 						using (var reader = new StreamReader(errorResponse.GetResponseStream())) {
 							string error = reader.ReadToEnd();
-							Log.Debug (TAG, "Error PostFile" + error);
+							Log.Debug (Constants.TOURI_TAG, "Error PostFile" + error);
 						}
 					}
 				}
@@ -132,9 +131,9 @@ namespace TouriDroid
 			}
 			catch (Exception e) {
 				if (e.Message != null) {
-					Log.Debug (TAG, "Error PostFile" + e.Message);
+					Log.Debug (Constants.TOURI_TAG, "Error PostFile" + e.Message);
 				} else {
-					Log.Debug (TAG, "Error PostFile");
+					Log.Debug (Constants.TOURI_TAG, "Error PostFile");
 				}
 				return null;
 			}
@@ -160,9 +159,9 @@ namespace TouriDroid
 			}
 			catch (Exception e) {
 				if (e.Message != null) {
-					Log.Debug (TAG, "Error PostDataSync" + e.Message);
+					Log.Debug (Constants.TOURI_TAG, "Error PostDataSync" + e.Message);
 				} else {
-					Log.Debug (TAG, "Error PostDataSync");
+					Log.Debug (Constants.TOURI_TAG, "Error PostDataSync");
 				}
 
 				return null;
@@ -204,9 +203,9 @@ namespace TouriDroid
 			}
 			catch (Exception e) {
 				if (e.Message != null) {
-					Log.Debug (TAG, "Error PostDataSyncUsingUri" + e.Message);
+					Log.Debug (Constants.TOURI_TAG, "Error PostDataSyncUsingUri" + e.Message);
 				} else {
-					Log.Debug (TAG, "Error PostDataSyncUsingUri");
+					Log.Debug (Constants.TOURI_TAG, "Error PostDataSyncUsingUri");
 				}
 				return null;
 			}
@@ -219,9 +218,9 @@ namespace TouriDroid
 			catch (ParseException e) 
 			{ 
 				if (e.Message != null) {
-					Log.Debug (TAG, "Error PostDataSyncUsingUri" + e.Message);
+					Log.Debug (Constants.TOURI_TAG, "Error PostDataSyncUsingUri" + e.Message);
 				} else {
-					Log.Debug (TAG, "Error PostDataSyncUsingUri");
+					Log.Debug (Constants.TOURI_TAG, "Error PostDataSyncUsingUri");
 				}
 			}
 
@@ -337,9 +336,9 @@ namespace TouriDroid
 			}
 			catch (Exception e) {
 				if (e.Message != null) {
-					Log.Debug (TAG, "Error PostWebApiData" + e.Message);
+					Log.Debug (Constants.TOURI_TAG, "Error PostWebApiData" + e.Message);
 				} else {
-					Log.Debug (TAG, "Error PostWebApiData");
+					Log.Debug (Constants.TOURI_TAG, "Error PostWebApiData");
 				}
 			}
 		}
@@ -383,11 +382,11 @@ namespace TouriDroid
 					{			
 						if (e.Message!=null)
 						{
-							Log.Debug(TAG, e.Message);
+							Log.Debug(Constants.TOURI_TAG, e.Message);
 						}
 						else
 						{
-							Log.Debug(TAG, "Error in comms");
+							Log.Debug(Constants.TOURI_TAG, "Error in comms");
 						}
 						return null;
 					}
@@ -395,12 +394,12 @@ namespace TouriDroid
 			}
 			catch (Exception e) {
 				if (e.InnerException != null) {
-					Log.Debug (TAG, e.InnerException.ToString ());
+					Log.Debug (Constants.TOURI_TAG, e.InnerException.ToString ());
 				} else if (e.Message != null) {
-					Log.Debug (TAG, e.Message);
+					Log.Debug (Constants.TOURI_TAG, e.Message);
 				}
 				else {
-					Log.Debug(TAG, "Error in comms");
+					Log.Debug(Constants.TOURI_TAG, "Error in comms");
 				}				
 				return null;
 			}

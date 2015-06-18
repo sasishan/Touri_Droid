@@ -26,7 +26,6 @@ namespace TouriDroid
 	[Activity (Label="Touri", MainLauncher = true, Theme = "@style/Theme.AppCompat", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]			
 	public class MainActivity : ActionBarActivity,  ILocationListener, Android.Support.V7.App.ActionBar.ITabListener
 	{
-		private const string TAG = "MainActivity";
 
 		private LocationManager mLocationManager = null;
 		public Location 		mCurrentLocation;
@@ -51,7 +50,7 @@ namespace TouriDroid
 		//Initialize all the globals for this activity
 		private void initializeGlobals()
 		{
-			Log.Debug (TAG, "initializeGlobals");
+			Log.Debug (Constants.TOURI_TAG, "initializeGlobals");
 			mSessionManager = new SessionManager (this);
 			mLocationManager = GetSystemService (LocationService) as LocationManager;
 			mGuideSearch = new GuideSearch ();
@@ -67,7 +66,7 @@ namespace TouriDroid
 			//SetContentView (Resource.Layout.Second);
 			SetContentView (Resource.Layout.Main);
 
-			Log.Info (TAG, "Version= " + Constants.TOURI_VER);
+			Log.Info (Constants.TOURI_TAG, "Version= " + Constants.TOURI_VER);
 			initializeGlobals ();
 
 			if (mSessionManager.isLoggedIn () == true) {
@@ -81,7 +80,7 @@ namespace TouriDroid
 
 			int returnVal = configureDrawer ();
 			if (returnVal == Constants.FAIL) {
-				Log.Debug (TAG, "Failed to configure the left drawer");
+				Log.Debug (Constants.TOURI_TAG, "Failed to configure the left drawer");
 				return;
 			}
 
@@ -117,7 +116,7 @@ namespace TouriDroid
 
 			returnVal = configureTabs (selectedTab);
 			if (returnVal == Constants.FAIL) {
-				Log.Debug (TAG, "Failed to configure the tabs");
+				Log.Debug (Constants.TOURI_TAG, "Failed to configure the tabs");
 			}
 		}	
 
@@ -189,7 +188,7 @@ namespace TouriDroid
 					ExpertiseFragment ef = FragmentManager.FindFragmentById<ExpertiseFragment> (Resource.Id.main_fragment_container);
 
 					if (ef==null || mSearchMenu == null) {
-						Log.Debug (TAG, "search menu is null");
+						Log.Debug (Constants.TOURI_TAG, "search menu is null");
 						return;
 					}
 					ef.loadExpertises ();
@@ -209,7 +208,7 @@ namespace TouriDroid
 					GuideFragment gf = FragmentManager.FindFragmentById<GuideFragment> (Resource.Id.main_fragment_container);
 
 					if (gf==null) {
-						Log.Debug (TAG, "search menu is null");
+						Log.Debug (Constants.TOURI_TAG, "search menu is null");
 						return;
 					}
 
@@ -218,7 +217,7 @@ namespace TouriDroid
 
 			} else {
 				//@todo
-				Log.Debug(TAG, "search click's sender was null");
+				Log.Debug(Constants.TOURI_TAG, "search click's sender was null");
 				Finish();
 			}
 		}
@@ -351,7 +350,7 @@ namespace TouriDroid
 			//string Provider = LocationManager.GpsProvider;
 
 			if (mPlace.Equals ("")) {
-				Log.Debug (TAG, "OnResume - mPlace is empty");
+				Log.Debug (Constants.TOURI_TAG, "OnResume - mPlace is empty");
 				//string Provider = LocationManager.NetworkProvider;
 			
 				Criteria locationCriteria = new Criteria();
@@ -368,7 +367,7 @@ namespace TouriDroid
 				else
 				{
 					setMyPlace ("Chicago, Illinois, USA");
-					Log.Info(TAG, "No location providers available");
+					Log.Info(Constants.TOURI_TAG, "No location providers available");
 				}
 			}
 		}
@@ -378,7 +377,7 @@ namespace TouriDroid
 			string mPlace = "Toronto, ON, Canada";
 			var g = new Geocoder (this);
 
-			Log.Debug (TAG, "reverseFindLocation - lat="+lati.ToString() + ", long="+longi.ToString());
+			Log.Debug (Constants.TOURI_TAG, "reverseFindLocation - lat="+lati.ToString() + ", long="+longi.ToString());
 			try
 			{
 				IList<Address> address =  g.GetFromLocation (lati, longi, 1);
@@ -387,14 +386,14 @@ namespace TouriDroid
 				}
 			}
 			catch (Exception e) {
-				Log.Debug (TAG, "reverseFindLocation - Exception: "+e.Message);
+				Log.Debug (Constants.TOURI_TAG, "reverseFindLocation - Exception: "+e.Message);
 			}
 			return mPlace;
 		}
 
 		public void OnLocationChanged (Location location)
 		{
-			Log.Debug (TAG, "OnLocationChanged");
+			Log.Debug (Constants.TOURI_TAG, "OnLocationChanged");
 			mCurrentLocation = location;
 
 			mLocationManager.RemoveUpdates (this);
@@ -515,7 +514,7 @@ namespace TouriDroid
 
 			}
 			catch (Exception e) {
-				Log.Debug (TAG, e.InnerException.ToString ());
+				Log.Debug (Constants.TOURI_TAG, e.InnerException.ToString ());
 				return Constants.FAIL;
 			}
 

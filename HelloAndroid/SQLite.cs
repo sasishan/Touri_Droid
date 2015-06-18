@@ -155,7 +155,7 @@ namespace SQLite
 		/// <param name="storeDateTimeAsTicks">
 		/// Specifies whether to store DateTime properties as ticks (true) or strings (false). You
 		/// absolutely do want to store them as Ticks in all new projects. The default of false is
-		/// only here for backwards compatibility. There is a *significant* speed advantage, with no
+		/// only here for backwards compatibility. There is a *significant* speed advance, with no
 		/// down sides, when setting storeDateTimeAsTicks = true.
 		/// </param>
 		public SQLiteConnection (string databasePath, bool storeDateTimeAsTicks = false)
@@ -172,7 +172,7 @@ namespace SQLite
 		/// <param name="storeDateTimeAsTicks">
 		/// Specifies whether to store DateTime properties as ticks (true) or strings (false). You
 		/// absolutely do want to store them as Ticks in all new projects. The default of false is
-		/// only here for backwards compatibility. There is a *significant* speed advantage, with no
+		/// only here for backwards compatibility. There is a *significant* speed advanConstants.TOURI_Constants.TOURI_Constants.TOURI_Constants.TOURI_Constants.TOURI_Constants.TOURI_Constants.TOURI_Constants.TOURI_Constants.TOURI_TAGe, with no
 		/// down sides, when setting storeDateTimeAsTicks = true.
 		/// </param>
 		public SQLiteConnection (string databasePath, SQLiteOpenFlags openFlags, bool storeDateTimeAsTicks = false)

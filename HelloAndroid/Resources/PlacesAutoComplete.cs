@@ -80,7 +80,6 @@ namespace TouriDroid
 
 		protected List<string> autocomplete(string input) 
 		{
-			string TAG = "SuggestionsFilter";
 			List<string> resultList = null;
 
 			HttpURLConnection conn = null;
@@ -105,10 +104,10 @@ namespace TouriDroid
 					jsonResults.Append(buff, 0, read);
 				}
 			} catch (MalformedURLException e) {
-				Log.Error(TAG, "Error processing Places API URL", e);
+				Log.Error(Constants.TOURI_TAG, "Error processing Places API URL", e);
 				return resultList;
 			} catch (System.IO.IOException e) {
-				Log.Error(TAG, "Error connecting to Places API", e);
+				Log.Error(Constants.TOURI_TAG, "Error connecting to Places API", e);
 				return resultList;
 			} finally {
 				if (conn != null) {
@@ -127,7 +126,7 @@ namespace TouriDroid
 					resultList.Add(predsJsonArray.GetJSONObject(i).GetString("description"));
 				}
 			} catch (JSONException e) {
-				Log.Error(TAG, "Cannot process JSON results", e);
+				Log.Error(Constants.TOURI_TAG, "Cannot process JSON results", e);
 			}
 
 			return resultList;

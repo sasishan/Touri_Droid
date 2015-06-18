@@ -18,7 +18,6 @@ namespace TouriDroid
 {
 	public class EditCitiesFragment : Fragment
 	{
-	   	private const string TAG="EditCitiesFragment";
 	   	protected List<string> mLocations;
 	   	protected LinearLayout mCityList;
 
@@ -48,7 +47,7 @@ namespace TouriDroid
 
 			if ( ((EditGuideValueActivity)Activity).currentGuide.placesServedList==null )
 			{
-				Log.Debug (TAG, "Error getting current guide");
+				Log.Debug (Constants.TOURI_TAG, "Error getting current guide");
 				Activity.Finish();
 				return view;
 			}

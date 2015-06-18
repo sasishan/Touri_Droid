@@ -24,7 +24,6 @@ namespace TouriDroid
 {
 	public class GuideFragment : Fragment
 	{		
-		private	const string TAG = "GuideFragment";
 		private RecyclerView 				mRecyclerView;
 		private RecyclerView.LayoutManager 	mLayoutManager;
 		private RecyclerView.Adapter 		mAdapter;
@@ -263,7 +262,7 @@ namespace TouriDroid
 			}
 
 			if (mConverter == null || mComms==null) {
-				Log.Debug(TAG, "mConverter or mCA was null");
+				Log.Debug(Constants.TOURI_TAG, "mConverter or mCA was null");
 				return mGuideList;
 			}
 

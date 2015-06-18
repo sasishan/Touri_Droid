@@ -146,7 +146,6 @@ namespace TouriDroid
 
 	public class SupportFunctions
 	{
-		private const string TAG = "SupportFunctions";
 		private Converter mConverter = null;
 
 		public SupportFunctions ()
@@ -194,7 +193,7 @@ namespace TouriDroid
 
 			Comms ca = new Comms ();
 			if (guide == null) {
-				Log.Debug (TAG, "Guide is null!");
+				Log.Debug (Constants.TOURI_TAG, "Guide is null!");
 				return Constants.FAIL;
 			}
 
@@ -221,7 +220,7 @@ namespace TouriDroid
 
 			Comms ca = new Comms ();
 			if (guide == null) {
-				Log.Debug (TAG, "Guide is null!");
+				Log.Debug (Constants.TOURI_TAG, "Guide is null!");
 				return Constants.FAIL;
 			}
 
@@ -251,7 +250,7 @@ namespace TouriDroid
 			Comms ca = new Comms ();
 
 			if (guide == null) {
-				Log.Debug (TAG, "Guide is null!");
+				Log.Debug (Constants.TOURI_TAG, "Guide is null!");
 				return Constants.FAIL;
 			}
 

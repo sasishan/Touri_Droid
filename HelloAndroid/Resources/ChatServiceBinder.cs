@@ -11,7 +11,6 @@ namespace TouriDroid
 {
 	[Service]public class ChatService : Service
 	{
-		private const string 		TAG = "ChatService";
 		private static readonly int MessageReceivedId = 1000;
 		private bool 				mShowNotifications=true;
 		SessionManager 				mSm = null;
@@ -41,14 +40,14 @@ namespace TouriDroid
 		{
 			mBinder = new ChatServiceBinder (this);
 			mShowNotifications = false;
-			Log.Debug (TAG, "In OnBind");
+			Log.Debug (Constants.TOURI_TAG, "In OnBind");
 			return mBinder;
 		}
 
 		/** Called when all clients have unbound with unbindService() */
 		public override Boolean OnUnbind(Intent intent) {
 			mShowNotifications = true;
-			Log.Debug (TAG, "In Unbind");
+			Log.Debug (Constants.TOURI_TAG, "In Unbind");
 			return mAllowRebind;
 		}
 
@@ -60,7 +59,7 @@ namespace TouriDroid
 		/** Called when The service is no longer used and is being destroyed */
 		public override void OnDestroy() {
 			Toast.MakeText(this, "Chat server disconnect", ToastLength.Long).Show();
-			Log.Debug (TAG, "OnDestroy");
+			Log.Debug (Constants.TOURI_TAG, "OnDestroy");
 			mKeepPinging = false;
 			mClient.OnMessageReceived -= (sender, message) => { };
 			mClient.PingMe -= (sender, timestamp) => {};
@@ -73,7 +72,7 @@ namespace TouriDroid
 		{
 			// Let it continue running until it is stopped.
 			Toast.MakeText(this, "Service Started", ToastLength.Long).Show();
-			Log.Debug (TAG, "OnStartCommand");
+			Log.Debug (Constants.TOURI_TAG, "OnStartCommand");
 
 			/*	var ongoing = new Notification (Resource.Drawable.ic_touri_logo_trans, "Touri");
 			// Create the PendingIntent with the back stack
@@ -98,7 +97,7 @@ namespace TouriDroid
 
 		private async void LoadMyMessages ()
 		{
-			Log.Debug (TAG, "In LoadMyMessages");
+			Log.Debug (Constants.TOURI_TAG, "In LoadMyMessages");
 			string token = mSm.getAuthorizedToken ();
 			SupportFunctions sf = new SupportFunctions ();
 
@@ -112,18 +111,18 @@ namespace TouriDroid
 
 			PendingIntent resultPendingIntent = stackBuilder.GetPendingIntent(0, (int) PendingIntentFlags.UpdateCurrent);
 
-			Log.Debug (TAG, "Calling GetMyMessages");
+			Log.Debug (Constants.TOURI_TAG, "Calling GetMyMessages");
 			int count = await sf.GetMyMessages (token, mDm);
 			if (count > 0) {
 				ShowNewMessagesNotification (resultPendingIntent);
 			}
 
-			Log.Debug (TAG, "Exiting LoadMyMessages");
+			Log.Debug (Constants.TOURI_TAG, "Exiting LoadMyMessages");
 		}
 
 		protected async Task initalizeClient(string userName)
 		{
-			Log.Debug (TAG, "initalizeClient");
+			Log.Debug (Constants.TOURI_TAG, "initalizeClient");
 			mClient = new ChatClient (userName, "0");
 
 			await mClient.Connect ();
@@ -132,7 +131,7 @@ namespace TouriDroid
 
 		public async void PollMyMessages(int intervalInSeconds)
 		{
-			Log.Debug (TAG, "StartChatConnection");
+			Log.Debug (Constants.TOURI_TAG, "StartChatConnection");
 			SupportFunctions sf = new SupportFunctions ();
 			string token = mSm.getAuthorizedToken ();
 
@@ -158,7 +157,7 @@ namespace TouriDroid
 
 		public async void StartChatConnection (int intervalInSeconds) {
 
-			Log.Debug (TAG, "StartChatConnection");
+			Log.Debug (Constants.TOURI_TAG, "StartChatConnection");
 			await initalizeClient (mMyUsername);
 
 			// Create the PendingIntent with the back stack
@@ -173,11 +172,11 @@ namespace TouriDroid
 
 			mClient.PingMe -= (sender, timestamp) => {};
 			mClient.PingMe += (sender, timestamp) => {
-				Log.Debug(TAG, "Pinged, we are connected at " + timestamp);
+				Log.Debug(Constants.TOURI_TAG, "Pinged, we are connected at " + timestamp);
 
 				if (mClient==null)
 				{
-					Log.Debug(TAG, "mClient is null!!");
+					Log.Debug(Constants.TOURI_TAG, "mClient is null!!");
 				}
 				else
 				{
@@ -188,8 +187,8 @@ namespace TouriDroid
 			//assume only guides get messages for now so there will be a ToUser name
 			mClient.OnMessageReceived -= (sender, message) => { };
 			mClient.OnMessageReceived += (sender, message) => { 
-				Log.Debug (TAG, "OnMessageReceived");
-				Log.Debug (TAG, "mShowNotifications "+ mShowNotifications);
+				Log.Debug (Constants.TOURI_TAG, "OnMessageReceived");
+				Log.Debug (Constants.TOURI_TAG, "mShowNotifications "+ mShowNotifications);
 
 				LogNewMessage(message);
 
@@ -201,26 +200,31 @@ namespace TouriDroid
 
 			while (mKeepPinging) {
 				if (mClient == null) {
-					Log.Debug (TAG, "Fatal: mClient is null!");
+					Log.Debug (Constants.TOURI_TAG, "Fatal: mClient is null!");
 				} 
 				else if (mClient.isConnected == false) {
 					try
 					{
-						Log.Debug (TAG, "isConnect is false" );
+						Log.Debug (Constants.TOURI_TAG, "isConnect is false" );
 						await mClient._connection.Start ();
 						LoadMyMessages();
 					}
 					catch (Exception e) {
-						Log.Debug (TAG, "Exception on Pinging caught but keep moving ");
+						Log.Debug (Constants.TOURI_TAG, "Exception on Pinging caught but keep moving ");
 					}
 					//mClient.isConnected = true;
 				}
 
 				if (mClient == null) {
-					Log.Debug (TAG, "Fatal: mClient is null!");
+					Log.Debug (Constants.TOURI_TAG, "Fatal: mClient is null!");
 				} else {
-					Log.Debug (TAG, "Going to ping server");
-					await mClient.PingServer ();
+					Log.Debug (Constants.TOURI_TAG, "Going to ping server");
+					int result = await mClient.PingServer ();
+
+					if (result != Constants.SUCCESS) {
+						Log.Debug (Constants.TOURI_TAG, "Could not ping server, so calling LoadMyMessages");
+						LoadMyMessages ();
+					}
 				}
 				await Task.Delay (intervalInSeconds * 1000);
 			}
@@ -284,7 +288,7 @@ namespace TouriDroid
 			cm.MyResponse=Constants.MyResponseNo;
 			cm.Msgtimestamp = DateTime.Now.ToString ();
 
-			Log.Debug (TAG, "Logging a message from " + cm.FromUser);
+			Log.Debug (Constants.TOURI_TAG, "Logging a message from " + cm.FromUser);
 
 			// dont insert messages from myself back (eg. could not deliver a message is returned)
 			if (!cm.FromUser.Equals(mMyUsername))
@@ -297,12 +301,12 @@ namespace TouriDroid
 
 		public async Task<ChatClient> GetChatClient()
 		{
-			Log.Debug (TAG, "GetChatClient");
+			Log.Debug (Constants.TOURI_TAG, "GetChatClient");
 
 			if (mClient == null) {
 				SessionManager sm = new SessionManager (this);
 				string myUsername = sm.getEmail ();
-				Log.Debug (TAG, "GetChatClient - mClient is null");
+				Log.Debug (Constants.TOURI_TAG, "GetChatClient - mClient is null");
 				await initalizeClient (myUsername);
 			}
 
