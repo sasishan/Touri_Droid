@@ -269,6 +269,15 @@
     <AndroidResource Include="Resources\layout\Bookings_Layout.axml" />
     <AndroidResource Include="Resources\drawable\expander_ic_maximized.png" />
     <AndroidResource Include="Resources\drawable\expander_ic_minimized.png" />
+    <AndroidResource Include="Resources\drawable\forward_64.png" />
+    <AndroidResource Include="Resources\drawable\ChatButtonLayout.axml" />
+    <AndroidResource Include="Resources\drawable\Languages_26.png" />
+    <AndroidResource Include="Resources\drawable\speech_50.png" />
+    <AndroidResource Include="Resources\drawable\Talk_50.png" />
+    <AndroidResource Include="Resources\drawable\more_50.png" />
+    <AndroidResource Include="Resources\drawable\MoreButtonLayout.axml" />
+    <AndroidResource Include="Resources\drawable\MapMarker_32.png" />
+    <AndroidResource Include="Resources\drawable\Filter_32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

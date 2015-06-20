@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:yourapp="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/map"
-			android:icon="@drawable/Map_64"
+			android:icon="@drawable/MapMarker_32"
         	android:showAsAction="ifRoom"
     		yourapp:showAsAction="ifRoom"
     		android:layout_marginRight="5dp"/>
     <item android:id="@+id/filter"
-			android:icon="@drawable/Languages_64"
+			android:icon="@drawable/Filter_32"
         	android:showAsAction="ifRoom"
     		yourapp:showAsAction="ifRoom"/>
 </menu>

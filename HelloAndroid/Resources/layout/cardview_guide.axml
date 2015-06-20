@@ -20,23 +20,56 @@
             <RelativeLayout
                 android:id="@+id/guide_details"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="2dp">
-                <ImageView
-                    android:id="@+id/guide_photo"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginRight="10dp"
-                    android:layout_centerVertical="true"
-                    android:background="@color/dark_grey"
-                    android:scaleType="centerCrop" />
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:id="@+id/photoLayout"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentTop="true">
+                    <ImageView
+                        android:id="@+id/guide_photo"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/dark_grey"
+                        android:scaleType="centerCrop" />
+                    <TextView
+                        android:id="@+id/availability"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_centerVertical="true"
+                        android:textSize="10sp"
+                        android:textColor="@color/black"
+                        android:layout_below="@+id/guide_photo" />
+                </LinearLayout>
+                <Button
+                    android:id="@+id/chatButton"
+                    android:layout_height="40dp"
+                    android:layout_width="40dp"
+                    android:layout_alignBottom="@+id/photoLayout"
+                    android:layout_alignRight="@+id/photoLayout"
+                    android:text="chat"
+                    android:textSize="8dp"
+                    android:background="@drawable/chatbuttonlayout" />
+                <Button
+                    android:id="@+id/moreButton"
+                    android:layout_height="40dp"
+                    android:layout_width="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:textSize="8dp"
+                    android:background="@drawable/MoreButtonLayout" />
                 <TextView
                     android:id="@+id/guide_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="5dp"
-                    android:layout_toRightOf="@+id/guide_photo"
+                    android:layout_toRightOf="@+id/photoLayout"
                     android:layout_alignParentTop="true"
                     android:textStyle="bold"
                     android:textColor="@color/black" />
@@ -45,71 +78,16 @@
                     android:layout_width="wrap_content"
                     android:paddingLeft="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/guide_photo"
+                    android:layout_toRightOf="@+id/photoLayout"
                     android:layout_below="@+id/guide_name"
-                    android:textColor="@color/black" />
-                <TextView
-                    android:id="@+id/availability"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="10sp"
-                    android:textColor="@color/black"
-                    android:layout_toRightOf="@+id/guide_photo"
-                    android:layout_below="@+id/description" />
-            </RelativeLayout>
-            <LinearLayout
-                android:id="@+id/more"
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:gravity="center"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:padding="5dp">
-                <Button
-                    android:id="@+id/moreButton"
-                    android:layout_height="15dp"
-                    android:layout_width="15dp"
-                    android:background="@drawable/expander_ic_minimized" />
-                <TextView
-                    android:id="@+id/moreText"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="More..."
-                    android:textSize="13sp"
-                    android:textColor="@color/dark_grey" />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/moreLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="gone">
-                <TextView
-                    android:id="@+id/locationsTitle"
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="5dp"
-                    android:textStyle="bold"
-                    android:text="Locations:"
-                    android:layout_below="@+id/guide_name"
-                    android:textSize="13sp"
-                    android:textColor="@color/black" />
-                <TextView
-                    android:id="@+id/locationsServed"
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:layout_below="@+id/locationsTitle"
-                    android:textSize="13sp"
                     android:textColor="@color/black" />
                 <TextView
                     android:id="@+id/languagesTitle"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/locationsServed"
-                    android:paddingLeft="5dp"
+                    android:layout_below="@+id/description"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/photoLayout"
                     android:textStyle="bold"
                     android:text="Languages:"
                     android:textSize="13sp"
@@ -119,11 +97,12 @@
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/languagesTitle"
+                    android:layout_toRightOf="@+id/photoLayout"
                     android:paddingLeft="10dp"
                     android:paddingBottom="10dp"
                     android:textSize="13sp"
                     android:textColor="@color/black" />
-            </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

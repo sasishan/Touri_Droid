@@ -15,6 +15,7 @@ namespace TouriDroid
 		private Activity thisActivity;
 		private Comms mCa;
 		public event EventHandler<int> ItemClick;
+		public event EventHandler<int> ImageClick;
 
 		public RecyclerAdapter(List<Guide> guideList, Activity thisAct)
 		{
@@ -30,13 +31,21 @@ namespace TouriDroid
 			public TextView mSummary { get; set;} 
 			public TextView mAvailability { get; set;} 
 			public TextView mLanguages { get; set;}
-			public TextView mLocations { get; set;}
 			public ImageView mPhoto { get; set; }
+			public Button mMoreButton { get; set; }
 
-			public MyView(View view, Action<int> listener): base(view)
+			public MyView(View view, Action<int> listener, Action<int> chatListener): base(view)
 			{
 				mMainView = view;
-				view.Click += (sender, e) => listener (base.Position);
+
+				Button moreButton = view.FindViewById<Button> (Resource.Id.moreButton);
+				ImageView profile = view.FindViewById<ImageView> (Resource.Id.guide_photo);
+				Button chat = view.FindViewById<Button> (Resource.Id.chatButton);
+
+				moreButton.Click += (sender, e) => listener (base.Position);
+				chat.Click += (sender, e) => chatListener (base.Position);
+				profile.Click  += (sender, e) => chatListener (base.Position);
+				//view.Click += (sender, e) => listener (base.Position);
 			}
 		}
 
@@ -47,56 +56,17 @@ namespace TouriDroid
 
 			View row = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.cardview_guide, parent, false);
 			TextView FName = row.FindViewById<TextView> (Resource.Id.guide_name);
-			TextView locations = row.FindViewById<TextView> (Resource.Id.locationsServed);
 			TextView languages = row.FindViewById<TextView> (Resource.Id.languages);
 			TextView summary = row.FindViewById<TextView> (Resource.Id.description);
 			TextView availability = row.FindViewById<TextView> (Resource.Id.availability);
 			ImageView photo = row.FindViewById<ImageView> (Resource.Id.guide_photo);
+			Button moreButton = row.FindViewById<Button> (Resource.Id.moreButton);
 
 			//set click listener for more button
-			Button moreButton = row.FindViewById<Button>(Resource.Id.moreButton);
-			LinearLayout moreContainer = row.FindViewById<LinearLayout>(Resource.Id.more);
-			TextView moreText = row.FindViewById<TextView> (Resource.Id.moreText);
-			moreContainer.Click += (sender, e) => {
-				LinearLayout more = (LinearLayout) row.FindViewById(Resource.Id.moreLayout);
+		//	Button moreButton = row.FindViewById<Button>(Resource.Id.moreButton);
+		//	LinearLayout moreContainer = row.FindViewById<LinearLayout>(Resource.Id.more);
 
-				View card = row.FindViewById(Resource.Id.guideCardViewLayout);
-
-				float newHeight = 0;
-				if (more.Visibility==ViewStates.Visible)
-				{ 
-					// make it invisible
-					newHeight =card.Height-more.Height;	
-					more.Visibility=ViewStates.Gone;
-					moreButton.SetBackgroundResource(Resource.Drawable.expander_ic_minimized);
-					moreText.Text = "More";
-					//moreButton.Background=DRawabl(Resource.Drawable.expander_ic_minimized);
-				}
-				else //make it visible
-				{
-					newHeight =card.Height+more.Height;
-					more.Visibility=ViewStates.Visible;
-					moreButton.SetBackgroundResource(Resource.Drawable.expander_ic_maximized);
-					moreText.Text = "Less";
-				}
-
-				//more.Alpha=0.0f;
-
-				//TranslateAnimation animateSlideUp = new TranslateAnimation(0,0,0,h);
-				//animateSlideUp.FillAfter=true;
-				//card.StartAnimation(animateSlideUp);
-				//row.LayoutParameters.Height=-2;//row.Height-(int)h;
-				//	row.RequestLayout();
-				//card.LayoutParameters.Height=card.Height-(int)h;
-				card.RequestLayout();
-				more.Animate().Alpha(1.0f);
-				//page.=page.Height-(int)h;
-
-				//card.Animate().TranslationYBy(h);
-
-			};
-
-			MyView view = new MyView (row, OnClick) { mFName = FName, mLocations=locations, mLanguages = languages, mPhoto=photo, mSummary=summary, mAvailability=availability};
+			MyView view = new MyView (row, OnClick, ChatClick) { mFName = FName, mLanguages = languages, mPhoto=photo, mMoreButton=moreButton, mSummary=summary, mAvailability=availability};
 			return view;
 		}
 
@@ -136,7 +106,7 @@ namespace TouriDroid
 				placesServed += "• "+l.location+"\r\n" ;
 			}				
 			//placesServed = placesServed.Remove (placesServed.Length - 2);
-			myHolder.mLocations.Text = placesServed;
+			//myHolder.mLocations.Text = placesServed;
 
 			//myHolder.mPhoto.SetImageResource (Resource.Drawable.placeholder_photo);
 
@@ -164,6 +134,13 @@ namespace TouriDroid
 		{
 			if (ItemClick != null) {
 				ItemClick (this, position);
+			}
+		}
+
+		void ChatClick (int position)
+		{
+			if (ImageClick != null) {
+				ImageClick (this, position);
 			}
 		}
 

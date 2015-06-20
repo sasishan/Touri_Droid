@@ -71,6 +71,7 @@ namespace TouriDroid
 			mGuideSearch.expertiseList.Add (expertise);
 			mAdapter = new RecyclerAdapter (mGuideList, this.Activity);
 			((RecyclerAdapter)mAdapter).ItemClick += guideClick;
+			((RecyclerAdapter)mAdapter).ImageClick += chatClick;
 			mRecyclerView.SetAdapter (mAdapter);
 
 			RefineSearch(mGuideSearch);
@@ -108,6 +109,35 @@ namespace TouriDroid
 			base.OnCreateOptionsMenu(menu, menuInflater);				
 		}
 
+		public void chatClick(object sender, int position)
+		{
+			int itemPosition = position;
+
+			Guide guide = ((RecyclerAdapter)mAdapter).GetGuide (position);
+
+			SessionManager sm = new SessionManager(Activity);
+			if (sm.isLoggedIn()==false)
+			{
+				Toast.MakeText(Activity, "Please sign in to chat", ToastLength.Short).Show();
+			}
+			else
+			{
+				string myUsername = sm.getEmail();
+				if (myUsername.Equals(guide.userName))
+				{
+					Toast.MakeText(Activity, "You can't chat with yourself", ToastLength.Short).Show();
+				}
+				else
+				{
+					var chatActivity = new Intent (Activity, typeof(ActiveChat));
+					chatActivity.PutExtra ("TargetGuideId", guide.guideId.ToString());
+					chatActivity.PutExtra ("TargetUserName", guide.userName);
+					chatActivity.PutExtra ("TargetFirstName", guide.fName);
+					chatActivity.PutExtra ("TargetLastName", guide.lName);
+					this.StartActivity(chatActivity);					
+				}
+			}
+		}
 
 		public void guideClick(object sender, int position)
 		{

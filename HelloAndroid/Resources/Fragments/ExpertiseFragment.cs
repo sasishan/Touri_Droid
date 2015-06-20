@@ -75,7 +75,8 @@ namespace TouriDroid
 
 			return view;
 		}
-			
+
+
 		void OnItemClick (object sender, int position)
 		{
 			Expertise exp = ((RecyclerAdapterExpertise)mAdapter).getExpertise (position);

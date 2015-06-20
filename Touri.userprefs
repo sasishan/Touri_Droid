@@ -1,19 +1,11 @@
 ﻿<Properties StartupItem="HelloAndroid\TouriDroid.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.08f7f593031f50f3" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\PlacesAutoComplete.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.SelectDevice" />
+  <MonoDevelop.Ide.Workbench>
     <Files>
-      <File FileName="HelloAndroid\Resources\Constants.cs" Line="13" Column="23" />
-      <File FileName="HelloAndroid\SQLite.cs" Line="158" Column="83" />
-      <File FileName="HelloAndroid\Resources\Fragments\GuideFragment.cs" Line="265" Column="25" />
-      <File FileName="HelloAndroid\Resources\Activities\MainActivity.cs" Line="29" Column="1" />
-      <File FileName="HelloAndroid\Resources\Activities\SecondActivity.cs" Line="28" Column="1" />
-      <File FileName="HelloAndroid\Resources\Activities\ActiveChat.cs" Line="23" Column="1" />
-      <File FileName="HelloAndroid\Resources\ChatClient.cs" Line="18" Column="1" />
-      <File FileName="HelloAndroid\Resources\SupportFunctions.cs" Line="149" Column="1" />
-      <File FileName="HelloAndroid\Resources\ChatServiceBinder.cs" Line="14" Column="1" />
-      <File FileName="HelloAndroid\Resources\Comms.cs" Line="25" Column="1" />
-      <File FileName="HelloAndroid\Resources\Fragments\EditCitiesFragment.cs" Line="21" Column="1" />
-      <File FileName="HelloAndroid\Resources\PlacesAutoComplete.cs" Line="83" Column="1" />
+      <File FileName="HelloAndroid\Resources\ChatServiceBinder.cs" Line="225" Column="91" />
+      <File FileName="HelloAndroid\Resources\ChatClient.cs" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\RecyclerAdapter.cs" Line="110" Column="85" />
+      <File FileName="HelloAndroid\Resources\Fragments\GuideFragment.cs" Line="102" Column="69" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
