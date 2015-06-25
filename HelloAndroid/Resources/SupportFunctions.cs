@@ -38,6 +38,7 @@ namespace TouriDroid
 		public const String KeyCurrentLastLocation = "lastPlace";
 		public const String KeyToken = "token";
 		public const String KeyGuideId = "guideId";
+		public const String KeySearchDistance = "searchDistance";
 
 		public SessionManager (Context pContext)
 		{
@@ -51,6 +52,17 @@ namespace TouriDroid
 			editor.PutFloat (KeyCurrentLatitude, lati);
 			editor.PutFloat (KeyCurrentLongitude, longi);
 			editor.Commit ();
+		}
+
+		public void setSearchDistance (string distance)
+		{
+			editor.PutString(KeySearchDistance, distance);
+			editor.Commit ();
+		}
+
+		public string getSearchDistance()
+		{
+			return pref.GetString (KeySearchDistance, Constants.DefaultSearchDistance);
 		}
 
 		public void setCurrentLocation (string location)

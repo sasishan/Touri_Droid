@@ -10,7 +10,7 @@
             android:id="@+id/searchDistance"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Search By"
+            android:text="Preferences"
             android:layout_marginTop="10dp"
             android:textSize="18dp"
             android:gravity="center" />
@@ -18,7 +18,7 @@
             android:id="@+id/searchDistance"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Distance from Location: "
+            android:text="Search Distance from Location: "
             android:layout_marginTop="10dp"
             android:textSize="15dp"
             android:layout_gravity="center" />
@@ -45,6 +45,7 @@
             android:id="@+id/applyFilter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/ApplyFilter" />
+            android:layout_alignParentBottom="true"
+            android:text="Apply" />
     </LinearLayout>
 </ScrollView>

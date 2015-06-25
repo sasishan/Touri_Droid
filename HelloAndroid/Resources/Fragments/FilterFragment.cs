@@ -25,26 +25,68 @@ namespace TouriDroid
 		public override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
-
-			((SecondActivity)Activity).SupportActionBar.SetDisplayHomeAsUpEnabled (false);
-			((SecondActivity)Activity).SupportActionBar.SetHomeButtonEnabled (false);
+			if ((SecondActivity)Activity != null) {
+				((SecondActivity)Activity).SupportActionBar.SetDisplayHomeAsUpEnabled (false);
+				((SecondActivity)Activity).SupportActionBar.SetHomeButtonEnabled (false);
+			}
 			SetHasOptionsMenu(true);
-			// Create your fragment here
 		}
 
 		public override void OnCreateOptionsMenu(IMenu menu, MenuInflater menuInflater)
 		{
 			menu.Clear ();
-
 		}
 
 		public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
 			// Use this to return your custom view for this Fragment
 			var view = inflater.Inflate(Resource.Layout.fragment_filter, container, false);
+
+
 			Button apply = view.FindViewById<Button> (Resource.Id.applyFilter);
 
+			Spinner spinner = (Spinner) view.FindViewById(Resource.Id.distanceSpinner);
+			// Create an ArrayAdapter using the string array and a default spinner layout
+			ArrayAdapter adapter = ArrayAdapter.CreateFromResource(Activity,
+				Resource.Array.distances, Android.Resource.Layout.SimpleSpinnerItem);
+			// Specify the layout to use when the list of choices appears
+			adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+			// Apply the adapter to the spinner
+			spinner.Adapter = adapter;
+
+			SessionManager sm = new SessionManager (Activity);
+			string searchDistance;
+
+			if (typeof(Activity) != typeof(SecondActivity)) {
+				searchDistance = ((SecondActivity)this.Activity).mGuideSearch.withinDistance;
+				if (searchDistance == null) {
+					searchDistance = sm.getSearchDistance ();
+				} else {
+					searchDistance+= " KM";
+				}
+				int position = adapter.GetPosition(searchDistance);
+				spinner.SetSelection (position);
+			} 
+
+			Converter converter = new Converter();
 			apply.Click += (object IntentSender, EventArgs e) => {
+
+				string distance = spinner.SelectedItem.ToString();
+				if (sm.isLoggedIn())
+				{
+					sm.setSearchDistance(distance);
+				}
+
+				string withinDistance = converter.ConvertWithinDistance(distance);
+				if (withinDistance==null)
+				{
+					Log.Debug(Constants.TOURI_TAG, "Failed to convert withindistance "+distance);
+				}
+				else
+				{
+					((SecondActivity)this.Activity).mGuideSearch.withinDistance = withinDistance;
+				}
+
 				var newFragment = new GuideFragment ();
 				//var ft = FragmentManager.BeginTransaction ();
 
@@ -52,6 +94,7 @@ namespace TouriDroid
 				{
 					((SecondActivity)this.Activity).mGuideSearch.languageList.Clear();
 				}
+
 				foreach (String l in ((SecondActivity)this.Activity).checkedLanguages)
 				{
 					if ((SecondActivity)this.Activity!=null)
@@ -71,7 +114,6 @@ namespace TouriDroid
 				transaction.Commit();
 			};
 
-			SupportFunctions sf = new SupportFunctions ();
 
 			// build out the expertises table
 		//	TableLayout expertiseTable = (TableLayout)view.FindViewById (Resource.Id.table_Expertise);
@@ -149,7 +191,9 @@ namespace TouriDroid
 			//return base.OnCreateView (inflater, container, savedInstanceState);
 		}
 			
+
 	}
+
 
 	public class ImageAdapter: BaseAdapter {
 		private Context context;

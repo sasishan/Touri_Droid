@@ -69,6 +69,19 @@ namespace TouriDroid
 			mGuideSearch.placesServedList.Clear ();
 			mGuideSearch.placesServedList.Add (mPlace);
 			mGuideSearch.expertiseList.Add (expertise);
+
+			SessionManager sm = new SessionManager(Activity);
+			Converter converter = new Converter ();
+			if (mGuideSearch.withinDistance == null) {
+				string distance = Constants.DefaultSearchDistance;
+				if (sm.isLoggedIn ()) {
+					if (mGuideSearch.withinDistance == null) {
+						distance = sm.getSearchDistance ();
+					}
+				}
+				mGuideSearch.withinDistance = converter.ConvertWithinDistance (distance);
+			}
+
 			mAdapter = new RecyclerAdapter (mGuideList, this.Activity);
 			((RecyclerAdapter)mAdapter).ItemClick += guideClick;
 			((RecyclerAdapter)mAdapter).ImageClick += chatClick;
@@ -233,6 +246,18 @@ namespace TouriDroid
 			url = Constants.DEBUG_BASE_URL;
 			//check places first
 			url += Constants.URL_SearchGuides;
+
+			if (guideSearch.withinDistance != null) {
+				url += "withinDistance=" + guideSearch.withinDistance + "&";
+			} else {
+				
+				SessionManager sm = new SessionManager (Activity);
+				string distance = sm.getSearchDistance ();
+				Converter converter = new Converter ();
+				guideSearch.withinDistance = converter.ConvertWithinDistance (distance);
+				url += "withinDistance=" + guideSearch.withinDistance + "&";
+			}
+
 			if (guideSearch.placesServedList.Count>0)
 			{				
 				atLeastOneSearchParameter = true;

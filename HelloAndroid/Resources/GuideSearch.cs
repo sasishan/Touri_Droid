@@ -7,6 +7,7 @@ namespace TouriDroid
 	{
 		public int guideId { get; set; }
 		public int availability { get; set; }
+		public string withinDistance  { get; set; }
 
 		public List<string> languageList = new List<string>();
 		public List<string> placesServedList = new List<string>();

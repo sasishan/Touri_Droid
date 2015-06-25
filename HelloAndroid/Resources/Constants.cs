@@ -29,6 +29,8 @@ namespace TouriDroid
 		public const int MyResponseYes = 1;
 		public const int MyResponseNo = 0;
 
+		public const string DefaultSearchDistance = "50 KM";
+
 		//URL values for WebApi calls
 		//public const string DEBUG_BASE_IP = "http://192.168.0.13";
 		public const string DEBUG_BASE_IP = "http://54.69.185.48"; //PRODUCTION SYSTEM
@@ -228,6 +230,16 @@ namespace TouriDroid
 	public class Converter
 	{
 		
+		public string ConvertWithinDistance(string distance)
+		{
+			string[] words = distance.Split(' ');
+			if (words != null) {
+				return words [0];
+			} else {
+				return null;
+			}
+		}
+
 		public Color getOnlineStatusColor (int availability)
 		{
 			Color AvailableNowColor = Color.SeaGreen;

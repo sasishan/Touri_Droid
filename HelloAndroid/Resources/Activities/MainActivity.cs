@@ -229,6 +229,9 @@ namespace TouriDroid
 			if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.DrawerOptionBeAGuide)) {
 				mDrawer.CloseDrawers ();
 				this.StartActivity (typeof(SignUpAsGuideActivity));
+			} else if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.MyPreferences)) {
+				mDrawer.CloseDrawers ();
+				this.StartActivity (typeof(Preferences));
 			}
 			//Log out and refresh the screen
 			else if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.DrawerOptionLogout)) 

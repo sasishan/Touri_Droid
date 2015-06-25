@@ -120,7 +120,15 @@ namespace TouriDroid
 			}
 
 			string place = ((MainActivity)Activity).mPlace;
-			string url = Constants.DEBUG_BASE_URL + "/api/expertises/search?locs="+place;
+
+			SessionManager sm = new SessionManager (Activity);
+			Converter converter = new Converter ();
+			string distance=Constants.DefaultSearchDistance;
+			if (sm.isLoggedIn ()) {
+				distance = sm.getSearchDistance ();
+			}
+			string withinDistance = converter.ConvertWithinDistance (distance);
+			string url = Constants.DEBUG_BASE_URL + "/api/expertises/search?locs="+place +"&withinDistance="+withinDistance;
 
 			Comms ca = new Comms();
 
