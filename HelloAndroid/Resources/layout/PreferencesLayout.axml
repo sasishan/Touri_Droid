@@ -1,51 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
-    <LinearLayout
+    android:layout_height="fill_parent"
+    android:layout_centerInParent="true"
+    android:paddingTop="1dp"
+    android:layout_gravity="top"
+    android:gravity="center_horizontal">
+    <Button
+        android:id="@+id/applyFilter"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/holo_blue_dark"
+        android:text="Save and Apply" />
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/searchDistance"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp">
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Preferences"
-            android:layout_marginTop="10dp"
-            android:textSize="18dp"
-            android:gravity="center" />
-        <TextView
-            android:id="@+id/searchDistance"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Search Distance from Location: "
-            android:layout_marginTop="10dp"
-            android:textSize="15dp"
-            android:layout_gravity="center" />
-        <Spinner
-            android:id="@+id/distanceSpinner"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-        <TextView
-            android:id="@+id/text33"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/SelectLanguages"
-            android:layout_marginTop="10dp"
-            android:textSize="15dp"
-            android:gravity="center" />
-        <TableLayout
-            android:id="@+id/table_Languages"
-            android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:stretchColumns="0"
-            android:layout_margin="30dp" />
-        <Button
-            android:id="@+id/applyFilter"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:text="Apply" />
-    </LinearLayout>
-</ScrollView>
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/searchDistance"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Search Options"
+                android:layout_marginTop="10dp"
+                android:textSize="18dp"
+                android:gravity="center" />
+            <TextView
+                android:id="@+id/searchDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Search Distance from Location: "
+                android:layout_marginTop="30dp"
+                android:textSize="15dp"
+                android:layout_gravity="center" />
+            <Spinner
+                android:id="@+id/distanceSpinner"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+                <CheckBox
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/Offlinecheckbox" />
+                <TextView
+                    android:id="@+id/offlineText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Show Offline Guides"
+                    android:textSize="15dp"
+                    android:gravity="center" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/text33"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/SelectLanguages"
+                android:layout_marginTop="30dp"
+                android:textSize="15dp"
+                android:gravity="center" />
+            <TableLayout
+                android:id="@+id/table_Languages"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:stretchColumns="0"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

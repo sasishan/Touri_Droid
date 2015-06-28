@@ -14,8 +14,12 @@ namespace TouriDroid
 		//Success, Fail values for function calls
 		public const int SUCCESS=1;
 		public const int FAIL=-1;
+		public const string EmptyString = "";
 
 		public const int MAX_SUMMARY_LENGTH=100;
+
+		public const string DefaultLanguage="English";
+		public const bool DefaultShowOffline=false;
 
 		//Main Tab positions
 		public const int Main_Expertise_Tab=0;
@@ -112,7 +116,7 @@ namespace TouriDroid
 
 		public const string DrawerOptionLogout = "Log Out";
 		public const string DrawerOptionLoginOrSignUp = "Sign In or Sign Up";
-		public const string MyPreferences = "My Preferences";
+		public const string MyPreferences = "Search Options";
 
 		public const int REQUEST_IMAGE =0;
 

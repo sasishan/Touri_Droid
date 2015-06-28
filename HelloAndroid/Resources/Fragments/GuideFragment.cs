@@ -34,6 +34,8 @@ namespace TouriDroid
 		private bool 						guidesLoaded = true;
 		protected Comms						mComms;
 		private Converter 					mConverter;
+		private UserPreferences 			mUserPreference;
+		private List<string> mLanguages;
 
 		public override void OnCreate (Bundle savedInstanceState)
 		{
@@ -42,7 +44,8 @@ namespace TouriDroid
 			((SecondActivity)Activity).SupportActionBar.SetHomeButtonEnabled (true);
 			mComms	= new Comms ();
 			mConverter = new Converter ();
-
+			mUserPreference = new UserPreferences (Activity);
+			mLanguages = mUserPreference.GetLanguages ();
 		}	
 
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -69,18 +72,6 @@ namespace TouriDroid
 			mGuideSearch.placesServedList.Clear ();
 			mGuideSearch.placesServedList.Add (mPlace);
 			mGuideSearch.expertiseList.Add (expertise);
-
-			SessionManager sm = new SessionManager(Activity);
-			Converter converter = new Converter ();
-			if (mGuideSearch.withinDistance == null) {
-				string distance = Constants.DefaultSearchDistance;
-				if (sm.isLoggedIn ()) {
-					if (mGuideSearch.withinDistance == null) {
-						distance = sm.getSearchDistance ();
-					}
-				}
-				mGuideSearch.withinDistance = converter.ConvertWithinDistance (distance);
-			}
 
 			mAdapter = new RecyclerAdapter (mGuideList, this.Activity);
 			((RecyclerAdapter)mAdapter).ItemClick += guideClick;
@@ -209,18 +200,23 @@ namespace TouriDroid
 		{
 			//load filter fragment
 			if (item.ItemId == Resource.Id.filter) {
-				var newFragment = new FilterFragment ();
+				var preferences = new Intent (Activity, typeof(Preferences));
+				this.StartActivity(preferences);
+
 				//var ft = FragmentManager.BeginTransaction ();
-				FragmentTransaction transaction = FragmentManager.BeginTransaction ();
+		
 
 				// Replace whatever is in the fragment_container view with this fragment,
 				// and add the transaction to the back stack if needed
-				transaction.Replace (Resource.Id.fragment_container, newFragment);
+
 			//	transaction.AddToBackStack("GuideFragment");
 				//transaction.AddToBackStack(null);
 
 				// Commit the transaction
-				transaction.Commit ();
+				//		var newFragment = new FilterFragment ();
+				//		FragmentTransaction transaction = FragmentManager.BeginTransaction ();
+//				transaction.Replace (Resource.Id.fragment_container, newFragment);
+//				transaction.Commit ();
 			} else if (item.ItemId == Resource.Id.map) {
 				
 				if (guidesLoaded==true)
@@ -247,16 +243,9 @@ namespace TouriDroid
 			//check places first
 			url += Constants.URL_SearchGuides;
 
-			if (guideSearch.withinDistance != null) {
-				url += "withinDistance=" + guideSearch.withinDistance + "&";
-			} else {
-				
-				SessionManager sm = new SessionManager (Activity);
-				string distance = sm.getSearchDistance ();
-				Converter converter = new Converter ();
-				guideSearch.withinDistance = converter.ConvertWithinDistance (distance);
-				url += "withinDistance=" + guideSearch.withinDistance + "&";
-			}
+			string dist = mUserPreference.GetWithinDistanceAsString ();
+			string withinDistance = mConverter.ConvertWithinDistance (dist);
+			url += "withinDistance=" + withinDistance + "&";
 
 			if (guideSearch.placesServedList.Count>0)
 			{				
@@ -267,10 +256,10 @@ namespace TouriDroid
 				}
 			}
 
-			if (guideSearch.languageList.Count>0)
+			if (mLanguages.Count>0)
 			{	
 				atLeastOneSearchParameter = true;
-				foreach(string l in guideSearch.languageList)
+				foreach(string l in mLanguages)
 				{
 					url += "langs=" + l +"&";
 				}

@@ -1,15 +1,9 @@
 ﻿<Properties StartupItem="HelloAndroid\TouriDroid.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.08f7f593031f50f3" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Activities\Preferences.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" PreferredExecutionTarget="Android.08f7f593031f50f3" />
+  <MonoDevelop.Ide.Workbench>
     <Files>
-      <File FileName="HelloAndroid\Resources\Activities\Preferences.cs" Line="59" Column="1" />
-      <File FileName="HelloAndroid\Resources\Fragments\GuideFragment.cs" Line="269" Column="4" />
-      <File FileName="HelloAndroid\Resources\Activities\MainActivity.cs" Line="391" Column="11" />
-      <File FileName="HelloAndroid\Resources\Activities\LoginOrSignupActivity.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\Activities\ImageSelectActivity.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\Activities\SecondActivity.cs" Line="50" Column="1" />
-      <File FileName="HelloAndroid\Resources\Activities\SignUpAsGuideActivity.cs" Line="25" Column="1" />
-      <File FileName="HelloAndroid\Resources\Fragments\FilterFragment.cs" Line="148" Column="35" />
+      <File FileName="HelloAndroid\Resources\Activities\Preferences.cs" Line="44" Column="5" />
+      <File FileName="HelloAndroid\Resources\SupportFunctions.cs" Line="52" Column="5" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

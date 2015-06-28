@@ -99,10 +99,9 @@
     </ScrollView>
     <Button
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:id="@+id/ChatButton"
-        android:textSize="16sp"
-        android:text="Ask Questions"
+        android:text="Chat"
         android:textStyle="bold"
         android:background="@android:color/holo_blue_dark"
         android:layout_margin="1dp"

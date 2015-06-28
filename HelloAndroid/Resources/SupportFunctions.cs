@@ -19,6 +19,112 @@ namespace TouriDroid
 		public string Email { get; set; }
 		public string Password { get; set; }
 		public string ConfirmPassword { get; set; }
+
+	}
+
+	public class UserPreferences
+	{
+		string WithinDistance;
+		List<string> Languages;   
+		protected bool ShowOffline { get; set; }
+		SessionManager mSm;
+		Converter mConverter;
+
+		public UserPreferences(Context pContext)
+		{
+			mConverter = new Converter();
+			mSm = new SessionManager(pContext);
+
+			Languages = new List<string> ();
+		}
+
+		public int SaveShowOffline(bool show)
+		{
+			ShowOffline = show;
+			mSm.SetShowOffline (ShowOffline);
+
+			return (Constants.SUCCESS);
+		}
+
+		public bool GetShowOffline()
+		{
+			if (mSm.isLoggedIn () == true) {
+				ShowOffline = mSm.GetShowOffline ();
+			} else {
+				ShowOffline = Constants.DefaultShowOffline;
+			}
+			return ShowOffline;
+		}
+
+		//passed in as X KM
+		public int SaveWithinDistance(string distance)
+		{
+			WithinDistance = distance;
+			mSm.setSearchDistance (WithinDistance);
+
+			return (Constants.SUCCESS);
+		}
+
+		public string GetWithinDistanceAsString()
+		{
+			if (mSm.isLoggedIn () == true) {
+
+				if (WithinDistance == null) {
+					WithinDistance = mSm.getSearchDistance ();
+				}
+
+				if (WithinDistance.Equals (Constants.EmptyString)) {
+					WithinDistance = Constants.DefaultSearchDistance;
+				}
+			} else {
+				WithinDistance = Constants.DefaultSearchDistance;
+			}
+			return WithinDistance;
+		}
+
+		public List<string> GetLanguages ()
+		{
+			string myLanguages = mSm.GetLanguages ();
+			Languages.Clear ();
+
+			if (mSm.isLoggedIn () == true) {
+				if (myLanguages.Equals ("")) {
+					myLanguages = Constants.DefaultLanguage;
+				}
+
+				string[] splitLanguages = myLanguages.Split (Constants.separator);
+
+				for (int i = 0; i < splitLanguages.Length; i++) {
+					Languages.Add (splitLanguages [i]);	
+				}
+			}
+
+			return Languages;
+		}
+
+		public List<string> SaveLanguages(List<string> languages)
+		{
+			string myLanguages = "";
+			foreach (string l in languages) {
+				myLanguages += l + Constants.separator;
+			}
+			if (myLanguages.Length > 1) {
+				myLanguages = myLanguages.Remove (myLanguages.Length - 1);
+			}
+
+			mSm.SetLanguages (myLanguages);
+			return Languages;
+		}
+
+		public int RefreshPreferences()
+		{
+			return Constants.SUCCESS;
+		}
+
+		public int SavePreferences()
+		{
+			return Constants.SUCCESS;
+		}
 	}
 
 	public class SessionManager 
@@ -38,7 +144,9 @@ namespace TouriDroid
 		public const String KeyCurrentLastLocation = "lastPlace";
 		public const String KeyToken = "token";
 		public const String KeyGuideId = "guideId";
-		public const String KeySearchDistance = "searchDistance";
+		public const String PREF_KeySearchDistance = "searchDistance";
+		public const String PREF_KeyLanguages = "languages";
+		public const String PREF_KeyShowOffline = "showOffline";
 
 		public SessionManager (Context pContext)
 		{
@@ -54,15 +162,28 @@ namespace TouriDroid
 			editor.Commit ();
 		}
 
+		//stored as a list of languages x, y, z
+		public void SetLanguages (string languages)
+		{
+			editor.PutString(PREF_KeyLanguages, languages);
+			editor.Commit ();
+		}
+
+		public string GetLanguages()
+		{
+			return pref.GetString (PREF_KeyLanguages, "");
+		}
+
+		//stored as X KM
 		public void setSearchDistance (string distance)
 		{
-			editor.PutString(KeySearchDistance, distance);
+			editor.PutString(PREF_KeySearchDistance, distance);
 			editor.Commit ();
 		}
 
 		public string getSearchDistance()
 		{
-			return pref.GetString (KeySearchDistance, Constants.DefaultSearchDistance);
+			return pref.GetString (PREF_KeySearchDistance, Constants.EmptyString);
 		}
 
 		public void setCurrentLocation (string location)
@@ -145,7 +266,6 @@ namespace TouriDroid
 			editor.Remove (IsGuide);
 			editor.Remove (KeyGuideId);
 			editor.Commit();
-
 			//editor.Clear ();
 		//	editor.Commit();
 		}
@@ -153,6 +273,17 @@ namespace TouriDroid
 		public Boolean isLoggedIn()
 		{
 			return pref.GetBoolean (IsLoggedIn, false);
+		}
+
+		public void SetShowOffline (bool offline)
+		{
+			editor.PutBoolean (PREF_KeyShowOffline, offline);
+			editor.Commit ();
+		}
+
+		public Boolean GetShowOffline()
+		{
+			return pref.GetBoolean (PREF_KeyShowOffline, false);
 		}
 	}
 

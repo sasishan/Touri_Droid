@@ -27,7 +27,7 @@ namespace TouriDroid
 		protected List<Expertise> mExpertiseList = new List<Expertise> ();
 		private ProgressBar progress;
 		private View myView=null;
-
+		private UserPreferences mUserPreference;
 
 		public override void OnCreate (Bundle savedInstanceState)
 		{
@@ -44,6 +44,7 @@ namespace TouriDroid
 			myView = view;
 			((MainActivity)this.Activity).setCurrentFragment (typeof(ExpertiseFragment));
 			progress = (ProgressBar) view.FindViewById(Resource.Id.progressBar);
+			mUserPreference = new UserPreferences (Activity);
 
 			mRecyclerView = view.FindViewById<RecyclerView> (Resource.Id.expertise_recycler_view);
 
@@ -123,12 +124,23 @@ namespace TouriDroid
 
 			SessionManager sm = new SessionManager (Activity);
 			Converter converter = new Converter ();
-			string distance=Constants.DefaultSearchDistance;
-			if (sm.isLoggedIn ()) {
-				distance = sm.getSearchDistance ();
-			}
+
+			string distance = mUserPreference.GetWithinDistanceAsString();
 			string withinDistance = converter.ConvertWithinDistance (distance);
+			List<string> languages = mUserPreference.GetLanguages ();
+
+			string langUrl = "";
+			foreach (string l in languages) {
+				langUrl += "langs=" + l + "&";
+			}
+			if (langUrl.Length > 1) {
+				langUrl = langUrl.Remove (langUrl.Length - 1);
+			}
+
 			string url = Constants.DEBUG_BASE_URL + "/api/expertises/search?locs="+place +"&withinDistance="+withinDistance;
+			if (languages.Count > 0) {
+				url += "&" + langUrl;
+			} 
 
 			Comms ca = new Comms();
 
