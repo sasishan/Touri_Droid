@@ -8,17 +8,10 @@
     android:paddingTop="1dp"
     android:layout_gravity="top"
     android:gravity="center_horizontal">
-    <Button
-        android:id="@+id/applyFilter"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:background="@android:color/holo_blue_dark"
-        android:text="Save and Apply" />
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp">
+        android:layout_marginTop="2dp">
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -27,7 +20,7 @@
                 android:id="@+id/searchDistance"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Search Options"
+                android:text="Select Options and click apply below"
                 android:layout_marginTop="10dp"
                 android:textSize="18dp"
                 android:gravity="center" />
@@ -78,6 +71,22 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp" />
+            <Button
+                android:id="@+id/applyFilter"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/holo_blue_dark"
+                android:text="Save and Apply" />
+            <Button
+                android:id="@+id/cancel"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@android:color/darker_gray"
+                android:text="Cancel" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

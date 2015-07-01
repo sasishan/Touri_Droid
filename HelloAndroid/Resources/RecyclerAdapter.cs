@@ -90,8 +90,9 @@ namespace TouriDroid
 			}	
 
 			Converter converter = new Converter ();
-			myHolder.mAvailability.Text = converter.getOnlineStatusString (mGuides [position].availability);
-			myHolder.mAvailability.SetTextColor( converter.getOnlineStatusColor (mGuides [position].availability));
+			//myHolder.mAvailability.Text = converter.getOnlineStatusString (mGuides [position].availability);
+			//myHolder.mAvailability.SetTextColor( converter.getOnlineStatusColor (mGuides [position].availability));
+			myHolder.mAvailability.Text = mGuides [position].lastMessageSent;
 
 			foreach (string l in mGuides[position].languageList) {
 				languages += "• "+l+"\r\n" ;

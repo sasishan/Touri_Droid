@@ -14,6 +14,7 @@
 	<string name="ContactButtonTopMargin">60dp</string>
 	<string name="SelectExpertise">Select Expertise</string>
 	<string name="SelectLanguages">Available Guide Languages</string>
+	<string name="LastMessage">Last Chat</string>
 	<string name="ApplyFilter">Apply Filter</string>
 	<string name="Next">Next</string>
 	<color name="white">#FFFFFF</color>

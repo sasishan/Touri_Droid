@@ -19,6 +19,7 @@ namespace TouriDroid
 		public string summary { get; set; }
 		public int availability { get; set; }
 		public int profileImageId { get; set; }
+		public string lastMessageSent { get; set; }
 		public Bitmap profileImage { get; set; }
 		public JsonValue jsonText { get; set; }
 

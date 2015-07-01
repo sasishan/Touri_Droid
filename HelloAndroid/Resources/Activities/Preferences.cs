@@ -14,7 +14,7 @@ using Android.Util;
 
 namespace TouriDroid
 {
-	[Activity (Label = "Preferences")]			
+	[Activity (Label = "Search Options")]			
 	public class Preferences : Activity
 	{
 		UserPreferences mUserPreferences;
@@ -36,6 +36,12 @@ namespace TouriDroid
 			Spinner spinner = (Spinner) FindViewById(Resource.Id.distanceSpinner);
 			CheckBox showOfflineCB = (CheckBox) FindViewById(Resource.Id.Offlinecheckbox);
 			Button apply = FindViewById<Button> (Resource.Id.applyFilter);
+			Button cancel = FindViewById<Button> (Resource.Id.cancel);
+
+			cancel.Click += (object sender, EventArgs e) => {
+				Finish();
+			};
+
 			apply.Click += (object IntentSender, EventArgs e) => {
 				string distance = spinner.SelectedItem.ToString();
 				mUserPreferences.SaveWithinDistance(distance);

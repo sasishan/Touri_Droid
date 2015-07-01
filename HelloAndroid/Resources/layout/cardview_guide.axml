@@ -37,22 +37,35 @@
                         android:background="@color/dark_grey"
                         android:scaleType="centerCrop" />
                     <TextView
+                        android:id="@+id/messageSentText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginTop="20dp"
+                        android:layout_centerVertical="true"
+                        android:text="Last Activity:"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_below="@+id/guide_photo" />
+                    <TextView
                         android:id="@+id/availability"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:layout_centerVertical="true"
                         android:textSize="10sp"
                         android:textColor="@color/black"
-                        android:layout_below="@+id/guide_photo" />
+                        android:layout_below="@+id/messageSentText" />
                 </LinearLayout>
                 <Button
                     android:id="@+id/chatButton"
-                    android:layout_height="40dp"
-                    android:layout_width="40dp"
+                    android:layout_height="50dp"
+                    android:layout_width="50dp"
                     android:layout_alignBottom="@+id/photoLayout"
                     android:layout_alignRight="@+id/photoLayout"
+                    android:layout_marginBottom="20dp"
                     android:text="chat"
                     android:textSize="8dp"
                     android:background="@drawable/chatbuttonlayout" />

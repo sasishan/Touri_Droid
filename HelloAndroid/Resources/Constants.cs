@@ -37,8 +37,8 @@ namespace TouriDroid
 
 		//URL values for WebApi calls
 		//public const string DEBUG_BASE_IP = "http://192.168.0.13";
-		public const string DEBUG_BASE_IP = "http://54.69.185.48"; //PRODUCTION SYSTEM
-		//public const string DEBUG_BASE_IP = "http://192.168.0.28";
+		//public const string DEBUG_BASE_IP = "http://54.69.185.48"; //PRODUCTION SYSTEM
+		public const string DEBUG_BASE_IP = "http://192.168.0.28";
 		public const string DEBUG_BASE_PORT = "50467";
 		public const string DEBUG_BASE_URL = DEBUG_BASE_IP + ":"+ DEBUG_BASE_PORT;//"http://192.168.0.28:50467";//"http://192.168.43.247:50467";//"http://192.168.0.12:50467";//"http://192.168.1.14:50467"; "http://192.168.1.189:50467"
 		public const string URL_Get_All_Guides = "/api/guides";
@@ -63,6 +63,7 @@ namespace TouriDroid
 
 		// WebApi Keys
 		public const string Guide_WebAPI_Key_Username="username";
+		public const string Guide_WebAPI_Key_LastMessageSent="lastMessageSent";
 		public const string Guide_WebAPI_Key_FirstName="fName";
 		public const string Guide_WebAPI_Key_LastName="lName";
 		public const string Guide_WebAPI_Key_Description="description";
@@ -340,6 +341,11 @@ namespace TouriDroid
 				g.fName = fName;
 				g.guideId = values [Constants.Guide_WebAPI_Key_GuideId];
 
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_LastMessageSent)) {
+				string lastMessageSent = values [Constants.Guide_WebAPI_Key_LastMessageSent];
+				g.lastMessageSent = lastMessageSent;
 			}
 
 			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Username)) {
