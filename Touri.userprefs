@@ -1,15 +1,10 @@
 ﻿<Properties StartupItem="HelloAndroid\TouriDroid.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.SelectDevice" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Activities\Preferences.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.08f7f593031f50f3" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\drawable\RoundedShapeGuide.xml">
     <Files>
-      <File FileName="HelloAndroid\Resources\Activities\Preferences.cs" Line="72" Column="4" />
-      <File FileName="HelloAndroid\Resources\SupportFunctions.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\Activities\ActiveChat.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\Activities\GuideProfileActivity.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\Activities\MainActivity.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\RecyclerAdapter.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\Fragments\GuideFragment.cs" Line="1" Column="1" />
-      <File FileName="HelloAndroid\Resources\values\Strings.xml" Line="1" Column="1" />
+      <File FileName="HelloAndroid\Resources\Activities\Preferences.cs" Line="73" Column="5" />
+      <File FileName="HelloAndroid\Resources\drawable\RoundedShape.xml" Line="7" Column="31" />
+      <File FileName="HelloAndroid\Resources\drawable\RoundedShapeGuide.xml" Line="12" Column="16" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

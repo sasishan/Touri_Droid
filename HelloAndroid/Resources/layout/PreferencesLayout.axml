@@ -24,53 +24,51 @@
                 android:layout_marginTop="10dp"
                 android:textSize="18dp"
                 android:gravity="center" />
-            <TextView
-                android:id="@+id/searchDistance"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Search Distance from Location: "
-                android:layout_marginTop="30dp"
-                android:textSize="15dp"
-                android:layout_gravity="center" />
-            <Spinner
-                android:id="@+id/distanceSpinner"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_gravity="center"
-                android:orientation="horizontal">
-                <CheckBox
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:id="@+id/Offlinecheckbox" />
-                <TextView
-                    android:id="@+id/offlineText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Show Offline Guides"
-                    android:textSize="15dp"
-                    android:gravity="center" />
-            </LinearLayout>
-            <TextView
-                android:id="@+id/text33"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/SelectLanguages"
-                android:layout_marginTop="30dp"
-                android:textSize="15dp"
-                android:gravity="center" />
-            <TableLayout
-                android:id="@+id/table_Languages"
-                android:layout_width="200dp"
-                android:layout_height="match_parent"
-                android:stretchColumns="0"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp" />
+                android:orientation="vertical"
+                android:background="@drawable/roundedshape"
+                android:layout_margin="30dp"
+                android:padding="30dp">
+                <TextView
+                    android:id="@+id/searchDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Search Distance from Location: "
+                    android:layout_marginTop="30dp"
+                    android:textSize="15dp"
+                    android:layout_gravity="center" />
+                <Spinner
+                    android:id="@+id/distanceSpinner"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/roundedshape"
+                android:layout_margin="30dp"
+                android:padding="30dp">
+                <TextView
+                    android:id="@+id/text33"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/SelectLanguages"
+                    android:layout_marginTop="30dp"
+                    android:textSize="15dp"
+                    android:gravity="center" />
+                <TableLayout
+                    android:id="@+id/table_Languages"
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:stretchColumns="0"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp" />
+            </LinearLayout>
             <Button
                 android:id="@+id/applyFilter"
                 android:layout_width="match_parent"

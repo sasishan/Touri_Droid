@@ -34,7 +34,7 @@ namespace TouriDroid
 			SetupLanguagesTable ();
 
 			Spinner spinner = (Spinner) FindViewById(Resource.Id.distanceSpinner);
-			CheckBox showOfflineCB = (CheckBox) FindViewById(Resource.Id.Offlinecheckbox);
+		//	CheckBox showOfflineCB = (CheckBox) FindViewById(Resource.Id.Offlinecheckbox);
 			Button apply = FindViewById<Button> (Resource.Id.applyFilter);
 			Button cancel = FindViewById<Button> (Resource.Id.cancel);
 
@@ -46,7 +46,7 @@ namespace TouriDroid
 				string distance = spinner.SelectedItem.ToString();
 				mUserPreferences.SaveWithinDistance(distance);
 				mUserPreferences.SaveLanguages(mCheckedLanguages);
-				mUserPreferences.SaveShowOffline(showOfflineCB.Checked);
+			//	mUserPreferences.SaveShowOffline(showOfflineCB.Checked);
 
 				Finish();
 				var mainActivity = new Intent (this, typeof(MainActivity));
@@ -68,9 +68,9 @@ namespace TouriDroid
 
 		private void SetupOffline()
 		{
-			CheckBox showOfflineCB = (CheckBox) FindViewById(Resource.Id.Offlinecheckbox);
-			bool showOffline = mUserPreferences.GetShowOffline ();
-			showOfflineCB.Checked = showOffline;
+		//	CheckBox showOfflineCB = (CheckBox) FindViewById(Resource.Id.Offlinecheckbox);
+		//	bool showOffline = mUserPreferences.GetShowOffline ();
+		//	showOfflineCB.Checked = showOffline;
 		}
 
 		private void SetupWithinDistance()

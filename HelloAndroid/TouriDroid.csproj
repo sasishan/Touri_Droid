@@ -280,6 +280,9 @@
     <AndroidResource Include="Resources\drawable\MapMarker_32.png" />
     <AndroidResource Include="Resources\drawable\Filter_32.png" />
     <AndroidResource Include="Resources\layout\PreferencesLayout.axml" />
+    <AndroidResource Include="Resources\drawable\RoundedShape.xml" />
+    <AndroidResource Include="Resources\drawable\RoundedShapeGuide.xml" />
+    <AndroidResource Include="Resources\drawable\ImageBorder.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
