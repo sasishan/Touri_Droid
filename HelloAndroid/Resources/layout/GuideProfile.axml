@@ -16,20 +16,23 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:visibility="gone" />
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="200dp"
                 android:id="@+id/guide_photo"
                 android:layout_alignParentTop="true"
+                android:padding="2dp"
+                android:cropToPadding="true"
+                android:background="@drawable/ImageBorder_White"
                 android:scaleType="centerCrop" />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:visibility="gone" />
             <TextView
                 android:id="@+id/availability"
                 android:layout_width="wrap_content"

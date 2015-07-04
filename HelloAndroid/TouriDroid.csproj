@@ -283,6 +283,9 @@
     <AndroidResource Include="Resources\drawable\RoundedShape.xml" />
     <AndroidResource Include="Resources\drawable\RoundedShapeGuide.xml" />
     <AndroidResource Include="Resources\drawable\ImageBorder.xml" />
+    <AndroidResource Include="Resources\drawable\ImageBorder_White.xml" />
+    <AndroidResource Include="Resources\layout\searchtext_layout.axml" />
+    <AndroidResource Include="Resources\layout\CustomSearchMenu.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

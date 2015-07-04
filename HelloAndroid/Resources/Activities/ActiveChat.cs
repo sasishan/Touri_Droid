@@ -55,6 +55,8 @@ namespace TouriDroid
 				mMyUsername = sm.getEmail ();
 			}
 
+			this.Title = fName + " " + lName;
+
 			HandleClicks ();
 		}
 

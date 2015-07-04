@@ -35,15 +35,14 @@ namespace TouriDroid
 
 			SessionManager sm = new SessionManager (view.Context);
 			SupportFunctions sf = new SupportFunctions ();
+			mDm = new DataManager ();
+			mDm.SetContext (view.Context);
 
 			string myUsername = "";
 			if (sm.isLoggedIn() == true) {
 				myUsername= sm.getEmail();
 				loadMyMessages (sm, sf);
 			}
-
-			mDm = new DataManager ();
-			mDm.SetContext (view.Context);
 
 			List<string> users = mDm.GetUsersWhoSentMeMessages (myUsername);
 			if (users == null) {
@@ -77,7 +76,7 @@ namespace TouriDroid
 		public async void loadMyMessages(SessionManager sm, SupportFunctions sf)
 		{
 			string token = sm.getAuthorizedToken ();
-			await sf.GetMyMessages(token, mDm);
+			int newMessages = await sf.GetMyMessages(token, mDm);
 			return;
 		}
 
