@@ -287,7 +287,7 @@ namespace TouriDroid
 			cm.Message = message.message;
 			cm.MyResponse=Constants.MyResponseNo;
 			cm.Msgtimestamp = DateTime.Now.ToString ();
-
+			cm.MsgRead = Constants.MessageUnread; //message not read as the service is reading it
 			Log.Debug (Constants.TOURI_TAG, "Logging a message from " + cm.FromUser);
 
 			// dont insert messages from myself back (eg. could not deliver a message is returned)

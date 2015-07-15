@@ -44,7 +44,7 @@ namespace TouriDroid
 				loadMyMessages (sm, sf);
 			}
 
-			List<string> users = mDm.GetUsersWhoSentMeMessages (myUsername);
+			List<ChatUser> users = mDm.GetUsersWhoSentMeMessages (myUsername);
 			if (users == null) {
 				Log.Debug ("ChatListFragment", "Unable to use DB");
 				Activity.Finish ();
@@ -53,7 +53,8 @@ namespace TouriDroid
 
 			var messages = view.FindViewById<ListView> (Resource.Id.Messages);
 
-			var adapter = new ArrayAdapter<string> (Activity, Android.Resource.Layout.SimpleListItem1, users);
+		//	var adapter = new ArrayAdapter<ChatUser> (Activity, Android.Resource.Layout.SimpleListItem1, users);
+			var adapter = new ChatUserAdapter(Activity, users);
 			messages.Adapter = adapter;
 
 			TextView noMsgs = view.FindViewById<TextView> (Resource.Id.nomsgs);
@@ -65,7 +66,7 @@ namespace TouriDroid
 			{
 				var chatActivity = new Intent (view.Context, typeof(ActiveChat));
 
-				chatActivity.PutExtra ("TargetUserName", users.ElementAt(e.Position));
+				chatActivity.PutExtra ("TargetUserName", users.ElementAt(e.Position).UserName);
 				chatActivity.PutExtra ("TargetFirstName", "");
 				chatActivity.PutExtra ("TargetLastName", "");
 				this.StartActivity(chatActivity);

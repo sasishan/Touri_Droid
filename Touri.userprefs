@@ -1,18 +1,19 @@
 ﻿<Properties StartupItem="HelloAndroid\TouriDroid.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.08f7f593031f50f3" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\Activities\MainActivity.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" PreferredExecutionTarget="Android.08f7f593031f50f3" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="HelloAndroid\Resources\ChatMessageDB.cs">
     <Files>
-      <File FileName="HelloAndroid\Resources\Activities\MainActivity.cs" Line="95" Column="34" />
-      <File FileName="HelloAndroid\Resources\menu\menu_guide.xml" Line="11" Column="49" />
-      <File FileName="HelloAndroid\Resources\Activities\GuidingActivity.cs" Line="19" Column="53" />
-      <File FileName="HelloAndroid\Resources\Activities\SecondActivity.cs" Line="30" Column="37" />
+      <File FileName="HelloAndroid\Resources\Activities\ActiveChat.cs" Line="103" Column="1" />
+      <File FileName="HelloAndroid\Resources\Fragments\ChatListFragment.cs" Line="19" Column="19" />
+      <File FileName="HelloAndroid\Resources\SupportFunctions.cs" Line="388" Column="32" />
+      <File FileName="HelloAndroid\Resources\ChatMessageAdapter.cs" Line="62" Column="41" />
+      <File FileName="HelloAndroid\Resources\ChatMessageDB.cs" Line="135" Column="35" />
+      <File FileName="HelloAndroid\Resources\drawable\RoundedShape.xml" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Fragments\EditCitiesFragment.cs" line="22" column="39" />
-      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Activities\MainActivity.cs" line="225" column="1" />
-      <Breakpoint file="c:\Bitbucket\Touri_Droid\HelloAndroid\Resources\SupportFunctions.cs" line="309" column="1" />
+      <Breakpoint file="C:\Bitbucket\Touri_Droid\HelloAndroid\Resources\Activities\MainActivity.cs" line="206" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>

@@ -7,6 +7,12 @@ using System.Collections.Generic;
 
 namespace TouriDroid
 {
+	public class ChatUser
+	{
+		public String UserName { get; set; }
+		public int NumberOfUnreadMessages { get; set; }
+	}
+
 	public class ChatMessage
 	{
 		[PrimaryKey, AutoIncrement]
@@ -17,13 +23,14 @@ namespace TouriDroid
 		public String Msgtimestamp { get; set; }
 		public int MyResponse { get; set; }  //set this to 1 (TRUE) if its a response from the current user
 		public String Delivered { get; set; } 
+		public String MsgRead { get; set; } 
 		//public char downloaded { get; set; }
 		//public string lastDownloaded { get; set; }
 
 		public override string ToString()
 		{
-			return string.Format("[ChatMessageEntry: ID={0}, FromUser={1}, ToUser={2}, Message={3}, Msgtimestamp={4}, delivered={5}]", 
-				ID, FromUser, ToUser, Message, Msgtimestamp, Delivered);
+			return string.Format("[ChatMessageEntry: ID={0}, FromUser={1}, ToUser={2}, Message={3}, Msgtimestamp={4}, delivered={5}, MsgRead={6}]", 
+				ID, FromUser, ToUser, Message, Msgtimestamp, Delivered, MsgRead);
 		}
 	}
 
@@ -38,6 +45,7 @@ namespace TouriDroid
 		public const String COLUMN_MESSAGE = "Message";
 		public const String COLUMN_TIMESTAMP = "Msgtimestamp";
 		public const String COLUMN_DELIVERED = "Delivered";
+		public const String COLUMN_MSGREAD = "MsgRead";
 	}
 
 	public static class ChatMessageContract {
@@ -53,7 +61,8 @@ namespace TouriDroid
 			ChatMessageEntry.COLUMN_MYRESPONSE_SUBTITLE + INT_TYPE + COMMA_SEP +
 			ChatMessageEntry.COLUMN_MESSAGE + TEXT_TYPE + COMMA_SEP +
 			ChatMessageEntry.COLUMN_TIMESTAMP +	TEXT_TYPE + COMMA_SEP +
-			ChatMessageEntry.COLUMN_DELIVERED +	TEXT_TYPE +
+			ChatMessageEntry.COLUMN_DELIVERED +	TEXT_TYPE + COMMA_SEP +
+			ChatMessageEntry.COLUMN_MSGREAD + TEXT_TYPE +
 				" )";
 
 		public const String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + ChatMessageEntry.TABLE_NAME;
@@ -137,6 +146,11 @@ namespace TouriDroid
 					List<ChatMessage> messages = new List<ChatMessage>();
 					foreach (ChatMessage m in query)
 					{
+						if (m.MsgRead.Equals(Constants.MessageUnread))
+						{
+							m.MsgRead=Constants.MessageIsRead;
+							UpdateMessage(m);
+						}
 						messages.Add(m);
 					}
 					return messages;
@@ -150,9 +164,10 @@ namespace TouriDroid
 		}
 
 		//retrieve a specific user by querying against their first name
-		public List<string> GetUsersWhoSentMeMessages(string myUsername)
+		public List<ChatUser> GetUsersWhoSentMeMessages(string myUsername)
 		{
 			const string getUsersQuery = "SELECT DISTINCT FromUser FROM "+ ChatMessageEntry.TABLE_NAME + " WHERE ToUser = ?";
+			const string getUserMsgsUnreadQuery = "SELECT COUNT(*) FROM "+ ChatMessageEntry.TABLE_NAME + " WHERE FromUser = ? AND MsgRead = 'N'";
 			using (var database = new SQLiteConnection(_helper.ReadableDatabase.Path))
 			{
 				try
@@ -161,10 +176,14 @@ namespace TouriDroid
 					//var query2 = database.Table<ChatMessage>().Where (q => q.ToUser==myUsername);
 					var query = database.Query<ChatMessage>(getUsersQuery, myUsername);
 
-					List<string> fromUsers = new List<string>();
+					List<ChatUser> fromUsers = new List<ChatUser>();
 					foreach (ChatMessage m in query)
 					{
-						fromUsers.Add(m.FromUser);
+						ChatUser cu = new ChatUser();
+						cu.UserName= m.FromUser;
+						int msgCount = database.ExecuteScalar<int>(getUserMsgsUnreadQuery, m.FromUser);
+						cu.NumberOfUnreadMessages =msgCount;
+						fromUsers.Add(cu);
 					}
 					return fromUsers;
 				}

@@ -205,6 +205,7 @@ namespace TouriDroid
 				cm.Msgtimestamp = oneNewChatItem.messageTimestamp;
 				cm.MyResponse=Constants.MyResponseYes; // this is my response
 				cm.Delivered = oneNewChatItem.deliveredToServer;
+				cm.MsgRead = Constants.MessageIsRead;
 
 				Log.Debug ("ActiveChat", "button.Click - Add item to DB");
 				dm.AddMessage(cm);

@@ -29,6 +29,9 @@ namespace TouriDroid
 		public const string Profile_Tab = "My Profile";
 		public const string Bookings_Tab = "Bookings";
 
+		public const string MessageIsRead = "Y";
+		public const string MessageUnread = "N";
+
 		public const int FULL_SIZE = 600;
 		public const int MyResponseYes = 1;
 		public const int MyResponseNo = 0;

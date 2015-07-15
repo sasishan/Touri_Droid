@@ -314,11 +314,11 @@ namespace TouriDroid
 
 			for (int i = 0; i < json.Count; i++) {
 				ChatMessage cm = mConverter.parseOneChatMessage (json[i]);
-
 				if (cm == null) {
 					continue;
 				}
 
+				cm.MsgRead = Constants.MessageUnread;
 				//this is not a response from the current user
 				cm.MyResponse=Constants.MyResponseNo;
 				//add it straight to the DB

@@ -286,6 +286,7 @@
     <AndroidResource Include="Resources\drawable\ImageBorder_White.xml" />
     <AndroidResource Include="Resources\layout\searchtext_layout.axml" />
     <AndroidResource Include="Resources\layout\CustomSearchMenu.axml" />
+    <AndroidResource Include="Resources\layout\chatuser_listview.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
