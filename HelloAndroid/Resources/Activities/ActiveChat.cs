@@ -97,7 +97,7 @@ namespace TouriDroid
 					oneChatItem.myMessage = true;
 					oneChatItem.user = "Me";
 				}
-				mMyMessages.Add (oneChatItem);
+				mMyMessages.Add (oneChatItem);//
 			}
 
 			mAdapter = new ChatMessageAdapter(this, mMyMessages);
