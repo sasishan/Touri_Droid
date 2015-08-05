@@ -245,7 +245,7 @@ namespace TouriDroid
 
 			string dist = mUserPreference.GetWithinDistanceAsString ();
 			string withinDistance = mConverter.ConvertWithinDistance (dist);
-			url += "withinDistance=" + withinDistance + "&";
+			//@touriToronto url += "withinDistance=" + withinDistance + "&";
 
 			if (guideSearch.placesServedList.Count>0)
 			{				

@@ -104,17 +104,17 @@ namespace TouriDroid
 		public async Task<int> SendPrivateMessage(string message, string targetUsername)
 		{
 			Log.Debug (Constants.TOURI_TAG, "In SendPrivateMessage");
-
+			int messageId;
 			try
 			{
-				await _proxy.Invoke ("SendPrivateMessage", message, _myUsername, targetUsername);
+				messageId = await _proxy.Invoke<int> ("SendPrivateMessage", message, _myUsername, targetUsername);
 			}
 			catch (Exception e) {
 				Log.Debug (Constants.TOURI_TAG, "SendPrivateMessage erorr");
 				return Constants.FAIL;
 			}
 
-			return Constants.SUCCESS;
+			return messageId;
 		}
 
 		public Task Send(string message)

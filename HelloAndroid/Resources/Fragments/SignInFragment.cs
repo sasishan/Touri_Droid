@@ -53,6 +53,14 @@ namespace TouriDroid
 					if (response.ContainsKey (Constants.Guide_WebAPI_Key_GuideId)) {						
 						guideId = response [Constants.Guide_WebAPI_Key_GuideId];
 						isGuide = true;					
+
+						SessionManager sm = new SessionManager (Activity);
+
+						DataManager dm = new DataManager ();
+						dm.SetContext (Activity);
+						dm.DeleteAllMessages();
+						sm.SetLastMessageId (0);
+
 				//		mChatIntent = new Intent (Activity, typeof(ChatService));
 				//		mChatIntent.SetData ();
 					}

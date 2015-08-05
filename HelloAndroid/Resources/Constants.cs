@@ -40,8 +40,9 @@ namespace TouriDroid
 
 		//URL values for WebApi calls
 		//public const string DEBUG_BASE_IP = "http://192.168.0.13";
-		public const string DEBUG_BASE_IP = "http://54.69.185.48"; //PRODUCTION SYSTEM
-		//public const string DEBUG_BASE_IP = "http://192.168.0.28";
+		//public const string DEBUG_BASE_IP = "http://54.69.185.48"; //PRODUCTION SYSTEM
+		public const string DEBUG_BASE_IP = "http://192.168.0.28";
+
 		public const string DEBUG_BASE_PORT = "50467";
 		public const string DEBUG_BASE_URL = DEBUG_BASE_IP + ":"+ DEBUG_BASE_PORT;//"http://192.168.0.28:50467";//"http://192.168.43.247:50467";//"http://192.168.0.12:50467";//"http://192.168.1.14:50467"; "http://192.168.1.189:50467"
 		public const string URL_Get_All_Guides = "/api/guides";
@@ -59,6 +60,7 @@ namespace TouriDroid
 		public const string URL_PutGuideDescription = "/{0}/description";
 		public const string URL_PutGuideSummary= "/{0}/summary";
 		public const string URL_MyMessages= "/api/messages";
+		public const string URL_Query_LastMessageId= "?msgId=";
 
 		//online offline
 		public const string ONLINE_NOTIFICATIONS = "Chat Notifications are ON";
@@ -322,6 +324,10 @@ namespace TouriDroid
 			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Msg_TimeStampe)) {
 				string timestamp = values [Constants.Guide_WebAPI_Key_Msg_TimeStampe];
 				cm.Msgtimestamp = timestamp;
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Msg_Id)) {
+				cm.ID = values [Constants.Guide_WebAPI_Key_Msg_Id];
 			}
 
 			return cm;

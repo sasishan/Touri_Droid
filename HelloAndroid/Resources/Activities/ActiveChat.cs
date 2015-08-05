@@ -28,6 +28,7 @@ namespace TouriDroid
 		List<ChatItem> 					mMyMessages;
 		ChatMessageAdapter			    mAdapter;
 		public ChatServiceBinder 		binder;
+		SessionManager 					mSm;
 
 		//Messages need to be cleared cos OnStart is recalled each time, while onCreate is only called on startup
 		protected override void OnStart ()
@@ -50,9 +51,9 @@ namespace TouriDroid
 			string fName = 		Intent.GetStringExtra ("TargetFirstName") ?? "";
 			string lName = 		Intent.GetStringExtra ("TargetLastName") ?? "";
 
-			SessionManager sm = new SessionManager (this);
-			if (sm.isLoggedIn() == true) {
-				mMyUsername = sm.getEmail ();
+			mSm = new SessionManager (this);
+			if (mSm.isLoggedIn() == true) {
+				mMyUsername = mSm.getEmail ();
 			}
 
 			this.Title = fName + " " + lName;
@@ -184,31 +185,33 @@ namespace TouriDroid
 				mMyMessages.Add(oneNewChatItem);
 				mAdapter.NotifyDataSetChanged();
 
-				int result = await mClient.SendPrivateMessage(newMessage, mTargetUsername);
+				int messageId = await mClient.SendPrivateMessage(newMessage, mTargetUsername);
 
 				//@todo more efficient way?
-				if (result==Constants.SUCCESS)
+				//add it to the Database as well
+				ChatMessage cm = new ChatMessage();
+				if (messageId>0)
 				{
 					oneNewChatItem.deliveredToServer="delivered";
+					mSm.SetLastMessageId(messageId);
+
+					cm.Message = newMessage;
+					cm.FromUser = mTargetUsername;
+					cm.ToUser =	mMyUsername;
+					cm.Msgtimestamp = oneNewChatItem.messageTimestamp;
+					cm.MyResponse=Constants.MyResponseYes; // this is my response
+					cm.Delivered = oneNewChatItem.deliveredToServer;
+					cm.MsgRead = Constants.MessageIsRead;
+
+					Log.Debug ("ActiveChat", "button.Click - Add item to DB");
+
+					dm.AddMessage(cm);
 				}
 				else
 				{
 					oneNewChatItem.deliveredToServer="not delivered";
 				}
 				mAdapter.NotifyDataSetChanged();
-
-				//add it to the Database as well
-				ChatMessage cm = new ChatMessage();
-				cm.Message = newMessage;
-				cm.FromUser = mTargetUsername;
-				cm.ToUser =	mMyUsername;
-				cm.Msgtimestamp = oneNewChatItem.messageTimestamp;
-				cm.MyResponse=Constants.MyResponseYes; // this is my response
-				cm.Delivered = oneNewChatItem.deliveredToServer;
-				cm.MsgRead = Constants.MessageIsRead;
-
-				Log.Debug ("ActiveChat", "button.Click - Add item to DB");
-				dm.AddMessage(cm);
 
 				Log.Debug ("ActiveChat", "button.Click - Notifydatasetchanged");
 			};

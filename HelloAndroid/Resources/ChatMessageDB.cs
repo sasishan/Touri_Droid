@@ -115,6 +115,22 @@ namespace TouriDroid
 			}
 		}
 
+		public long DeleteAllMessages()
+		{
+			using (var db = new SQLiteConnection(_helper.WritableDatabase.Path))
+			{
+				try
+				{					
+					return db.DeleteAll<ChatMessage>();
+				}
+				catch (Exception ex)
+				{
+					//exception handling code to go here
+					return Constants.Uninitialized;
+				}
+			}
+		}
+
 		public long UpdateMessage(ChatMessage updMsg)
 		{
 			using (var db = new SQLiteConnection(_helper.WritableDatabase.Path))
@@ -134,14 +150,14 @@ namespace TouriDroid
 		//retrieve a specific user by querying against their first name
 		public List<ChatMessage> GetMessagesFromUser(string myUsername, string fromUsername)
 		{
-			const string getMessagesQuery = "SELECT * FROM "+ ChatMessageEntry.TABLE_NAME + " WHERE ToUser = ? AND FromUser= ?";
+			const string getMessagesQuery = "SELECT * FROM "+ ChatMessageEntry.TABLE_NAME + " WHERE (ToUser = ? AND FromUser= ?) OR (ToUser = ? AND FromUser = ?)";
 			using (var database = new SQLiteConnection(_helper.ReadableDatabase.Path))
 			{
 				try
 				{					
 					//var messages =  database.Table<ChatMessage>();
 					//var query2 = database.Table<ChatMessage>().Where (q => q.ToUser==myUsername);
-					var query = database.Query<ChatMessage>(getMessagesQuery, myUsername, fromUsername);
+					var query = database.Query<ChatMessage>(getMessagesQuery, myUsername, fromUsername, fromUsername, myUsername);
 
 					List<ChatMessage> messages = new List<ChatMessage>();
 					foreach (ChatMessage m in query)
