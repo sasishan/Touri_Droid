@@ -34,20 +34,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/numberGuides"
-                android:text="@string/numGuidesText"
+                android:id="@+id/expertiseDescription"
                 android:layout_below="@+id/expertise"
                 android:textStyle="bold"
                 android:textColor="@color/light_grey"
-                android:textSize="16dp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/expertise_guide_count"
-                android:layout_below="@+id/expertise"
-                android:layout_toRightOf="@+id/numberGuides"
-                android:textColor="@color/light_grey"
-                android:textStyle="bold"
                 android:textSize="16dp" />
         </LinearLayout>
     </LinearLayout>

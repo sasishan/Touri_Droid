@@ -2,13 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="@drawable/chat_background_2">
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="60dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:divider="#00000000"
         android:stackFromBottom="true"
+        android:dividerHeight="10.0sp"
         android:id="@+id/Messages" />
     <RelativeLayout
         android:orientation="horizontal"
@@ -17,24 +21,35 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true">
-        <EditText
-            android:hint="Enter message"
-            android:inputType="textMultiLine"
-            android:ems="10"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/inputChat"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/sendMessageButton" />
-        <Button
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:text="Send"
-            android:id="@+id/sendMessageButton"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:orientation="horizontal"
+            android:background="@android:color/background_dark">
+            <EditText
+                android:hint="Enter message"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/inputChat"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center_vertical|left"
+                android:layout_toLeftOf="@+id/sendMessageButton"
+                android:layout_weight="3" />
+            <Button
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Send"
+                android:id="@+id/sendMessageButton"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="right"
+                android:background="@android:color/holo_blue_dark"
+                android:layout_weight="1" />
+        </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

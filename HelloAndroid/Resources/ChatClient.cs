@@ -11,13 +11,14 @@ namespace TouriDroid
 	{
 		public string fromUser {get;set;}
 		public string message { get; set; }
+		public int fromUserId { get; set; }
 	}
 
 	public class ChatClient
 	{
 		public string _myUsername;
 		public string _targetUserName;
-		public string _myId;
+		public int _myId;
 		public bool   isConnected=false;
 
 		public 	readonly HubConnection _connection;
@@ -26,13 +27,14 @@ namespace TouriDroid
 		public event EventHandler<Message> OnMessageReceived;
 		public event EventHandler<string> PingMe;
 
-		public ChatClient(string myUsername, string targetUserName)
+		public ChatClient(string myUsername, string targetUserName, int myId)
 		{
 			//_platform = platform;
 			_myUsername = myUsername;
 			_targetUserName = targetUserName;
+			_myId = myId;
 
-			_connection = new HubConnection(Constants.DEBUG_BASE_URL, "username=" + _myUsername+"&targetUserName="+_targetUserName);
+			_connection = new HubConnection(Constants.DEBUG_BASE_URL, "username=" + _myUsername+"&targetUserName="+_targetUserName+"&userid="+_myId.ToString());
 			_proxy = _connection.CreateHubProxy("ChatHub");
 		}
 
@@ -40,7 +42,7 @@ namespace TouriDroid
 		{		
 			Log.Debug (Constants.TOURI_TAG, "In connect");	
 
-			_proxy.On("messageReceived", (string fromUser, string message, string messageId) =>
+			_proxy.On("messageReceived", (string fromUser, string message, int messageId, int fromUserId) =>
 				{
 					if (OnMessageReceived != null)
 					{
@@ -57,9 +59,13 @@ namespace TouriDroid
 						}
 						Log.Debug (Constants.TOURI_TAG, "Acknowledged message with id " + messageId);
 
-						Message m = new Message ();
+						  Message m = new Message ();
 						m.fromUser = fromUser;
 						m.message = message;
+						m.fromUserId = fromUserId;
+
+						//*add fromuserid here - is it int or string?
+
 						OnMessageReceived(this, m);
 					}
 				});
@@ -81,7 +87,7 @@ namespace TouriDroid
 				//do nothing
 				isConnected = false;
 			}
-		//	await Send("Connected");
+			//	await Send("Connected");
 		}
 
 		public async void disconnect()
@@ -101,20 +107,20 @@ namespace TouriDroid
 			}
 		}
 
-		public async Task<int> SendPrivateMessage(string message, string targetUsername)
+		public async Task<int> SendPrivateMessage(string message, string targetUsername, int myUserId)
 		{
 			Log.Debug (Constants.TOURI_TAG, "In SendPrivateMessage");
-
+			int messageId;
 			try
 			{
-				await _proxy.Invoke ("SendPrivateMessage", message, _myUsername, targetUsername);
+				messageId = await _proxy.Invoke<int> ("SendPrivateMessage", message, _myUsername, targetUsername, myUserId);
 			}
 			catch (Exception e) {
 				Log.Debug (Constants.TOURI_TAG, "SendPrivateMessage erorr");
 				return Constants.FAIL;
 			}
 
-			return Constants.SUCCESS;
+			return messageId;
 		}
 
 		public Task Send(string message)

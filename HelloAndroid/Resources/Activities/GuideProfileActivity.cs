@@ -25,6 +25,7 @@ namespace TouriDroid
 		string userName;
 		string fName;
 		string lName;
+		string category;
 
 		protected override void OnCreate (Bundle bundle)
 		{
@@ -45,11 +46,13 @@ namespace TouriDroid
 			string languages = Intent.GetStringExtra ("Languages") ?? "Data not available";
 			string expertise = Intent.GetStringExtra ("Expertise") ?? "Data not available";
 			string availability = Intent.GetStringExtra ("Availability") ?? "Data not available";
+			category = Intent.GetStringExtra ("Category") ?? "Local Activities";
 
 			loadProfile (guideId, fName, lName, description,languages,expertise );
 
 			Button button = FindViewById<Button>(Resource.Id.ChatButton);
 
+			button.Text = "Chat about " + category;
 			button.Click += (o, e) => {
 				//if not logged in
 				SessionManager sm = new SessionManager(this);
@@ -71,6 +74,7 @@ namespace TouriDroid
 						chatActivity.PutExtra ("TargetUserName", thisGuide.userName);
 						chatActivity.PutExtra ("TargetFirstName", thisGuide.fName);
 						chatActivity.PutExtra ("TargetLastName", thisGuide.lName);
+						chatActivity.PutExtra ("Category", category);
 						this.StartActivity(chatActivity);						
 					}
 				}
@@ -136,28 +140,10 @@ namespace TouriDroid
 
 			progress.Visibility = ViewStates.Gone;
 
-			TextView availability = this.FindViewById<TextView> (Resource.Id.availability);
-			availability.Text = converter.getOnlineStatusString(thisGuide.availability);
-			availability.SetTextColor(converter.getOnlineStatusColor(thisGuide.availability));
-
 			gName.Text = thisGuide.fName+" " +thisGuide.lName;
 			gAbout.Text = thisGuide.description;
 
-			foreach (string l in thisGuide.languageList) {
-				gLanguages.Text += "• " + l + "\r\n";	 
-			}
-
-			foreach (Expertise e in thisGuide.expertise) {
-				gExpertise.Text +="• " + e.expertise+ "\r\n";	 
-			}
-	
 			// set the titles to visible so it appears at the same times after loading
-			TextView holders = this.FindViewById<TextView> (Resource.Id.languages_text);
-			holders.Visibility = ViewStates.Visible;
-			holders = this.FindViewById<TextView> (Resource.Id.expertise_text);
-			holders.Visibility = ViewStates.Visible;
-			holders = this.FindViewById<TextView> (Resource.Id.about_text);
-			holders.Visibility = ViewStates.Visible;
 			//gLanguages.Text = g.languages;
 			//gExpertise.Text = expertise;
 		}

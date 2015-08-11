@@ -6,11 +6,17 @@
     android:weightSum="100"
     android:paddingTop="5dp"
     android:paddingBottom="5dp">
+    <ImageView
+        android:id="@+id/profileThumbnail"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_weight="5"
+        android:gravity="center" />
     <TextView
         android:id="@+id/name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="85"
+        android:layout_weight="80"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"

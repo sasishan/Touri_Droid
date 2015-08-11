@@ -287,6 +287,8 @@
     <AndroidResource Include="Resources\layout\searchtext_layout.axml" />
     <AndroidResource Include="Resources\layout\CustomSearchMenu.axml" />
     <AndroidResource Include="Resources\layout\chatuser_listview.axml" />
+    <AndroidResource Include="Resources\drawable\chat_background_2.JPG" />
+    <AndroidResource Include="Resources\layout\ChatTitle_Layout.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

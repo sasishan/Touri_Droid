@@ -35,6 +35,7 @@ namespace TouriDroid
 		protected Comms						mComms;
 		private Converter 					mConverter;
 		private UserPreferences 			mUserPreference;
+		private string 						mExpertise;
 		private List<string> mLanguages;
 
 		public override void OnCreate (Bundle savedInstanceState)
@@ -67,11 +68,11 @@ namespace TouriDroid
 			mRecyclerView.SetLayoutManager (mLayoutManager);
 
 			mPlace = Activity.Intent.GetStringExtra (Constants.selectedLocation) ?? "";
-			string expertise = Activity.Intent.GetStringExtra (Constants.selectedExpertise) ?? "";
+			mExpertise = Activity.Intent.GetStringExtra (Constants.selectedExpertise) ?? "";
 
 			mGuideSearch.placesServedList.Clear ();
 			mGuideSearch.placesServedList.Add (mPlace);
-			mGuideSearch.expertiseList.Add (expertise);
+			mGuideSearch.expertiseList.Add (mExpertise);
 
 			mAdapter = new RecyclerAdapter (mGuideList, this.Activity);
 			((RecyclerAdapter)mAdapter).ItemClick += guideClick;
@@ -154,6 +155,7 @@ namespace TouriDroid
 			gprofileActivity.PutExtra ("UName", guide.userName);
 			gprofileActivity.PutExtra ("FName", guide.fName);
 			gprofileActivity.PutExtra ("LName", guide.lName);
+			gprofileActivity.PutExtra ("Category", mExpertise);
 
 			string langs="";
 			foreach(string l in guide.languageList)
@@ -199,9 +201,9 @@ namespace TouriDroid
 		public override bool OnOptionsItemSelected (IMenuItem item)
 		{
 			//load filter fragment
-			if (item.ItemId == Resource.Id.filter) {
-				var preferences = new Intent (Activity, typeof(Preferences));
-				this.StartActivity(preferences);
+			//@TouriTraveler if (item.ItemId == Resource.Id.filter) {
+			//@TouriTraveler 				var preferences = new Intent (Activity, typeof(Preferences));
+			//@TouriTraveler this.StartActivity(preferences);
 
 				//var ft = FragmentManager.BeginTransaction ();
 		
@@ -217,7 +219,8 @@ namespace TouriDroid
 				//		FragmentTransaction transaction = FragmentManager.BeginTransaction ();
 //				transaction.Replace (Resource.Id.fragment_container, newFragment);
 //				transaction.Commit ();
-			} else if (item.ItemId == Resource.Id.map) {
+			//@TouriTraveler 	} else 
+			if (item.ItemId == Resource.Id.map) {
 				
 				if (guidesLoaded==true)
 				{
@@ -245,16 +248,16 @@ namespace TouriDroid
 
 			string dist = mUserPreference.GetWithinDistanceAsString ();
 			string withinDistance = mConverter.ConvertWithinDistance (dist);
-			url += "withinDistance=" + withinDistance + "&";
+		//@touriToronto	url += "withinDistance=" + withinDistance + "&";
 
-			if (guideSearch.placesServedList.Count>0)
-			{				
-				atLeastOneSearchParameter = true;
-				foreach(string l in guideSearch.placesServedList)
-				{
-					url += "locs=" + l +"&";
-				}
-			}
+			//@touriTorontoif (guideSearch.placesServedList.Count>0)
+			//@touriToronto{				
+			//@touriTorontoatLeastOneSearchParameter = true;
+			//@touriTorontoforeach(string l in guideSearch.placesServedList)
+			//@touriToronto{
+			//@touriTorontourl += "locs=" + l +"&";
+			//@touriToronto}
+			//@touriToronto}
 
 			if (mLanguages.Count>0)
 			{	
@@ -324,7 +327,9 @@ namespace TouriDroid
 			//		string imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ g.profileImageId + "/thumbnail";
 			//		Bitmap image = (Bitmap) await mComms.getScaledImage (imageUrl, Constants.GuideListingReqWidth, Constants.GuideListingReqHeight);
 			//		g.profileImage = image;
-
+				//	if (!g.fName.Equals (Constants.TOURI_FNAME)) {
+				//		continue;
+				//	}
 					mGuideList.Add (g);
 					mAdapter.NotifyItemInserted (i);
 

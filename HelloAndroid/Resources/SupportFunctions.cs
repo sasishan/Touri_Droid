@@ -11,6 +11,7 @@ using Org.Json;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Android.Graphics;
+using System.IO;
 
 namespace TouriDroid
 {
@@ -146,6 +147,7 @@ namespace TouriDroid
 		public const String KeyGuideId = "guideId";
 		public const String PREF_KeySearchDistance = "searchDistance";
 		public const String PREF_KeyLanguages = "languages";
+		public const String KeyLastMessageId = "lastMessageId";
 		public const String PREF_KeyShowOffline = "showOffline";
 
 		public SessionManager (Context pContext)
@@ -166,6 +168,17 @@ namespace TouriDroid
 		public void SetLanguages (string languages)
 		{
 			editor.PutString(PREF_KeyLanguages, languages);
+			editor.Commit ();
+		}
+
+		public long GetLastMessageId()
+		{
+			return pref.GetLong (KeyLastMessageId, 0);
+		}
+
+		public void SetLastMessageId (long id)
+		{
+			editor.PutLong (KeyLastMessageId, id);
 			editor.Commit ();
 		}
 
@@ -266,8 +279,11 @@ namespace TouriDroid
 			editor.Remove (IsGuide);
 			editor.Remove (KeyGuideId);
 			editor.Commit();
+
+
+
 			//editor.Clear ();
-		//	editor.Commit();
+			//	editor.Commit();
 		}
 
 		public Boolean isLoggedIn()
@@ -290,19 +306,52 @@ namespace TouriDroid
 	public class SupportFunctions
 	{
 		private Converter mConverter = null;
+		private SessionManager mSm = null;
 
 		public SupportFunctions ()
 		{
 			mConverter = new Converter ();
 		}
 
-		public async Task<int> GetMyMessages(string accessToken, DataManager dm)
+		public bool FileExistsInStorage(string fileName)
+		{
+			string mDocumentsPath = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
+			string filePath = System.IO.Path.Combine (mDocumentsPath, fileName);
+			return (File.Exists (filePath));
+		}
+
+		public Bitmap GetImageFromStorage(string fileName)
+		{
+			Bitmap bmpImage = null;
+			string mDocumentsPath = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
+			string filePath = System.IO.Path.Combine (mDocumentsPath, fileName);
+			try
+			{
+				
+				FileStream fi = new System.IO.FileStream (filePath, FileMode.Open);
+
+				if (fi!=null)
+				{
+					bmpImage = BitmapFactory.DecodeStream(fi);
+					fi.Close ();
+				}
+			}
+			catch (Exception e) {
+			}
+
+			return bmpImage;
+		}
+
+		public async Task<int> GetMyMessages(string accessToken, DataManager dm, SessionManager sm)
 		{
 			if (dm == null) {
 				return 0;
 			}
 
-			string url = Constants.DEBUG_BASE_URL + Constants.URL_MyMessages;
+			long lastId = sm.GetLastMessageId ();
+			string myUsername = sm.getEmail ();
+
+			string url = Constants.DEBUG_BASE_URL + Constants.URL_MyMessages + Constants.URL_Query_LastMessageId + lastId;
 			Comms comms = new Comms();
 
 			var json = await comms.getWebApiData(url, accessToken);
@@ -318,13 +367,27 @@ namespace TouriDroid
 					continue;
 				}
 
+
+				if (lastId < cm.ID) {
+					lastId = (int) cm.ID;					
+				}
 				cm.MsgRead = Constants.MessageUnread;
 				//this is not a response from the current user
-				cm.MyResponse=Constants.MyResponseNo;
+
+				if (cm.FromUser.Equals (myUsername)) {
+					cm.MyResponse = Constants.MyResponseYes;
+				}
+				else
+				{
+					cm.MyResponse=Constants.MyResponseNo;
+				}
+			
+
 				//add it straight to the DB
 				dm.AddMessage(cm);
 			}
 
+			sm.SetLastMessageId (lastId);
 			return json.Count;
 		}
 

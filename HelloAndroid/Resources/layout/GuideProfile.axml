@@ -33,14 +33,6 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:visibility="gone" />
-            <TextView
-                android:id="@+id/availability"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:layout_gravity="center"
-                android:layout_marginTop="2dp" />
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -55,46 +47,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/languages_text"
-                    android:layout_below="@+id/guide_name"
-                    android:layout_marginTop="20dp"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text="Languages Spoken:"
-                    android:visibility="gone" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/languages"
-                    android:layout_below="@+id/languages_text" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/expertise_text"
-                    android:layout_marginTop="20dp"
-                    android:layout_below="@+id/languages"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text="Expertise Areas:"
-                    android:visibility="gone" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/expertise"
-                    android:layout_below="@+id/expertise_text" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:id="@+id/about_text"
-                    android:layout_below="@+id/expertise"
+                    android:layout_below="@+id/guide_name"
                     android:textStyle="bold"
                     android:textSize="18sp"
-                    android:text="About me:"
+                    android:text="About:"
                     android:visibility="gone" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:id="@+id/about"
                     android:layout_below="@+id/about_text" />
             </RelativeLayout>

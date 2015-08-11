@@ -53,8 +53,16 @@ namespace TouriDroid
 					if (response.ContainsKey (Constants.Guide_WebAPI_Key_GuideId)) {						
 						guideId = response [Constants.Guide_WebAPI_Key_GuideId];
 						isGuide = true;					
-				//		mChatIntent = new Intent (Activity, typeof(ChatService));
-				//		mChatIntent.SetData ();
+
+						SessionManager sm = new SessionManager (Activity);
+
+						DataManager dm = new DataManager ();
+						dm.SetContext (Activity);
+						dm.DeleteAllMessages();
+						sm.SetLastMessageId (0);
+
+						//		mChatIntent = new Intent (Activity, typeof(ChatService));
+						//		mChatIntent.SetData ();
 					}
 				}
 
@@ -76,7 +84,7 @@ namespace TouriDroid
 				// Closing all the backstack Activities
 				i.SetFlags(ActivityFlags.ClearTask | ActivityFlags.NewTask);
 				this.StartActivity (i);
-			
+
 			} else {
 				Toast.MakeText (view.Context, "Username or password was incorrect", ToastLength.Long).Show ();
 			}

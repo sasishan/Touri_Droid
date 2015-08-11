@@ -123,18 +123,18 @@ namespace TouriDroid
 		//Set up the menu, including the search bar in the menu
 		public override bool OnCreateOptionsMenu(IMenu menu)
 		{
-			MenuInflater.Inflate(Resource.Menu.menu_guide, menu);
+		//@touriToronto	MenuInflater.Inflate(Resource.Menu.menu_guide, menu);
 
 			//set up the action bar menu's search 
-			var item = menu.FindItem (Resource.Id.search);
-			mSearchMenu = menu;
-			View v = (View) MenuItemCompat.GetActionView (item);
+			//@touriToronto	var item = menu.FindItem (Resource.Id.search);
+			//@touriToronto	mSearchMenu = menu;
+			//@touriToronto	View v = (View) MenuItemCompat.GetActionView (item);
 
-			mSearchPlaces = (AutoCompleteTextView) v.FindViewById (Resource.Id.search_places);
+			//@touriToronto	mSearchPlaces = (AutoCompleteTextView) v.FindViewById (Resource.Id.search_places);
 
-			PlacesAutoCompleteAdapter pacAdapter = new PlacesAutoCompleteAdapter (this, Android.Resource.Layout.SimpleListItem1);
-			mSearchPlaces.Adapter = pacAdapter;
-			mSearchPlaces.ItemClick += searchPlaces_ItemClick;
+			//@touriToronto	PlacesAutoCompleteAdapter pacAdapter = new PlacesAutoCompleteAdapter (this, Android.Resource.Layout.SimpleListItem1);
+			//@touriToronto	mSearchPlaces.Adapter = pacAdapter;
+			//@touriToronto	mSearchPlaces.ItemClick += searchPlaces_ItemClick;
 
 			//See if we can speed things up by looking for the last location held in memory
 			//if the person was logged in, the location would be saved in the session manager
@@ -161,7 +161,7 @@ namespace TouriDroid
 		private void SetActivityLabel(string place)
 		{
 			char[] splits = {',' };
-			string[] placeArray= mSearchPlaces.Text.Split (splits, 3);
+			string[] placeArray= place.Split (splits, 3);
 
 			if (placeArray.Length > 1) {
 				this.Title = placeArray [0] + ", " + placeArray [1];
@@ -442,7 +442,7 @@ namespace TouriDroid
 		public void setMyPlace(string address)
 		{
 			mPlace = address;
-			mSearchPlaces.Text = address;
+		//@touriToronto	mSearchPlaces.Text = address;
 			SetActivityLabel (mPlace);
 			mGuideSearch.placesServedList.Clear ();
 			mGuideSearch.placesServedList.Add (mPlace);
@@ -459,9 +459,9 @@ namespace TouriDroid
 			if (mSessionManager.isLoggedIn ()) {
 				//mDrawerItems.Add ("Logout");
 				if (mSessionManager.isGuide ()) {
-					mDrawerItems.Add (Constants.DrawerOptionSwitchGuide);
+					//@TouriTraveler mDrawerItems.Add (Constants.DrawerOptionSwitchGuide);
 				} else {
-					mDrawerItems.Add ("Favourite Guides");
+					//@TouriTraveler mDrawerItems.Add ("Favourite Guides");
 				}
 				mDrawerItems.Add (Constants.MyPreferences);
 
@@ -472,7 +472,7 @@ namespace TouriDroid
 				mDrawerItems.Add (Constants.DrawerOptionLogout);
 
 			} else {
-				mDrawerItems.Add(Constants.DrawerOptionBeAGuide);
+				//@TouriTraveler mDrawerItems.Add(Constants.DrawerOptionBeAGuide);
 				//drawerFooter.Text = Constants.DrawerOptionLoginOrSignUp;
 				mDrawerItems.Add (Constants.DrawerOptionLoginOrSignUp);
 			}

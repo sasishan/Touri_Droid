@@ -6,8 +6,4 @@ xmlns:yourapp="http://schemas.android.com/apk/res-auto">
         	android:showAsAction="ifRoom"
     		yourapp:showAsAction="ifRoom"
     		android:layout_marginRight="5dp"/>
-    <item android:id="@+id/filter"
-			android:icon="@drawable/Filter_32"
-        	android:showAsAction="ifRoom"
-    		yourapp:showAsAction="ifRoom"/>
 </menu>

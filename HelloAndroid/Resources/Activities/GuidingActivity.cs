@@ -46,7 +46,7 @@ namespace TouriDroid
 
 			if (sessionManager.isLoggedIn ()) {
 				//mDrawerItems.Add ("Logout");
-				mDrawerItems.Add (Constants.DrawerOptionSwitchTravel);
+				//@TouriTraveler mDrawerItems.Add (Constants.DrawerOptionSwitchTravel);
 				mDrawerItems.Add (Constants.DrawerOptionLogout);
 				drawerFooter.Text = "Signed in as " + sessionManager.getEmail ();
 			} else {

@@ -13,6 +13,9 @@ using Android.Widget;
 using Android.Views.InputMethods;
 using Android.Util;
 using System.Threading.Tasks;
+using Android.Graphics;
+using Java.IO;
+using System.IO;
 
 
 namespace TouriDroid
@@ -28,6 +31,10 @@ namespace TouriDroid
 		List<ChatItem> 					mMyMessages;
 		ChatMessageAdapter			    mAdapter;
 		public ChatServiceBinder 		binder;
+		SessionManager 					mSm;
+		int 							mFromUserId=Constants.Uninitialized;
+		int 							mMyUserId=Constants.Uninitialized;
+		string 							mUserProfileImage;
 
 		//Messages need to be cleared cos OnStart is recalled each time, while onCreate is only called on startup
 		protected override void OnStart ()
@@ -39,25 +46,67 @@ namespace TouriDroid
 		protected override async void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
+	//		RequestWindowFeature (WindowFeatures.CustomTitle);
+	//		Window.SetFeatureInt(WindowFeatures.CustomTitle, Resource.Layout.ChatTitle_Layout);
+
 			SetContentView (Resource.Layout.ActiveChat_Activity);
 
-			ActionBar.SetDisplayHomeAsUpEnabled (true);
-			ActionBar.SetHomeButtonEnabled (true);
+			//addPreferencesFromResource(R.xml.settings);
 
 			//get the information of who we want to chat WITH
-			mTargetGuideId = 	Intent.GetStringExtra ("TargetGuideId") ?? "";
+			mTargetGuideId = 	Intent.GetStringExtra ("TargetGuideId") ?? "-1";
 			mTargetUsername = 	Intent.GetStringExtra ("TargetUserName") ?? "";
 			string fName = 		Intent.GetStringExtra ("TargetFirstName") ?? "";
 			string lName = 		Intent.GetStringExtra ("TargetLastName") ?? "";
+			string topic =      Intent.GetStringExtra ("Category") ?? "General";
+			mUserProfileImage =  Intent.GetStringExtra ("ImageName") ?? "";
 
-			SessionManager sm = new SessionManager (this);
-			if (sm.isLoggedIn() == true) {
-				mMyUsername = sm.getEmail ();
+			mFromUserId = Convert.ToInt32 (mTargetGuideId);
+			ActionBar.SetDisplayHomeAsUpEnabled (true);
+			ActionBar.SetHomeButtonEnabled (true);
+
+			SupportFunctions sf = new SupportFunctions();
+			if (!mUserProfileImage.Equals ("")) {
+				//FileInputStream fo = new FileInputStream(imagePath);
+				Bitmap image = sf.GetImageFromStorage(mUserProfileImage);
+
+				if (image != null) {
+					ActionBar.SetDisplayOptions (ActionBar.DisplayOptions | ActionBarDisplayOptions.ShowCustom, 0);
+					ImageView imageView = new ImageView(ActionBar.ThemedContext);
+					imageView.SetScaleType(ImageView.ScaleType.Center);
+					imageView.SetImageBitmap (image);
+
+					ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(
+						ActionBar.LayoutParams.WrapContent,
+						ActionBar.LayoutParams.WrapContent, 
+						GravityFlags.Left | GravityFlags.CenterVertical);
+					//	layoutParams.RightMargin = 40;
+
+					LayoutInflater inflator = (LayoutInflater) this.GetSystemService(Context.LayoutInflaterService);
+					View v = inflator.Inflate(Resource.Layout.ChatTitle_Layout, null);
+
+					ImageView profileImage = v.FindViewById<ImageView> (Resource.Id.userImage);
+					TextView chat_user = v.FindViewById<TextView> (Resource.Id.chat_user);
+					chat_user.Text = fName + lName;
+					profileImage.SetImageBitmap (image);
+					imageView.LayoutParameters =layoutParams;
+					ActionBar.CustomView = v;
+					ActionBar.SetDisplayShowTitleEnabled(false);
+					ActionBar.SetDisplayShowCustomEnabled(true);
+				}
 			}
 
-			this.Title = fName + " " + lName;
+			mSm = new SessionManager (this);
+			if (mSm.isLoggedIn() == true) {
+				mMyUsername = mSm.getEmail ();
+				mMyUserId = mSm.getGuideId();
+			}
+
+	//		this.Title = fName + " " + lName + " | " + topic;
 
 			HandleClicks ();
+
+
 		}
 
 		protected override void OnResume ()
@@ -97,7 +146,7 @@ namespace TouriDroid
 					oneChatItem.myMessage = true;
 					oneChatItem.user = "Me";
 				}
-				mMyMessages.Add (oneChatItem);
+				mMyMessages.Add (oneChatItem);//
 			}
 
 			mAdapter = new ChatMessageAdapter(this, mMyMessages);
@@ -142,10 +191,10 @@ namespace TouriDroid
 		public async void HandleClicks()
 		{
 			if (mClient == null) {
-				mClient = new ChatClient (mMyUsername, mTargetUsername);
+				mClient = new ChatClient (mMyUsername, mTargetUsername, mMyUserId);
 			}
 
-		//	mClient.disconnect ();
+			//	mClient.disconnect ();
 			await mClient.Connect ();
 
 			if (mClient.isConnected == false) {
@@ -184,31 +233,34 @@ namespace TouriDroid
 				mMyMessages.Add(oneNewChatItem);
 				mAdapter.NotifyDataSetChanged();
 
-				int result = await mClient.SendPrivateMessage(newMessage, mTargetUsername);
+				int messageId = await mClient.SendPrivateMessage(newMessage, mTargetUsername, mMyUserId);
 
 				//@todo more efficient way?
-				if (result==Constants.SUCCESS)
+				//add it to the Database as well
+				ChatMessage cm = new ChatMessage();
+				if (messageId>0)
 				{
 					oneNewChatItem.deliveredToServer="delivered";
+					mSm.SetLastMessageId(messageId);
+
+					cm.Message = newMessage;
+					cm.FromUser = mTargetUsername;
+					cm.FromUserId = mFromUserId;
+					cm.ToUser =	mMyUsername;
+					cm.Msgtimestamp = oneNewChatItem.messageTimestamp;
+					cm.MyResponse=Constants.MyResponseYes; // this is my response
+					cm.Delivered = oneNewChatItem.deliveredToServer;
+					cm.MsgRead = Constants.MessageIsRead;
+
+					Log.Debug ("ActiveChat", "button.Click - Add item to DB");
+
+					dm.AddMessage(cm);
 				}
 				else
 				{
 					oneNewChatItem.deliveredToServer="not delivered";
 				}
 				mAdapter.NotifyDataSetChanged();
-
-				//add it to the Database as well
-				ChatMessage cm = new ChatMessage();
-				cm.Message = newMessage;
-				cm.FromUser = mTargetUsername;
-				cm.ToUser =	mMyUsername;
-				cm.Msgtimestamp = oneNewChatItem.messageTimestamp;
-				cm.MyResponse=Constants.MyResponseYes; // this is my response
-				cm.Delivered = oneNewChatItem.deliveredToServer;
-				cm.MsgRead = Constants.MessageIsRead;
-
-				Log.Debug ("ActiveChat", "button.Click - Add item to DB");
-				dm.AddMessage(cm);
 
 				Log.Debug ("ActiveChat", "button.Click - Notifydatasetchanged");
 			};

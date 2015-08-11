@@ -71,8 +71,8 @@ namespace TouriDroid
 		public override StartCommandResult OnStartCommand (Intent intent, StartCommandFlags flags, int startId)
 		{
 			// Let it continue running until it is stopped.
-			Toast.MakeText(this, "Service Started", ToastLength.Long).Show();
-			Log.Debug (Constants.TOURI_TAG, "OnStartCommand");
+			//Toast.MakeText(this, "Service Started", ToastLength.Long).Show();
+			Log.Debug (Constants.TOURI_TAG, "OnStartCommand - Chat Service Started");
 
 			/*	var ongoing = new Notification (Resource.Drawable.ic_touri_logo_trans, "Touri");
 			// Create the PendingIntent with the back stack
@@ -112,7 +112,8 @@ namespace TouriDroid
 			PendingIntent resultPendingIntent = stackBuilder.GetPendingIntent(0, (int) PendingIntentFlags.UpdateCurrent);
 
 			Log.Debug (Constants.TOURI_TAG, "Calling GetMyMessages");
-			int count = await sf.GetMyMessages (token, mDm);
+
+			int count = await sf.GetMyMessages (token, mDm, mSm);
 			if (count > 0) {
 				ShowNewMessagesNotification (resultPendingIntent);
 			}
@@ -123,7 +124,9 @@ namespace TouriDroid
 		protected async Task initalizeClient(string userName)
 		{
 			Log.Debug (Constants.TOURI_TAG, "initalizeClient");
-			mClient = new ChatClient (userName, "0");
+			int myId = mSm.getGuideId();
+
+			mClient = new ChatClient (userName, "0", myId);
 
 			await mClient.Connect ();
 			Toast.MakeText(this, "Connected to Chat Server", ToastLength.Long).Show();
@@ -146,8 +149,9 @@ namespace TouriDroid
 			PendingIntent resultPendingIntent = stackBuilder.GetPendingIntent(0, (int) PendingIntentFlags.UpdateCurrent);
 
 			//assume only guides get messages for now so there will be a ToUser name
+			int lastMessageId=0;
 			while (true) {
-				int count = await sf.GetMyMessages (token, mDm);
+				int count = await sf.GetMyMessages (token, mDm, mSm);
 				if (count > 0) {
 					ShowNewMessagesNotification (resultPendingIntent);
 				}
@@ -282,6 +286,7 @@ namespace TouriDroid
 			int result = Constants.SUCCESS;
 
 			ChatMessage cm = new ChatMessage ();
+
 			cm.FromUser = message.fromUser;
 			cm.ToUser = mMyUsername;
 			cm.Message = message.message;
@@ -291,10 +296,10 @@ namespace TouriDroid
 			Log.Debug (Constants.TOURI_TAG, "Logging a message from " + cm.FromUser);
 
 			// dont insert messages from myself back (eg. could not deliver a message is returned)
-			if (!cm.FromUser.Equals(mMyUsername))
-			{
-				long id = mDm.AddMessage (cm);
-			}
+			//if (!cm.FromUser.Equals(mMyUsername))
+			//{
+			long id = mDm.AddMessage (cm);
+			//}
 
 			return result;
 		}

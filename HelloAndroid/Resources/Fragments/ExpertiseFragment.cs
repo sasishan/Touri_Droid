@@ -77,7 +77,6 @@ namespace TouriDroid
 			return view;
 		}
 
-
 		void OnItemClick (object sender, int position)
 		{
 			Expertise exp = ((RecyclerAdapterExpertise)mAdapter).getExpertise (position);
@@ -90,8 +89,34 @@ namespace TouriDroid
 			gprofileActivity.PutExtra (Constants.selectedLocation, place);
 			gprofileActivity.PutExtra (Constants.selectedExpertise, exp.expertise);		
 			this.StartActivity (gprofileActivity);
+			//ChatWithTouri(exp, place);
 		}
 
+		public void ChatWithTouri(Expertise exp, string place)
+		{
+			SessionManager sm = new SessionManager(Activity);
+			if (sm.isLoggedIn()==false)
+			{
+				Toast.MakeText(Activity, "Please sign in to chat", ToastLength.Short).Show();
+			}
+			else
+			{
+				string myUsername = sm.getEmail();
+				if (myUsername.Equals(Constants.TOURI_USERNAME))
+				{
+					Toast.MakeText(Activity, "You can't chat with yourself", ToastLength.Short).Show();
+				}
+				else
+				{
+					var chatActivity = new Intent (Activity, typeof(ActiveChat));
+					chatActivity.PutExtra ("TargetGuideId", Constants.TOURI_GUIDEID);
+					chatActivity.PutExtra ("TargetUserName", Constants.TOURI_USERNAME);
+					chatActivity.PutExtra ("TargetFirstName", Constants.TOURI_FNAME);
+					chatActivity.PutExtra ("TargetLastName", Constants.TOURI_LNAME);
+					this.StartActivity(chatActivity);					
+				}
+			}
+		}
 
 		/* Load the expertises list based on the gloabl mPlace value held by MainActivity */
 		public async void loadExpertises()
@@ -137,6 +162,7 @@ namespace TouriDroid
 				langUrl = langUrl.Remove (langUrl.Length - 1);
 			}
 
+			//@touriToronto string url = Constants.DEBUG_BASE_URL + "/api/expertises/search?locs="+place +"&withinDistance="+withinDistance;
 			string url = Constants.DEBUG_BASE_URL + "/api/expertises/search?locs="+place +"&withinDistance="+withinDistance;
 			if (languages.Count > 0) {
 				url += "&" + langUrl;
@@ -251,10 +277,10 @@ namespace TouriDroid
 			//View row = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.cardview_expertise, parent, false);
 			View row = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.list_expertise, parent, false);
 			TextView expertise = row.FindViewById<TextView> (Resource.Id.expertise);
-			TextView guideCount = row.FindViewById<TextView> (Resource.Id.expertise_guide_count);
+			TextView description = row.FindViewById<TextView> (Resource.Id.expertiseDescription);
 			ImageView expImage = row.FindViewById<ImageView> (Resource.Id.expertise_image);
 
-			MyView view = new MyView (row, OnClick) { mExpertise = expertise, mGuideCount=guideCount, mExpertiseImage = expImage};
+			MyView view = new MyView (row, OnClick) { mExpertise = expertise, mDescription=description, mExpertiseImage = expImage};
 			return view;
 		}
 
@@ -264,7 +290,8 @@ namespace TouriDroid
 
 			// Set name
 			myHolder.mExpertise.Text = mExpertise[position].expertise;
-			myHolder.mGuideCount.Text = mExpertise[position].numberOfGuides.ToString();
+			myHolder.mDescription.Text = mExpertise [position].description;
+			//myHolder.mGuideCount.Text = mExpertise[position].numberOfGuides.ToString();
 
 		//	string imageUrl= Constants.DEBUG_BASE_URL + "/api/images/"+ mExpertise[position].expertiseImageId;
 		//	Bitmap image = (Bitmap) await mCa.getImage (imageUrl);
