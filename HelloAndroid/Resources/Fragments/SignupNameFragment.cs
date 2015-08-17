@@ -38,8 +38,8 @@ namespace TouriDroid
 
 				if (!fname.Text.Equals("") && !fname.Text.Equals("") )
 				{					
-					((SignUpAsGuideActivity)Activity).newGuide.fName = fname.Text;
-					((SignUpAsGuideActivity)Activity).newGuide.lName = lname.Text;		
+					((LoginOrSignupActivity)Activity).newGuide.fName = fname.Text;
+					((LoginOrSignupActivity)Activity).newGuide.lName = lname.Text;		
 
 					var newFragment = new SignupRegisterGuide ();
 

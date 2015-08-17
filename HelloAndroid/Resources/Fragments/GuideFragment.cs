@@ -139,6 +139,23 @@ namespace TouriDroid
 					chatActivity.PutExtra ("TargetUserName", guide.userName);
 					chatActivity.PutExtra ("TargetFirstName", guide.fName);
 					chatActivity.PutExtra ("TargetLastName", guide.lName);
+
+					string imageName = guide.userName;
+					SupportFunctions sf = new SupportFunctions ();
+					//we are sending this to the activity so make sure it is saved
+					bool fileExists=sf.FileExistsInStorage(imageName);
+					if (fileExists==false)
+					{
+						if (sf.SaveImageFromBitmap(imageName, guide.profileImage)!=null)
+						{
+							fileExists=true;
+						}
+					}
+
+					if (fileExists)
+					{
+						chatActivity.PutExtra ("ImageName", imageName);
+					}
 					this.StartActivity(chatActivity);					
 				}
 			}
@@ -291,12 +308,24 @@ namespace TouriDroid
 
 		public async Task LoadGuideImages()
 		{
+			SupportFunctions sf = new SupportFunctions ();
 			int position = 0;
 			foreach (Guide g in mGuideList) {
 				string imageUrl = Constants.DEBUG_BASE_URL + "/api/images/" + g.profileImageId + "/thumbnail";
 				//Bitmap image = (Bitmap) await mComms.getScaledImage (imageUrl, Constants.GuideListingReqWidth, Constants.GuideListingReqHeight);
-				Bitmap image = (Bitmap) await mComms.getImage (imageUrl);
-				g.profileImage = image;
+
+				string imageName = g.userName;
+				Bitmap bmpImage = null;//sf.GetImageFromStorage (imageName);
+				//does not exist, download it
+				if (bmpImage == null) {
+					bmpImage = (Bitmap)await mComms.getImage (imageUrl);
+
+			//		if (bmpImage != null) {
+			//			sf.SaveImageFromBitmap (imageName, bmpImage);
+			//		}
+				}
+
+				g.profileImage = bmpImage;
 				mAdapter.NotifyItemChanged (position++);
 			}
 		}

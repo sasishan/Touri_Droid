@@ -42,10 +42,10 @@ namespace TouriDroid
 				ImageView profile = view.FindViewById<ImageView> (Resource.Id.guide_photo);
 				Button chat = view.FindViewById<Button> (Resource.Id.chatButton);
 
-				moreButton.Click += (sender, e) => listener (base.Position);
+				//moreButton.Click += (sender, e) => listener (base.Position);
 				chat.Click += (sender, e) => chatListener (base.Position);
 				profile.Click  += (sender, e) => chatListener (base.Position);
-				//view.Click += (sender, e) => listener (base.Position);
+				view.Click += (sender, e) => listener (base.Position);
 			}
 		}
 

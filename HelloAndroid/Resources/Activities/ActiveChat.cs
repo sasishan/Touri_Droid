@@ -35,7 +35,9 @@ namespace TouriDroid
 		int 							mFromUserId=Constants.Uninitialized;
 		int 							mMyUserId=Constants.Uninitialized;
 		string 							mUserProfileImage;
-
+		string 							mCommonName;
+		string 							mTargetName;
+		Bitmap							mProfileImage;
 		//Messages need to be cleared cos OnStart is recalled each time, while onCreate is only called on startup
 		protected override void OnStart ()
 		{
@@ -62,19 +64,22 @@ namespace TouriDroid
 			mUserProfileImage =  Intent.GetStringExtra ("ImageName") ?? "";
 
 			mFromUserId = Convert.ToInt32 (mTargetGuideId);
+			mTargetName = fName + " " + lName;
+			mTargetName = mTargetName.Trim ();
+
 			ActionBar.SetDisplayHomeAsUpEnabled (true);
 			ActionBar.SetHomeButtonEnabled (true);
 
 			SupportFunctions sf = new SupportFunctions();
 			if (!mUserProfileImage.Equals ("")) {
 				//FileInputStream fo = new FileInputStream(imagePath);
-				Bitmap image = sf.GetImageFromStorage(mUserProfileImage);
+				mProfileImage = sf.GetImageFromStorage(mUserProfileImage);
 
-				if (image != null) {
+				if (mProfileImage != null) {
 					ActionBar.SetDisplayOptions (ActionBar.DisplayOptions | ActionBarDisplayOptions.ShowCustom, 0);
 					ImageView imageView = new ImageView(ActionBar.ThemedContext);
 					imageView.SetScaleType(ImageView.ScaleType.Center);
-					imageView.SetImageBitmap (image);
+					imageView.SetImageBitmap (mProfileImage);
 
 					ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(
 						ActionBar.LayoutParams.WrapContent,
@@ -88,7 +93,7 @@ namespace TouriDroid
 					ImageView profileImage = v.FindViewById<ImageView> (Resource.Id.userImage);
 					TextView chat_user = v.FindViewById<TextView> (Resource.Id.chat_user);
 					chat_user.Text = fName + lName;
-					profileImage.SetImageBitmap (image);
+					profileImage.SetImageBitmap (mProfileImage);
 					imageView.LayoutParameters =layoutParams;
 					ActionBar.CustomView = v;
 					ActionBar.SetDisplayShowTitleEnabled(false);
@@ -100,6 +105,7 @@ namespace TouriDroid
 			if (mSm.isLoggedIn() == true) {
 				mMyUsername = mSm.getEmail ();
 				mMyUserId = mSm.getGuideId();
+				mCommonName = mSm.getFName().Trim() + " " + mSm.getLName().Trim();
 			}
 
 	//		this.Title = fName + " " + lName + " | " + topic;
@@ -138,7 +144,7 @@ namespace TouriDroid
 				ChatItem oneChatItem = new ChatItem ();
 				oneChatItem.message = m.Message;
 				oneChatItem.messageTimestamp = m.Msgtimestamp;
-				oneChatItem.user = m.FromUser;
+				oneChatItem.user = m.FromName;
 				oneChatItem.myMessage = false;
 				oneChatItem.deliveredToServer = m.Delivered;
 
@@ -149,7 +155,7 @@ namespace TouriDroid
 				mMyMessages.Add (oneChatItem);//
 			}
 
-			mAdapter = new ChatMessageAdapter(this, mMyMessages);
+			mAdapter = new ChatMessageAdapter(this, mMyMessages, mProfileImage);
 			messages.Adapter = mAdapter;
 		}
 
@@ -233,7 +239,7 @@ namespace TouriDroid
 				mMyMessages.Add(oneNewChatItem);
 				mAdapter.NotifyDataSetChanged();
 
-				int messageId = await mClient.SendPrivateMessage(newMessage, mTargetUsername, mMyUserId);
+				int messageId = await mClient.SendPrivateMessage(newMessage, mTargetUsername, mMyUserId, mFromUserId, mCommonName, mTargetName);
 
 				//@todo more efficient way?
 				//add it to the Database as well
@@ -246,6 +252,7 @@ namespace TouriDroid
 					cm.Message = newMessage;
 					cm.FromUser = mTargetUsername;
 					cm.FromUserId = mFromUserId;
+					cm.FromName = mTargetName;
 					cm.ToUser =	mMyUsername;
 					cm.Msgtimestamp = oneNewChatItem.messageTimestamp;
 					cm.MyResponse=Constants.MyResponseYes; // this is my response
@@ -265,8 +272,8 @@ namespace TouriDroid
 				Log.Debug ("ActiveChat", "button.Click - Notifydatasetchanged");
 			};
 
-
-			removeMessageReceivedEvent ();
+			mClient.OnMessageReceived += MessageReceivedDelegate;
+			/*removeMessageReceivedEvent ();
 			mClient.OnMessageReceived+=(sender, message) => RunOnUiThread( () =>
 				{	
 					Log.Debug ("ActiveChat", "In OnMessageReceived");
@@ -284,7 +291,27 @@ namespace TouriDroid
 						mAdapter.NotifyDataSetChanged();
 					}
 				}
-			);
+			);*/
+		}
+
+		private void MessageReceivedDelegate(object sender, TouriMessage message)
+		{
+			RunOnUiThread (() => {
+				Log.Debug ("ActiveChat", "In OnMessageReceived");
+				if (message.fromUser.Equals(mTargetUsername))
+				{
+					ChatItem oneNewChatItem = new ChatItem();
+					oneNewChatItem.message = message.message;
+					oneNewChatItem.user = message.fromUser;
+					oneNewChatItem.messageTimestamp=DateTime.Now.ToString();
+
+					Log.Debug ("ActiveChat", "OnMessageReceived - add item to message list");
+					mMyMessages.Add(oneNewChatItem);
+					//@todo check if my message
+					oneNewChatItem.myMessage= false;
+					mAdapter.NotifyDataSetChanged();
+				}				
+			});
 		}
 	}
 }

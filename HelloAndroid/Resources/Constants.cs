@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Json;
 using Android.App;
 using Android.Content;
+using Android.Util;
 
 namespace TouriDroid
 {
 	public static class Constants
 	{
-		public const string TOURI_VER = "v.0.1.06.16.15.2";
+		public const string TOURI_VER = "v.0.1.08.15.15.2";
 		public const string TOURI_TAG = "Touri";
 		//Success, Fail values for function calls
 		public const int SUCCESS=1;
@@ -40,8 +41,8 @@ namespace TouriDroid
 
 		//URL values for WebApi calls
 		//public const string DEBUG_BASE_IP = "http://192.168.0.13";
-		//public const string DEBUG_BASE_IP = "http://54.69.185.48"; //PRODUCTION SYSTEM
-		public const string DEBUG_BASE_IP = "http://192.168.0.28";
+		public const string DEBUG_BASE_IP = "http://54.69.185.48"; //PRODUCTION SYSTEM
+		//public const string DEBUG_BASE_IP = "http://192.168.0.28";
 		public const string DEBUG_BASE_PORT = "50467";
 		public const string DEBUG_BASE_URL = DEBUG_BASE_IP + ":"+ DEBUG_BASE_PORT;//"http://192.168.0.28:50467";//"http://192.168.43.247:50467";//"http://192.168.0.12:50467";//"http://192.168.1.14:50467"; "http://192.168.1.189:50467"
 		public const string URL_Get_All_Guides = "/api/guides";
@@ -99,6 +100,20 @@ namespace TouriDroid
 		public const string Guide_WebAPI_Key_Message="message";
 		public const string Guide_WebAPI_Key_Msg_TimeStampe="timeStamp";
 		public const string Guide_WebAPI_Key_Msg_FromUserId="fromUserId";
+		public const string Guide_WebAPI_Key_Msg_ToUserId="toUserId";
+		public const string Guide_WebAPI_Key_Msg_FromName="fromName";
+		public const string Guide_WebAPI_Key_ToName="toName";
+
+		public const string HelpMain = "Use Touri to connect with locals in the area who can help you advise you on local hotspots, restaurants and other attractions. \n\n" +
+		                               "During this Beta, Touri guides are available to help provide advice and guidance for the Greater Toronto Area, Canada area. The primary " +
+		                               "communication method is the chat.\n\nOn the main Touri screen you will find the following options\n\nLocal Expertise:\nSelect one of the four categories of interest\n\nChat Messages:\n" +
+		                               "Click this tab to see all your past chat conversations with Touri guides. You can continue your chat by click on the name.\n";
+
+
+		public const string HelpProfile = "Use Touri to connect with locals in the area who can help you advise you on local hotspots, restaurants and other attractions. \n\n" +
+										"The Profile Screen allows you to upload a photo of yourself and change the name others will see. Your username is your unique login to the Touri system "+
+										"and is not displayed to others\n";
+									
 
 		// Availability Values - this is stored in the Database for each guide to indicate availability
 		public const int AvailableNowValue = 1;
@@ -118,9 +133,10 @@ namespace TouriDroid
 		// Drawer Items and Identifiers - this is the order they're displayed
 		public const int MainActivity_DrawerMainMenuId = 1;
 		public const string DrawerOptionBeAGuide = "Become A Guide";
-		public const string DrawerOptionSwitchGuide = "Switch To Guiding";
-		public const string DrawerOptionSwitchTravel = "Switch To Touri'ing";
+		public const string DrawerOptionSwitchGuide = "Edit My Profile";
+		public const string DrawerOptionSwitchTravel = "Find Expertise";
 
+		public const string DrawerOptionHelp = "App Help";
 		public const string DrawerOptionLogout = "Log Out";
 		public const string DrawerOptionLoginOrSignUp = "Sign In or Sign Up";
 		public const string MyPreferences = "Search Options";
@@ -322,9 +338,19 @@ namespace TouriDroid
 				cm.ToUser = toUser;
 			}
 
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_ToName)) {
+				string name = values [Constants.Guide_WebAPI_Key_ToName];
+				cm.ToName = name;
+			}
+
 			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Message)) {
 				string message = values [Constants.Guide_WebAPI_Key_Message];
 				cm.Message = message;
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Msg_FromName)) {
+				string name = values [Constants.Guide_WebAPI_Key_Msg_FromName];
+				cm.FromName = name;
 			}
 
 			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Msg_TimeStampe)) {
@@ -338,6 +364,12 @@ namespace TouriDroid
 
 			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Msg_FromUserId)) {
 				cm.FromUserId = values [Constants.Guide_WebAPI_Key_Msg_FromUserId];
+				Log.Debug (Constants.TOURI_TAG, "Message fromUserId= " + cm.FromUserId);
+			}
+
+			if (values.ContainsKey (Constants.Guide_WebAPI_Key_Msg_ToUserId)) {
+				cm.ToUserId = values [Constants.Guide_WebAPI_Key_Msg_ToUserId];
+				//Log.Debug (Constants.TOURI_TAG, "Message fromUserId= " + cm.FromUserId);
 			}
 			return cm;
 		}

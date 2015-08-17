@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Android.Graphics;
 using System.IO;
+using Java.IO;
 
 namespace TouriDroid
 {
@@ -149,6 +150,8 @@ namespace TouriDroid
 		public const String PREF_KeyLanguages = "languages";
 		public const String KeyLastMessageId = "lastMessageId";
 		public const String PREF_KeyShowOffline = "showOffline";
+		public const String KeyFName = "fName";
+		public const String KeyLName = "lName";
 
 		public SessionManager (Context pContext)
 		{
@@ -220,15 +223,31 @@ namespace TouriDroid
 			return pref.GetFloat (KeyCurrentLongitude, Constants.Uninitialized);
 		}
 
-		public void createLoginSession (String email, String token, Boolean pIsGuide, int guideId)
+		public void createLoginSession (String email, String token, String fName, String lName,  Boolean pIsGuide, int guideId)
 		{
 			editor.PutBoolean (IsLoggedIn, true);
 			editor.PutBoolean (IsGuide, pIsGuide);
 			editor.PutString (KeyEmail, email);
 			editor.PutString (KeyToken, token);
+			editor.PutString (KeyFName, fName);
+			editor.PutString (KeyLName, lName);
 			editor.PutInt (KeyGuideId, guideId);
 
 			editor.Commit ();
+		}
+
+		public String getFName()
+		{
+			String name = pref.GetString (KeyFName, null);
+
+			return name;
+		}
+
+		public String getLName()
+		{
+			String name = pref.GetString (KeyLName, null);
+
+			return name;
 		}
 
 		public String getEmail()
@@ -277,6 +296,9 @@ namespace TouriDroid
 			editor.Remove (KeyToken);
 			editor.PutBoolean (IsLoggedIn, false);
 			editor.Remove (IsGuide);
+			//editor.Remove (KeyEmail);
+			editor.Remove (KeyFName);
+			editor.Remove (KeyLName);
 			editor.Remove (KeyGuideId);
 			editor.Commit();
 
@@ -317,8 +339,9 @@ namespace TouriDroid
 		{
 			string mDocumentsPath = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
 			string filePath = System.IO.Path.Combine (mDocumentsPath, fileName);
-			return (File.Exists (filePath));
+			return (System.IO.File.Exists (filePath));
 		}
+
 
 		public Bitmap GetImageFromStorage(string fileName)
 		{
@@ -339,8 +362,32 @@ namespace TouriDroid
 			catch (Exception e) {
 			}
 
-			return bmpImage;
+			return bmpImage;		
 		}
+
+
+		public String SaveImageFromBitmap(String imageName, Bitmap bitmap) {
+
+			var documentsPath = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
+			string filePath = System.IO.Path.Combine (documentsPath, imageName);
+
+			try {
+				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+				FileStream fio = new System.IO.FileStream (filePath, FileMode.Create);
+				bitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, fio);
+				fio.Write(bytes.ToByteArray(),0,bytes.Size());
+				fio.Close();
+				//	FileOutputStream fo = new FileOutputStream(imageName); //openFileOutput(fileName, Context.MODE_PRIVATE);
+				//	fo.Write(bytes.ToByteArray());
+				// remember close file output
+				//	fo.Close();
+			} catch (Exception e) {
+				//;
+				filePath = null;
+			}
+			return filePath;
+		}
+
 
 		public async Task<int> GetMyMessages(string accessToken, DataManager dm, SessionManager sm)
 		{
@@ -367,7 +414,6 @@ namespace TouriDroid
 					continue;
 				}
 
-
 				if (lastId < cm.ID) {
 					lastId = (int) cm.ID;					
 				}
@@ -376,12 +422,17 @@ namespace TouriDroid
 
 				if (cm.FromUser.Equals (myUsername)) {
 					cm.MyResponse = Constants.MyResponseYes;
+					//switch the fromuser and touser for now @todo
+					string me = cm.FromUser;
+					cm.FromUser = cm.ToUser;
+					cm.FromName = cm.ToName;
+					cm.FromUserId = cm.ToUserId;
+					cm.ToUser = me;
 				}
 				else
 				{
 					cm.MyResponse=Constants.MyResponseNo;
 				}
-			
 
 				//add it straight to the DB
 				dm.AddMessage(cm);

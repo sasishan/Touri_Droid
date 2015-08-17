@@ -93,45 +93,31 @@ namespace TouriDroid
 				var chatActivity = new Intent (mView.Context, typeof(ActiveChat));
 
 				chatActivity.PutExtra ("TargetUserName", mUsers.ElementAt(e.Position).UserName);
-				chatActivity.PutExtra ("TargetFirstName", mUsers.ElementAt(e.Position).UserName);
+				chatActivity.PutExtra ("TargetFirstName", mUsers.ElementAt(e.Position).CommonName);
 				chatActivity.PutExtra ("TargetGuideId", mUsers.ElementAt(e.Position).UserId.ToString());
 				chatActivity.PutExtra ("TargetLastName", "");
 
 				string imageName = mUsers.ElementAt(e.Position).UserName;
-				if (!sf.FileExistsInStorage(imageName))
-				{
-					SaveImageFromBitmap(imageName, mUsers.ElementAt(e.Position).profileImage);
-				}
 
-				chatActivity.PutExtra ("ImageName", imageName);
+				//we are sending this to the activity so make sure it is saved
+				bool fileExists=sf.FileExistsInStorage(imageName);
+				if (fileExists==false)
+				{
+					if (sf.SaveImageFromBitmap(imageName, mUsers.ElementAt(e.Position).profileImage)!=null)
+					{
+						fileExists=true;
+					}
+				}
+				if (fileExists)
+				{
+					chatActivity.PutExtra ("ImageName", imageName);
+				}
 
 				this.StartActivity(chatActivity);
 			};
 			return mView;
 		}
-
-		public String SaveImageFromBitmap(String imageName, Bitmap bitmap) {
-
-			var documentsPath = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
-			string filePath = System.IO.Path.Combine (documentsPath, imageName);
-
-			try {
-				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-				FileStream fio = new System.IO.FileStream (filePath, FileMode.Create);
-				bitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, fio);
-				fio.Write(bytes.ToByteArray(),0,bytes.Size());
-				fio.Close();
-			//	FileOutputStream fo = new FileOutputStream(imageName); //openFileOutput(fileName, Context.MODE_PRIVATE);
-			//	fo.Write(bytes.ToByteArray());
-				// remember close file output
-			//	fo.Close();
-			} catch (Exception e) {
-				//;
-				filePath = null;
-			}
-			return filePath;
-		}
-
+			
 		public async void loadMyMessages(SessionManager sm, SupportFunctions sf)
 		{
 			string token = sm.getAuthorizedToken ();

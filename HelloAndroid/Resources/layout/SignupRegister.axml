@@ -16,7 +16,7 @@
         android:layout_marginTop="-2dp"
         android:layout_marginBottom="10dp"
         android:padding="10dp"
-        android:hint="Email"
+        android:hint="Email Login"
         android:textColorHint="#cccccc"
         android:textColor="@color/black" />
     <EditText

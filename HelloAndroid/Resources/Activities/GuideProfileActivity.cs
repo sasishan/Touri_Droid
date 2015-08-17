@@ -51,6 +51,7 @@ namespace TouriDroid
 			loadProfile (guideId, fName, lName, description,languages,expertise );
 
 			Button button = FindViewById<Button>(Resource.Id.ChatButton);
+			SupportFunctions sf = new SupportFunctions ();
 
 			button.Text = "Chat about " + category;
 			button.Click += (o, e) => {
@@ -75,6 +76,24 @@ namespace TouriDroid
 						chatActivity.PutExtra ("TargetFirstName", thisGuide.fName);
 						chatActivity.PutExtra ("TargetLastName", thisGuide.lName);
 						chatActivity.PutExtra ("Category", category);
+
+						string imageName = thisGuide.userName;
+
+						//we are sending this to the activity so make sure it is saved
+						bool fileExists=sf.FileExistsInStorage(imageName);
+						if (fileExists==false)
+						{
+							if (sf.SaveImageFromBitmap(imageName, thisGuide.profileImage)!=null)
+							{
+								fileExists=true;
+							}
+						}
+
+						if (fileExists)
+						{
+							chatActivity.PutExtra ("ImageName", imageName);
+						}
+
 						this.StartActivity(chatActivity);						
 					}
 				}

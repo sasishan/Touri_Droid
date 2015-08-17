@@ -16,6 +16,7 @@ namespace TouriDroid
 		SessionManager 				mSm = null;
 		string						mMyUsername;
 		private bool				mKeepPinging=true;
+		private int mMyUserId = -1;
 
 		/** interface for clients that bind */
 		IBinder mBinder;     
@@ -32,6 +33,8 @@ namespace TouriDroid
 			mDm.SetContext (this);
 			mSm = new SessionManager (this);
 			mMyUsername = mSm.getEmail ();
+
+			mMyUserId = mSm.getGuideId ();
 
 
 		}
@@ -195,6 +198,7 @@ namespace TouriDroid
 				Log.Debug (Constants.TOURI_TAG, "mShowNotifications "+ mShowNotifications);
 
 				LogNewMessage(message);
+				mSm.SetLastMessageId(message.messageId);
 
 				if (mShowNotifications)
 				{
@@ -236,6 +240,15 @@ namespace TouriDroid
 			return;
 		}
 
+		private void ServiceMessageReceivedDelegate(object sender, TouriMessage message)
+		{
+			Log.Debug (Constants.TOURI_TAG, "OnMessageReceived");
+			Log.Debug (Constants.TOURI_TAG, "mShowNotifications "+ mShowNotifications);
+
+			LogNewMessage(message);
+			mSm.SetLastMessageId(message.messageId);
+		}
+
 		private int ShowNewMessagesNotification(PendingIntent pendingIntent)
 		{
 			int result = Constants.FAIL;
@@ -258,7 +271,7 @@ namespace TouriDroid
 			return result;
 		}
 
-		private int ShowNotification(Message message, PendingIntent pendingIntent)
+		private int ShowNotification(TouriMessage message, PendingIntent pendingIntent)
 		{
 			int result = Constants.FAIL;
 			if (pendingIntent != null && message != null) {
@@ -281,19 +294,22 @@ namespace TouriDroid
 		}
 
 		//Log the message in the database
-		private int LogNewMessage(Message message)
+		private int LogNewMessage(TouriMessage message)
 		{
 			int result = Constants.SUCCESS;
 
 			ChatMessage cm = new ChatMessage ();
 
-			cm.FromUser = message.fromUser;
+			cm.FromUserId = message.fromUserId;
+			cm.FromUser = message.fromUser.Trim ();
+			cm.FromName = message.fromName;
 			cm.ToUser = mMyUsername;
+			cm.ToUserId = mMyUserId;
 			cm.Message = message.message;
 			cm.MyResponse=Constants.MyResponseNo;
 			cm.Msgtimestamp = DateTime.Now.ToString ();
 			cm.MsgRead = Constants.MessageUnread; //message not read as the service is reading it
-			Log.Debug (Constants.TOURI_TAG, "Logging a message from " + cm.FromUser);
+			Log.Debug (Constants.TOURI_TAG, "Logging a message from " + cm.FromUser + ",id="+cm.FromUserId);
 
 			// dont insert messages from myself back (eg. could not deliver a message is returned)
 			//if (!cm.FromUser.Equals(mMyUsername))

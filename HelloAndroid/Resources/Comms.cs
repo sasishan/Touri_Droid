@@ -294,32 +294,48 @@ namespace TouriDroid
 			request.Method = "GET";
 			BitmapFactory.Options options = new BitmapFactory.Options();
 
+			try {
+				WebResponse response = await request.GetResponseAsync ();
+				System.IO.Stream stream = response.GetResponseStream ();
+
+				//options.InJustDecodeBounds = true;
+				//Bitmap bitMap =  await Task.Run (() => BitmapFactory.DecodeStream(stream, null, options));
+				Bitmap bitMap =  await Task.Run (() => BitmapFactory.DecodeStream(stream));
+
+//				options.InSampleSize = calculateInSampleSize(options, Constants.ProfileReqWidth, Constants.ProfileReqHeight);
+
+				return bitMap;
+			}
+			catch (Exception e) {
+				return null;
+			}
+
 			// Send the request to the server and wait for the response:
-			using (WebResponse response = await request.GetResponseAsync ())
-			{
+//			using (WebResponse response = await request.GetResponseAsync ())
+//			{
 				// Get a stream representation of the HTTP web response:
-				using (System.IO.Stream stream = response.GetResponseStream ())
-				{
+//				using (System.IO.Stream stream = response.GetResponseStream ())
+//				{
 					// Use this stream to build a JSON document object:
-					Rect outpadding = new Rect();
+//					Rect outpadding = new Rect();
 					//options.InJustDecodeBounds = true;
 					//Bitmap bitMap =  await Task.Run (() => BitmapFactory.DecodeStream(stream, null, options));
-					Bitmap bitMap =  await Task.Run (() => BitmapFactory.DecodeStream(stream));
+//					Bitmap bitMap =  await Task.Run (() => BitmapFactory.DecodeStream(stream));
 
-					options.InSampleSize = calculateInSampleSize(options, Constants.ProfileReqWidth, Constants.ProfileReqHeight);
+//					options.InSampleSize = calculateInSampleSize(options, Constants.ProfileReqWidth, Constants.ProfileReqHeight);
 					//options.InJustDecodeBounds = false;
 					//		bitMap =  await Task.Run (() => BitmapFactory.DecodeStream(stream, null, options));
 					//BitmapFactory.decodeResource(getResources(), R.id.myimage, options);
-					int imageHeight = options.OutHeight;
-					int imageWidth = options.OutWidth;
-					String imageType = options.OutMimeType;
+//					int imageHeight = options.OutHeight;
+//					int imageWidth = options.OutWidth;
+//					String imageType = options.OutMimeType;
 
 					//Console.Out.WriteLine("Response: {0}", jsonDoc.ToString ());
 
 					// Return the bitmap:
-					return bitMap;
-				}
-			}
+//					return bitMap;
+//				}
+			//}
 		}
 
 		public void PostWebApiData (string p_url, NameValueCollection parameters)

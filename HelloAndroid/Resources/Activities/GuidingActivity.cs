@@ -16,7 +16,7 @@ using Android.Util;
 
 namespace TouriDroid
 {
-	[Activity (Label = "Guiding", MainLauncher = true, Theme = "@style/Theme.AppCompat", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]	
+	[Activity (Label = "My Profile", Theme = "@style/Theme.AppCompat", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]	
 	public class GuidingActivity : ActionBarActivity, Android.Support.V7.App.ActionBar.ITabListener
 	{
 		private DrawerLayout 	mDrawer;
@@ -46,7 +46,8 @@ namespace TouriDroid
 
 			if (sessionManager.isLoggedIn ()) {
 				//mDrawerItems.Add ("Logout");
-				//@TouriTraveler mDrawerItems.Add (Constants.DrawerOptionSwitchTravel);
+				mDrawerItems.Add (Constants.DrawerOptionSwitchTravel);
+				mDrawerItems.Add (Constants.DrawerOptionHelp);
 				mDrawerItems.Add (Constants.DrawerOptionLogout);
 				drawerFooter.Text = "Signed in as " + sessionManager.getEmail ();
 			} else {
@@ -75,8 +76,9 @@ namespace TouriDroid
 
 		private void DrawerListOnItemClick(object sender, AdapterView.ItemClickEventArgs itemClickEventArgs)
 		{
+			string selectedDrawerItem = mDrawerItems [itemClickEventArgs.Position];
 			//Log out and refresh the screen
-			if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.DrawerOptionLogout)) 
+			if (selectedDrawerItem.Equals (Constants.DrawerOptionLogout)) 
 			{
 				SessionManager sm = new SessionManager (this);
 				//Logger logger = new Logger ();
@@ -92,12 +94,20 @@ namespace TouriDroid
 				i.SetFlags (ActivityFlags.NewTask | ActivityFlags.ClearTask);
 				this.StartActivity (i);
 			} 
-			else if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.DrawerOptionSwitchTravel)) {
+			else if (selectedDrawerItem.Equals (Constants.DrawerOptionSwitchTravel)) {
 				mDrawer.CloseDrawers ();
 				Intent i = new Intent (this, typeof(MainActivity));
 				// Closing all the Activities
 				i.SetFlags (ActivityFlags.NewTask | ActivityFlags.ClearTask);
 				this.StartActivity (i);
+			}
+			else if (selectedDrawerItem.Equals (Constants.DrawerOptionHelp)) {
+				mDrawer.CloseDrawers ();
+
+				Intent i = new Intent (this, typeof(HelpActivity));
+				i.PutExtra ("HelpCategory", "Profile");
+				this.StartActivity (i);
+
 			}
 		}
 

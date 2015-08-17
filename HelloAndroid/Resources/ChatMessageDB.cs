@@ -13,6 +13,7 @@ namespace TouriDroid
 		public int UserId { get; set ; }
 		public Bitmap profileImage { get; set; }
 		public String UserName { get; set; }
+		public String CommonName { get; set; }
 		public int NumberOfUnreadMessages { get; set; }
 	}
 
@@ -21,6 +22,7 @@ namespace TouriDroid
 		[PrimaryKey, AutoIncrement]
 		public long ID { get; set; }
 		public String FromUser { get; set; }
+		public String FromName { get; set; }
 		public String ToUser { get; set; }
 		public String Message { get; set; }
 		public String Msgtimestamp { get; set; }
@@ -28,13 +30,15 @@ namespace TouriDroid
 		public String Delivered { get; set; } 
 		public String MsgRead { get; set; } 
 		public int FromUserId { get; set; }
+		public int ToUserId { get; set; }
+		public string ToName { get; set; }
 		//public char downloaded { get; set; }
 		//public string lastDownloaded { get; set; }
 
 		public override string ToString()
 		{
-			return string.Format("[ChatMessageEntry: ID={0}, FromUser={1}, ToUser={2}, Message={3}, Msgtimestamp={4}, delivered={5}, MsgRead={6}, FromUserId={7}]", 
-				ID, FromUser, ToUser, Message, Msgtimestamp, Delivered, MsgRead, FromUserId);
+			return string.Format("[ChatMessageEntry: ID={0}, FromUser={1}, ToUser={2}, Message={3}, Msgtimestamp={4}, delivered={5}, MsgRead={6}, FromUserId={7}, ToUserId={8}, FromName={9}, ToName={10}]", 
+				ID, FromUser, ToUser, Message, Msgtimestamp, Delivered, MsgRead, FromUserId, ToUserId, FromName, ToName);
 		}
 	}
 
@@ -51,6 +55,9 @@ namespace TouriDroid
 		public const String COLUMN_DELIVERED = "Delivered";
 		public const String COLUMN_MSGREAD = "MsgRead";
 		public const String COLUMN_FROMUSERID = "FromUserId";
+		public const String COLUMN_TOUSERID = "ToUserId";
+		public const String COLUMN_FROMNAME = "FromName";
+		public const String COLUMN_TONAME = "ToName";
 	}
 
 	public static class ChatMessageContract {
@@ -68,7 +75,10 @@ namespace TouriDroid
 			ChatMessageEntry.COLUMN_TIMESTAMP +	TEXT_TYPE + COMMA_SEP +
 			ChatMessageEntry.COLUMN_DELIVERED +	TEXT_TYPE + COMMA_SEP +
 			ChatMessageEntry.COLUMN_MSGREAD + TEXT_TYPE + COMMA_SEP +
-			ChatMessageEntry.COLUMN_FROMUSERID + TEXT_TYPE + 
+			ChatMessageEntry.COLUMN_FROMUSERID + TEXT_TYPE + COMMA_SEP +
+			ChatMessageEntry.COLUMN_TOUSERID + TEXT_TYPE + COMMA_SEP + 
+			ChatMessageEntry.COLUMN_FROMNAME + TEXT_TYPE + COMMA_SEP +
+			ChatMessageEntry.COLUMN_TONAME + TEXT_TYPE +
 			" )";
 
 		public const String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + ChatMessageEntry.TABLE_NAME;
@@ -188,8 +198,8 @@ namespace TouriDroid
 		//retrieve a specific user by querying against their first name
 		public List<ChatUser> GetUsersWhoSentMeMessages(string myUsername)
 		{
-			const string getUsersQuery = "SELECT DISTINCT FromUser, FromUserId FROM "+ ChatMessageEntry.TABLE_NAME + " WHERE ToUser = ?";
-			const string getUserMsgsUnreadQuery = "SELECT COUNT(*) FROM "+ ChatMessageEntry.TABLE_NAME + " WHERE FromUser = ? AND ToUser = ? AND MsgRead = 'N'";
+			const string getUsersQuery = "SELECT DISTINCT FromUser, FromUserId, FromName FROM "+ ChatMessageEntry.TABLE_NAME + " WHERE ToUser = ?";
+			const string getUserMsgsUnreadQuery = "SELECT COUNT(*) FROM "+ ChatMessageEntry.TABLE_NAME + " WHERE FromUser = ? AND ToUser = ? AND MsgRead = 'N' AND MyResponse=0";
 			using (var database = new SQLiteConnection(_helper.ReadableDatabase.Path))
 			{
 				try
@@ -203,6 +213,7 @@ namespace TouriDroid
 					{
 						ChatUser cu = new ChatUser();
 						cu.UserName= m.FromUser;
+						cu.CommonName = m.FromName;
 						cu.UserId = m.FromUserId;
 						int msgCount = database.ExecuteScalar<int>(getUserMsgsUnreadQuery, m.FromUser, myUsername);
 						cu.NumberOfUnreadMessages =msgCount;

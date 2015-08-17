@@ -4,6 +4,15 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     <TextView
+        android:id="@+id/deliveredToServer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dip"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:textSize="11dp"
+        android:textColor="@android:color/darker_gray" />
+    <TextView
         android:id="@+id/user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,28 +30,34 @@
         android:paddingRight="10dip"
         android:textSize="11dp"
         android:textColor="@android:color/darker_gray" />
-    <TextView
-        android:id="@+id/deliveredToServer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dip"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
-        android:textSize="11dp"
-        android:textColor="@android:color/darker_gray" />
     <LinearLayout
-        android:id="@+id/messageContainer"
-        android:layout_width="wrap_content"
+        android:id="@+id/msgImageContainer"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/singleMessage"
-            android:layout_width="wrap_content"
+        android:layout_marginRight="20dp"
+        android:weightSum="100"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="10" />
+        <LinearLayout
+            android:id="@+id/messageContainer"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dip"
-            android:paddingLeft="10dip"
-            android:paddingRight="10dip"
-            android:textSize="18dp"
-            android:textColor="@color/black" />
+            android:layout_weight="85"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/singleMessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:singleLine="false"
+                android:textSize="18dp"
+                android:textColor="@color/black" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

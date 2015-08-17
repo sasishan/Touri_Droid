@@ -7,11 +7,13 @@ using Java.Lang.Reflect;
 
 namespace TouriDroid
 {
-	public class Message 
+	public class TouriMessage 
 	{
+		public int messageId { get; set; }
 		public string fromUser {get;set;}
 		public string message { get; set; }
 		public int fromUserId { get; set; }
+		public string fromName { get; set; }
 	}
 
 	public class ChatClient
@@ -24,7 +26,7 @@ namespace TouriDroid
 		public 	readonly HubConnection _connection;
 		private IHubProxy _proxy;
 
-		public event EventHandler<Message> OnMessageReceived;
+		public event EventHandler<TouriMessage> OnMessageReceived;
 		public event EventHandler<string> PingMe;
 
 		public ChatClient(string myUsername, string targetUserName, int myId)
@@ -42,7 +44,7 @@ namespace TouriDroid
 		{		
 			Log.Debug (Constants.TOURI_TAG, "In connect");	
 
-			_proxy.On("messageReceived", (string fromUser, string message, int messageId, int fromUserId) =>
+			_proxy.On("messageReceived", (string fromUser, int messageId, TouriMessage m) =>
 				{
 					if (OnMessageReceived != null)
 					{
@@ -59,10 +61,6 @@ namespace TouriDroid
 						}
 						Log.Debug (Constants.TOURI_TAG, "Acknowledged message with id " + messageId);
 
-						  Message m = new Message ();
-						m.fromUser = fromUser;
-						m.message = message;
-						m.fromUserId = fromUserId;
 
 						//*add fromuserid here - is it int or string?
 
@@ -107,13 +105,13 @@ namespace TouriDroid
 			}
 		}
 
-		public async Task<int> SendPrivateMessage(string message, string targetUsername, int myUserId)
+		public async Task<int> SendPrivateMessage(string message, string targetUsername, int myUserId, int tgtUserid, string commonName, string toName)
 		{
 			Log.Debug (Constants.TOURI_TAG, "In SendPrivateMessage");
 			int messageId;
 			try
 			{
-				messageId = await _proxy.Invoke<int> ("SendPrivateMessage", message, _myUsername, targetUsername, myUserId);
+				messageId = await _proxy.Invoke<int> ("SendPrivateMessage", message, _myUsername, targetUsername, myUserId, tgtUserid, commonName, toName);
 			}
 			catch (Exception e) {
 				Log.Debug (Constants.TOURI_TAG, "SendPrivateMessage erorr");

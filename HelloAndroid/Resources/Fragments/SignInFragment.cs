@@ -48,27 +48,34 @@ namespace TouriDroid
 				JsonValue response = await ca.getWebApiData (url, token);
 
 				progress.Visibility = ViewStates.Gone;
+				string fName = "";
+				string lName = "";
 				if (response != null) {
 					//not a guide
 					if (response.ContainsKey (Constants.Guide_WebAPI_Key_GuideId)) {						
 						guideId = response [Constants.Guide_WebAPI_Key_GuideId];
 						isGuide = true;					
+					}
 
-						SessionManager sm = new SessionManager (Activity);
+					if (response.ContainsKey (Constants.Guide_WebAPI_Key_FirstName)) {						
+						fName= response [Constants.Guide_WebAPI_Key_FirstName];
+					}
 
-						DataManager dm = new DataManager ();
-						dm.SetContext (Activity);
-						dm.DeleteAllMessages();
-						sm.SetLastMessageId (0);
-
-						//		mChatIntent = new Intent (Activity, typeof(ChatService));
-						//		mChatIntent.SetData ();
+					if (response.ContainsKey (Constants.Guide_WebAPI_Key_LastName)) {						
+						lName= response [Constants.Guide_WebAPI_Key_LastName];
 					}
 				}
 
+				SessionManager sm = new SessionManager (Activity);
+
+				DataManager dm = new DataManager ();
+				dm.SetContext (Activity);
+				dm.DeleteAllMessages();
+				sm.SetLastMessageId (0);
+
 				Logger logger = new Logger ();
 				SessionManager sessionManager = new SessionManager (view.Context);
-				sessionManager.createLoginSession (username, token, isGuide, guideId );
+				sessionManager.createLoginSession (username, token, fName, lName, isGuide, guideId );
 
 				await startChatListener ();
 

@@ -139,19 +139,10 @@ namespace TouriDroid
 
 			TextView guideName = view.FindViewById<TextView> (Resource.Id.guideName);
 			TextView userName = view.FindViewById<TextView> (Resource.Id.guideUsername);
-			TextView aboutMe = view.FindViewById<TextView> (Resource.Id.aboutme);
-			TextView shortAboutme = view.FindViewById<TextView> (Resource.Id.shortAboutme);
-			TextView locations = view.FindViewById<TextView> (Resource.Id.locations);
-			TextView languages = view.FindViewById<TextView> (Resource.Id.languages);
 			ImageView photo = view.FindViewById<ImageView> (Resource.Id.guide_photo);
 			ImageView changePhoto = view.FindViewById<ImageView> (Resource.Id.camera);
 
 			TextView editName = view.FindViewById<TextView> (Resource.Id.editGuideName);
-			TextView editAboutMe = view.FindViewById<TextView> (Resource.Id.editAboutme);
-			TextView editShortAboutMe = view.FindViewById<TextView> (Resource.Id.editShortAboutme);
-			TextView editLocations = view.FindViewById<TextView> (Resource.Id.editLocations);
-			TextView editExpertise = view.FindViewById<TextView> (Resource.Id.editExpertise);
-			TextView editLanguages = view.FindViewById<TextView> (Resource.Id.editLanguages);
 
 			TableLayout expertiseTableLayout = view.FindViewById<TableLayout> (Resource.Id.table_Expertise);
 			SupportFunctions sf = new SupportFunctions ();
@@ -160,15 +151,6 @@ namespace TouriDroid
 
 			userName.Text = myProfile.userName;
 			guideName.Text = myProfile.fName + " " + myProfile.lName;
-			aboutMe.Text = myProfile.description;
-			shortAboutme.Text = myProfile.summary;
-			foreach (LocationWrapper l in myProfile.placesServedList) {
-				locations.Text += "• "+l.location+"\r\n" ;
-			}
-
-			foreach (string l in myProfile.languageList) {
-				languages.Text += "• "+l+"\r\n" ;
-			}
 
 			photo.SetImageResource (Resource.Drawable.placeholder_photo);
 			/*if (myProfile.profileImage == null) {
@@ -201,53 +183,6 @@ namespace TouriDroid
 				editGuide.PutExtra (Constants.Action, Constants.Action_EditName);	
 
 				this.StartActivity (editGuide);
-			};
-
-			editAboutMe.Click += (sender, e) => 
-			{
-				var editGuide = new Intent (Activity, typeof(EditGuideValueActivity));
-				editGuide.PutExtra (Constants.guideDescription, myProfile.description);	
-				editGuide.PutExtra (Constants.Action, Constants.Action_EditDescription);	
-
-				this.StartActivity (editGuide);
-			};
-
-			editShortAboutMe.Click += (sender, e) => 
-			{
-				var editGuide = new Intent (Activity, typeof(EditGuideValueActivity));
-				editGuide.PutExtra (Constants.guideSummary, myProfile.summary);	
-				editGuide.PutExtra (Constants.Action, Constants.Action_EditSummary);	
-
-				this.StartActivity (editGuide);
-			};
-
-			editExpertise.Click += (sender, e) => 
-			{
-				var editGuide = new Intent (Activity, typeof(EditGuideValueActivity));
-				string stringExpertiseIds = GetStringExpertiseIds(myProfile.expertise);
-				editGuide.PutExtra (Constants.Action, Constants.Action_EditExpertise);	
-				editGuide.PutExtra (Constants.selectedExpertise, stringExpertiseIds);	
-				this.StartActivity (editGuide);
-			};
-
-			editLanguages.Click += (sender, e) => 
-			{
-				string stringLanguageIds = GetStringLanguageIds(myProfile.languages);
-				var editGuide = new Intent (Activity, typeof(EditGuideValueActivity));
-				editGuide.PutExtra (Constants.selectedLanguages, stringLanguageIds);	
-				editGuide.PutExtra (Constants.Action, Constants.Action_EditLanguages);	
-
-				this.StartActivity (editGuide);	
-			};
-
-			editLocations.Click += (sender, e) => 
-			{
-				string stringLocation = GetStringLocationsList(myProfile.placesServedList);
-				var editGuide = new Intent (Activity, typeof(EditGuideValueActivity));
-				editGuide.PutExtra (Constants.selectedLocation, stringLocation);	
-				editGuide.PutExtra (Constants.Action, Constants.Action_EditLocations);	
-
-				this.StartActivity (editGuide);				
 			};
 
 			//we've loaded all the details so set the current profile - this is used to load the image async

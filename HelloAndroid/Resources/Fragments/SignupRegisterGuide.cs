@@ -156,6 +156,21 @@ namespace TouriDroid
 			CommsResult result = await rs.Register(username.Text, password.Text, password.Text);
 
 			if (result.IsSuccess()) {
+				//now we are register, create the traveller profile
+				LoginService ls = new LoginService ();
+				String token = await ls.Login (username.Text, password.Text);
+
+				//add a guide record
+				Guide newGuide = ((LoginOrSignupActivity)Activity).newGuide;
+				NameValueCollection parameters = new NameValueCollection ();
+				parameters.Add (Constants.Guide_WebAPI_Key_Username, username.Text);
+				parameters.Add (Constants.Guide_WebAPI_Key_FirstName, newGuide.fName);
+				parameters.Add (Constants.Guide_WebAPI_Key_LastName, newGuide.lName);
+				parameters.Add (Constants.Guide_WebAPI_Key_ProfileImageId, Constants.DefaultProfileId.ToString());
+
+				JsonValue jsonResponse = PostDataSync (Constants.DEBUG_BASE_URL + Constants.URL_MyGuideProfile/*"/api/guides"*/, 
+					parameters, token);
+
 				Toast.MakeText (view.Context, "You are now registered. Please sign in", ToastLength.Long).Show ();
 
 				Intent i = new Intent(view.Context, typeof(LoginOrSignupActivity));

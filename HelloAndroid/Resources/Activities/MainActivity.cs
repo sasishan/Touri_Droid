@@ -225,16 +225,24 @@ namespace TouriDroid
 		//handle selections on the drawer list
 		private void DrawerListOnItemClick(object sender, AdapterView.ItemClickEventArgs itemClickEventArgs)
 		{
+			string selectedDrawerItem = mDrawerItems [itemClickEventArgs.Position];
 			//Be a guide - the user is going to register as a guide
-			if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.DrawerOptionBeAGuide)) {
+			if (selectedDrawerItem.Equals (Constants.DrawerOptionBeAGuide)) {
 				mDrawer.CloseDrawers ();
 				this.StartActivity (typeof(SignUpAsGuideActivity));
-			} else if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.MyPreferences)) {
+			} else if (selectedDrawerItem.Equals (Constants.DrawerOptionHelp)) {
+				mDrawer.CloseDrawers ();
+
+				Intent i = new Intent (this, typeof(HelpActivity));
+				i.PutExtra ("HelpCategory", "Main");
+				this.StartActivity (i);
+
+			} else if (selectedDrawerItem.Equals (Constants.MyPreferences)) {
 				mDrawer.CloseDrawers ();
 				this.StartActivity (typeof(Preferences));
 			}
 			//Log out and refresh the screen
-			else if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.DrawerOptionLogout)) 
+			else if (selectedDrawerItem.Equals (Constants.DrawerOptionLogout)) 
 			{
 				SessionManager sm = new SessionManager (this);
 
@@ -252,12 +260,12 @@ namespace TouriDroid
 				this.StartActivity (i);
 			} 
 			//Show the options to register or sign in as a guide
-			else if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.DrawerOptionLoginOrSignUp)) 
+			else if (selectedDrawerItem.Equals (Constants.DrawerOptionLoginOrSignUp)) 
 			{
 				mDrawer.CloseDrawers ();
 				this.StartActivity (typeof(LoginOrSignupActivity));
 			}
-			else if (mDrawerItems [itemClickEventArgs.Position].Equals (Constants.DrawerOptionSwitchGuide)) {
+			else if (selectedDrawerItem.Equals (Constants.DrawerOptionSwitchGuide)) {
 				mDrawer.CloseDrawers ();
 				Intent i = new Intent (this, typeof(GuidingActivity));
 				// Closing all the Activities
@@ -457,13 +465,15 @@ namespace TouriDroid
 			}
 
 			if (mSessionManager.isLoggedIn ()) {
+				mDrawerItems.Add (Constants.DrawerOptionSwitchGuide);
 				//mDrawerItems.Add ("Logout");
 				if (mSessionManager.isGuide ()) {
 					//@TouriTraveler mDrawerItems.Add (Constants.DrawerOptionSwitchGuide);
 				} else {
 					//@TouriTraveler mDrawerItems.Add ("Favourite Guides");
 				}
-				mDrawerItems.Add (Constants.MyPreferences);
+
+				//@TouriTraveler mDrawerItems.Add (Constants.MyPreferences);
 
 				//this is the last line in the drawer
 				TextView drawerFooter = this.FindViewById<TextView> (Resource.Id.drawer_bottom_text1);
@@ -474,6 +484,7 @@ namespace TouriDroid
 			} else {
 				//@TouriTraveler mDrawerItems.Add(Constants.DrawerOptionBeAGuide);
 				//drawerFooter.Text = Constants.DrawerOptionLoginOrSignUp;
+				mDrawerItems.Add (Constants.DrawerOptionHelp);
 				mDrawerItems.Add (Constants.DrawerOptionLoginOrSignUp);
 			}
 

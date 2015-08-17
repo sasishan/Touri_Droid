@@ -42,9 +42,10 @@ namespace TouriDroid
 			};
 
 			signUp.Click += (object IntentSender, EventArgs e) => {
-				var newFragment = new SignupRegisterGuide ();
+				var newFragment = new SignupNameFragment ();
 
 				FragmentTransaction transaction = FragmentManager.BeginTransaction();
+				//transaction.Replace(Resource.Id.signinup_fragment_container, newFragment);
 				transaction.Replace(Resource.Id.signinup_fragment_container, newFragment);
 
 				transaction.Commit();
